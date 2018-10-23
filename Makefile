@@ -16,8 +16,10 @@ OBJ_DIR = obj
 
 SRC = \
 	main\
+	load\
 	ops\
-	process
+	process\
+	util
 
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 

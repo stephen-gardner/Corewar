@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/22 22:45:12 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 06:31:38 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@
 
 # define PROG_NAME_LENGTH	128
 # define COMMENT_LENGTH		2048
-# define COREWAR_EXEC_MAGIC	0xEA83F3
+# define COREWAR_EXEC_MAGIC	0x00EA83F3
 
 /*
 ** Utility Macros

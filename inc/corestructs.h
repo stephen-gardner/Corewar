@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 02:11:07 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 07:13:15 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 # define CORESTRUCTS_H
 # include "coredef.h"
 # include "libft.h"
+
+typedef struct		s_header
+{
+	t_uint			magic;
+	char			prog_name[PROG_NAME_LENGTH + 1];
+	t_uint			prog_size;
+	char			comment[COMMENT_LENGTH + 1];
+}					t_header;
 
 typedef struct		s_op
 {
