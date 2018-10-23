@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/21 22:36:18 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/22 22:34:10 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 # include "libft.h"
 
 /*
-** ops.c
+** process.c
 */
 
-
+t_proc				*add_process(t_core *core, t_uint id);
+t_uint				cull_processes(t_core *core);
+t_proc				*fork_process(t_core *core, t_proc *process);
 
 /*
 ** #############################################################################
@@ -29,5 +31,4 @@
 */
 
 extern const t_op	g_ops[];
-extern const char	*g_opnames[];
 #endif

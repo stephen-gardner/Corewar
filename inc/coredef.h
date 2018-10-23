@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/22 00:42:22 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/22 22:45:12 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 
 /*
 ** Registers
+** Size options are ignored at this time, requiring a system with 2-byte shorts
+**  and 4-bytes ints.
 */
 
 # define IND_SIZE			2

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/22 01:39:49 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 02:11:07 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,28 @@
 # include "coredef.h"
 # include "libft.h"
 
+typedef struct		s_op
+{
+	const char		*instr;
+	t_ushrt			latency;
+	t_byte			opcode;
+	t_byte			nparams;
+	t_byte			ptypes[3];
+	t_bool			cbyte : 1;
+	t_bool			trunc : 1;
+}					t_op;
+
+typedef struct		s_proc
+{
+	t_uint			registers[REG_NUMBER];
+	t_byte			*pc;
+	t_op			*op;
+	t_uint			ecycle;
+	t_bool			carry : 1;
+	t_bool			lived : 1;
+	struct s_proc	*next;
+}					t_proc;
+
 typedef struct		s_champ
 {
 	t_uint			id;
@@ -22,40 +44,13 @@ typedef struct		s_champ
 	char			comment[COMMENT_LENGTH + 1];
 }					t_champ;
 
-typedef struct		s_proc
-{
-	t_byte			*pc;
-	t_byte			registers[REG_NUMBER][REG_SIZE];
-	t_bool			carry;
-	t_bool			lived;
-	struct s_proc	*next;
-}					t_proc;
-
-typedef struct		s_op
-{
-	t_uint			opcode;
-	t_uint			latency;
-	t_uint			nparams;
-	t_bool			cbyte;
-	t_bool			trunc;
-	t_byte			ptypes[3];
-}					t_op;
-
-typedef struct		s_cmd
-{
-	t_proc			*process;
-	t_op			*op;
-	t_uint			ecycle;
-	struct s_cmd	*next;
-}					t_cmd;
-
 typedef struct		s_core
 {
 	t_byte			arena[MEM_SIZE];
-	t_uint			cycle;
+	t_byte			owner[MEM_SIZE];
+	t_proc			*processes;
 	t_champ			champions[MAX_PLAYERS];
 	t_uint			nplayers;
-	t_coreproc		*processes;
-	t_cmd			*schedule;
+	t_uint			cycle;
 }					t_core;
 #endif
