@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/22 22:45:06 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 02:19:29 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_uint	cull_processes(t_core *core)
 	t_uint	count;
 
 	count = 0;
+	processes = &core->processes;
 	while (*processes)
 	{
 		if (!(*processes)->lived)

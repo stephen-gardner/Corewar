@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 01:23:55 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/21 04:18:21 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 02:18:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 typedef int				t_bool;
 typedef unsigned char	t_byte;
 typedef unsigned int	t_uint;
+typedef unsigned short	t_ushrt;
 
 /*
 ** Reproduction of <ctype.h>
