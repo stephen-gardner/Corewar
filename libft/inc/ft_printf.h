@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 22:42:25 by sgardner          #+#    #+#             */
-/*   Updated: 2018/04/15 07:11:13 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 04:51:40 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,17 @@ int				ft_dprintf(int fd, const char *fmt, ...);
 int				ft_printf(const char *fmt, ...);
 int				ft_snprintf(char *str, size_t size, const char *fmt, ...);
 int				ft_sprintf(char *str, const char *fmt, ...);
+
+/*
+** ft_vprintf.c
+*/
+
+int				ft_vasprintf(char **ret, const char *fmt, va_list ap);
+int				ft_vdprintf(int fd, const char *fmt, va_list ap);
+int				ft_vprintf(const char *fmt, va_list ap);
+int				ft_vsnprintf(char *str, size_t size, const char *fmt,
+					va_list ap);
+int				ft_vsprintf(char *str, const char *fmt, va_list ap);
 
 /*
 ** parser.c
