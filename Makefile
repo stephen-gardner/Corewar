@@ -17,9 +17,9 @@ OBJ_DIR = obj
 SRC = \
 	main\
 	load\
+	msg\
 	ops\
-	process\
-	util
+	process
 
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 

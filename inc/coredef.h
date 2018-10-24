@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 06:31:38 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 20:03:47 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,23 @@
 ** Utility Macros
 */
 
+# define ERR				error
+# define REV				ft_revbytes
+
 # define CORE_POS(x)		(((x) + MEM_SIZE) % MEM_SIZE)
 # define IDX_POS(ar, pc, x)	((ar) + (CORE_POS(((ar) - (pc)) + ((x) % IDX_MOD))))
 # define ABS_POS(ar, pc, x)	((ar) + (CORE_POS(((ar) - (pc)) + (x))))
+
+/*
+** Error Messages
+*/
+
+enum	e_errmsg
+{
+	BAD_IO,
+	CHAMP_TOO_LARGE,
+	CHAMP_TOO_SMALL,
+	INVALID_HEADER,
+	SIZE_MISMATCH
+};
 #endif
