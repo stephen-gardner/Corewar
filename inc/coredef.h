@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 22:08:25 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/24 06:03:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define IDX_MOD			(MEM_SIZE / 8)
 # define CHAMP_MAX_SIZE		(MEM_SIZE / 6)
 # define MAX_PLAYERS		4
+
+# define DUMP_LEN			32
 
 /*
 ** Every CYCLE_TO_DIE cycles, the VM kills processes that have not yet called
@@ -64,10 +66,9 @@
 ** Utility Macros
 */
 
+# define REV				ft_revbytes
 # define ERR				error
 # define SYS_ERR			ERR(DEFAULT_ERR, strerror(errno))
-
-# define REV				ft_revbytes
 
 # define CORE_POS(x)		(((x) + MEM_SIZE) % MEM_SIZE)
 # define IDX_POS(ar, pc, x)	((ar) + (CORE_POS(((ar) - (pc)) + ((x) % IDX_MOD))))
