@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 22:07:41 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/24 00:48:07 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,28 @@ const char	*g_errmsg[6] = {
 	"%s: invalid header",
 	"%s: code size does not match size specified in header"
 };
+
+void		dump(t_core *core)
+{
+	int	i;
+	int	line;
+
+	i = 0;
+	line = 0;
+	ft_printf("0x0000: ");
+	while (i < MEM_SIZE)
+	{
+		if (++line == 32)
+		{
+			line = 0;
+			ft_printf("%.2x\n", core->arena[i++]);
+			if (i < MEM_SIZE)
+				ft_printf("%#.4x: ", i);
+			continue ;
+		}
+		ft_printf("%.2x ", core->arena[i++]);
+	}
+}
 
 void		error(int id, ...)
 {
