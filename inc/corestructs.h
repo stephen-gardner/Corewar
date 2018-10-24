@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 07:13:15 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/24 07:12:38 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ typedef struct		s_core
 	t_byte			owner[MEM_SIZE];
 	t_proc			*processes;
 	t_champ			champions[MAX_PLAYERS];
-	t_uint			nplayers;
+	int				nplayers;
+	t_uint			dcycle;
 	t_uint			cycle;
 }					t_core;
 #endif

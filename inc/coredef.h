@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/24 06:03:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/24 07:04:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ enum	e_errmsg
 	CHAMP_TOO_LARGE,
 	CHAMP_TOO_SMALL,
 	INVALID_HEADER,
-	SIZE_MISMATCH
+	SIZE_MISMATCH,
+	TOO_MANY_CHAMPS
 };
 #endif

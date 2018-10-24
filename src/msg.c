@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/24 06:14:31 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/24 07:51:16 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-const char		*g_errmsg[6] = {
+const char		*g_errmsg[7] = {
 	"%s",
 	"%s: %s",
 	"%s: exceeds max champion size (%u > %u)",
 	"%s: too small to be a champion",
 	"%s: invalid header",
-	"%s: code size does not match size specified in header"
+	"%s: code size does not match size specified in header",
+	"too many champions specified"
 };
 
 static void		build_out(char *out, t_byte *arena, int addrlen)
@@ -78,6 +79,7 @@ void			dump(t_core *core)
 	build_out(out, core->arena, addrlen);
 	write(STDOUT_FILENO, out, olen);
 	free(out);
+	exit(EXIT_SUCCESS);
 }
 
 /*
