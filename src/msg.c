@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 20:05:04 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 22:07:41 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 
 const char	*g_errmsg[6] = {
+	"%s",
 	"%s: %s",
 	"%s: exceeds max champion size (%u > %u)",
 	"%s: too small to be a champion",
@@ -22,7 +23,7 @@ const char	*g_errmsg[6] = {
 	"%s: code size does not match size specified in header"
 };
 
-t_bool		error(int id, ...)
+void		error(int id, ...)
 {
 	char	*msg;
 	va_list	ap;
@@ -34,5 +35,5 @@ t_bool		error(int id, ...)
 		free(msg);
 	}
 	va_end(ap);
-	return (FALSE);
+	exit(EXIT_FAILURE);
 }

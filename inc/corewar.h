@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 19:55:02 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 22:57:23 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,20 @@
 # include "corestructs.h"
 # include "coredef.h"
 # include "libft.h"
+# include <errno.h>
+# include <string.h>
 
 /*
 ** load.c
 */
 
-t_bool				load_champ(t_core *core, const char *path);
+void				load_champ(t_core *core, const char *path, int pnum);
 
 /*
 ** msg.c
 */
 
-t_bool				error(int id, ...);
+void				error(int id, ...);
 
 /*
 ** process.c

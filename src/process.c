@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 02:19:29 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 22:01:39 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_proc	*add_process(t_core *core, t_uint id)
 	t_proc	*process;
 
 	if (!(process = ft_memalloc(sizeof(t_proc))))
-		return (NULL);
+		SYS_ERR;
 	process->registers[0] = id;
 	process->next = core->processes;
 	core->processes = process;
@@ -69,7 +69,7 @@ t_proc	*fork_process(t_core *core, t_proc *process)
 	t_proc	*clone;
 
 	if (!(clone = malloc(sizeof(t_proc))))
-		return (NULL);
+		SYS_ERR;
 	ft_memcpy(clone, process, sizeof(t_proc));
 	clone->op = NULL;
 	clone->next = core->processes;

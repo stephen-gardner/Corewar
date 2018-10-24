@@ -6,69 +6,66 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 20:04:33 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/23 23:49:34 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 #include "ft_printf.h"
-#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <string.h>
 
-# define SYS_ERR(path)	ERR(BAD_IO, path, strerror(errno))
+#define IO_ERR(path)	ERR(BAD_IO, path, strerror(errno))
 
-static t_bool	load_header(t_header *header, const char *path, int fd)
+/*
+** Checks if file size is too small, if magic is invalid, if code size doesn't
+**  match size specified in header, and if code size is too large.
+*/
+
+static void	load_header(int fd, const char *path, t_header *header)
 {
 	off_t	size;
 
 	if ((size = lseek(fd, 0, SEEK_END)) == -1)
-		return (SYS_ERR(path));
+		IO_ERR(path);
 	if ((size_t)size < sizeof(t_header))
-		return (ERR(CHAMP_TOO_SMALL, path));
+		ERR(CHAMP_TOO_SMALL, path);
 	if (lseek(fd, 0, SEEK_SET) == -1)
-		return (SYS_ERR(path));
+		IO_ERR(path);
 	if (read(fd, header, sizeof(t_header)) != sizeof(t_header))
-		return (SYS_ERR(path));
+		IO_ERR(path);
 	REV(&header->magic, sizeof(header->magic));
 	if (header->magic != COREWAR_EXEC_MAGIC)
-		return (ERR(INVALID_HEADER, path));
+		ERR(INVALID_HEADER, path);
 	REV(&header->prog_size, sizeof(header->prog_size));
 	if (header->prog_size != size - sizeof(t_header))
-		return (ERR(SIZE_MISMATCH, path));
+		ERR(SIZE_MISMATCH, path);
 	if (header->prog_size > CHAMP_MAX_SIZE)
-		return (ERR(CHAMP_TOO_LARGE, path, header->prog_size, CHAMP_MAX_SIZE));
-	return (TRUE);
+		ERR(CHAMP_TOO_LARGE, path, header->prog_size, CHAMP_MAX_SIZE);
 }
 
-static t_bool	load_code(t_core *core, t_header *header, const char *path,
-					int fd)
-{
-	t_champ	*champ;
-	t_byte	*pos;
+/*
+** Loads champion from file, verifies that its data is correct, and loads its
+**  code to the appropriate position in the arena. Spawns a new process for the
+**  champion and sets its PC to its start position.
+*/
 
-	champ = &core->champions[core->cycle];
-	ft_memcpy(champ->name, header->prog_name, PROG_NAME_LENGTH);
-	ft_memcpy(champ->comment, header->comment, COMMENT_LENGTH);
-	pos = &core->arena[(MEM_SIZE / core->nplayers) * core->cycle];
-	if (read(fd, pos, header->prog_size) != header->prog_size)
-	{
-		close(fd);
-		return (SYS_ERR(path));
-	}
-	close(fd);
-	++core->cycle;
-	return (TRUE);
-}
-
-t_bool			load_champ(t_core *core, const char *path)
+void		load_champ(t_core *core, const char *path, int pnum)
 {
+	t_champ		*champ;
+	t_byte		*pc;
 	t_header	header;
 	int			fd;
 
 	if ((fd = open(path, O_RDONLY)) == -1)
-		return (SYS_ERR(path));
-	return (load_header(&header, path, fd)
-		&& load_code(core, &header, path, fd));
+		IO_ERR(path);
+	load_header(fd, path, &header);
+	champ = &core->champions[pnum];
+	ft_memcpy(champ->name, header.prog_name, PROG_NAME_LENGTH);
+	ft_memcpy(champ->comment, header.comment, COMMENT_LENGTH);
+	pc = &core->arena[(MEM_SIZE / core->nplayers) * pnum];
+	if (read(fd, pc, header.prog_size) != header.prog_size)
+		IO_ERR(path);
+	add_process(core, champ->id)->pc = pc;
+	close(fd);
 }
