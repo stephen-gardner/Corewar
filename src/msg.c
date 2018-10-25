@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/24 07:51:16 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/24 23:39:37 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,22 @@ void			dump(t_core *core)
 {
 	char	*out;
 	size_t	olen;
+	char	*sep;
+	int		slen;
 	int		addrlen;
 
 	olen = calc_olen(&addrlen, MEM_SIZE);
 	if (!(out = malloc(olen + 1)))
 		SYS_ERR;
+	slen = (DUMP_LEN * 3) + addrlen + 3;
+	if (!(sep = malloc(slen)))
+		SYS_ERR;
+	ft_memset(sep, '-', slen);
 	build_out(out, core->arena, addrlen);
+	ft_printf("%s\nCORE DUMP [CYCLE %u]\n%s\n", sep, core->cycle, sep);
 	write(STDOUT_FILENO, out, olen);
 	free(out);
+	free(sep);
 	exit(EXIT_SUCCESS);
 }
 

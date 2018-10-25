@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/24 08:21:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 03:41:17 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,23 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 	return (paths);
 }
 
+static void		execute_war(t_core *core)
+{
+	t_champ	*champ;
+	int		i;
+
+	while (core->processes)
+	{
+		if (core->cycle == core->dcycle)
+			dump(core);
+		++core->cycle;
+	}
+	i = 0;
+	while ((champ = &core->champions[i])->id != core->victor)
+		++i;
+	ft_printf("Player %u (%s) wins!\n", UINT_MAX - champ->id, champ->name);
+}
+
 int				main(int ac, char *av[])
 {
 	char	**paths;
@@ -80,6 +97,7 @@ int				main(int ac, char *av[])
 		load_champ(&core, paths[i], i);
 		++i;
 	}
-	dump(&core);
+	core.victor = core.champions[0].id;
+	execute_war(&core);
 	return (EXIT_SUCCESS);
 }
