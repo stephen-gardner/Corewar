@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 04:47:26 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 10:03:31 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ typedef struct		s_header
 	t_uint			prog_size;
 	char			comment[COMMENT_LENGTH + 1];
 }					t_header;
+
+typedef struct		s_target
+{
+	t_byte			*end;
+	t_byte			*params[3];
+	t_byte			types[3];
+}					t_target;
 
 typedef struct		s_op
 {
@@ -39,6 +46,7 @@ typedef struct		s_proc
 	t_uint			registers[REG_NUMBER];
 	t_byte			*pc;
 	t_op			*op;
+	t_target		target;
 	t_uint			ecycle;
 	t_bool			carry : 1;
 	t_bool			lived : 1;
@@ -62,7 +70,7 @@ typedef struct		s_core
 	t_uint			cycle;
 	t_uint			dump_cycle;
 	t_uint			lives;
-	int				nplayers;
+	t_byte			nplayers;
 }					t_core;
 
 typedef struct		s_cullmgr

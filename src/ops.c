@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/22 22:45:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 10:19:39 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,3 +31,71 @@ const t_op	g_ops[17] = {
 	{"aff", 2, 0x10, 1, {T_R}, 1, 0},
 	{"undefined", 0, 0x00, 0, {0}, 0, 0}
 };
+
+static t_bool	set_register(t_byte *arena, t_byte **pos, t_proc *p, int i)
+{
+	t_byte	n;
+
+	n = **pos;
+	if (n > REG_NUMBER)
+		return (FALSE);
+	p->target.params[i] = (t_byte *)&p->registers[n - 1];
+	*pos = ABS_POS(arena, *pos, 1);
+	return (TRUE);
+}
+
+static t_bool	set_params(t_byte *arena, t_proc *p)
+{
+	t_byte	*pos;
+	int		i;
+
+	i = 0;
+	pos = ABS_POS(arena, p->pc, 2);
+	while (i < p->op->nparams)
+	{
+		if (!(p->target.types[i] & p->op->ptypes[i]))
+			return (FALSE);
+		if ((p->target.types[i] & T_R) && !set_register(arena, &pos, p, i))
+			return (FALSE);
+		else
+		{
+			p->target.params[i] = pos;
+			if (p->target.types[i] & T_D)
+				pos = ABS_POS(arena, pos, DIR_SIZE);
+			else
+				pos = ABS_POS(arena, pos, IND_SIZE);
+		}
+		++i;
+	}
+	p->target.end = pos;
+	return (TRUE);
+}
+
+t_bool			decode(t_byte *arena, t_proc *p)
+{
+	t_byte	acb;
+	t_byte	type;
+	int		i;
+
+	i = 0;
+	acb = *ABS_POS(arena, p->pc, 1);
+	while (i < p->op->nparams)
+	{
+		type = acb & 0xC0;
+		if (type == 0x40)
+			p->target.types[i] = T_R;
+		else if (type == 0x80)
+			p->target.types[i] = T_D;
+		else
+			p->target.types[i] = T_I;
+		acb <<= 2;
+		++i;
+	}
+	while (i++ < 5)
+	{
+		if (acb & 0xC0)
+			return (FALSE);
+		acb <<= 2;
+	}
+	return (set_params(arena, p));
+}

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 05:27:55 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 09:24:11 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@
 # define SYS_ERR			ERR(DEFAULT_ERR, strerror(errno))
 
 # define CORE_POS(x)		(((x) + MEM_SIZE) % MEM_SIZE)
-# define IDX_POS(ar, pc, x)	((ar) + (CORE_POS(((ar) - (pc)) + ((x) % IDX_MOD))))
-# define ABS_POS(ar, pc, x)	((ar) + (CORE_POS(((ar) - (pc)) + (x))))
+# define IDX_POS(ar, pc, x)	((ar) + (CORE_POS(((pc) - (ar)) + ((x) % IDX_MOD))))
+# define ABS_POS(ar, pc, x)	((ar) + (CORE_POS(((pc) - (ar)) + (x))))
 
 /*
 ** Error Messages

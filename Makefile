@@ -53,6 +53,13 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@echo " > Compiling $<..."
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
+again:
+	@rm -f $(NAME)
+	@rm -rf $(OBJ_DIR)
+	@echo "$(RED)Object files removed"
+	@echo "$(NAME) removed$(NC)"
+	@make
+
 clean:
 	@make -C libft $@
 	@rm -rf $(OBJ_DIR)

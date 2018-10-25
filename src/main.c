@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 05:29:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 07:16:36 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ static void		execute_war(t_core *core)
 			core->lives = 0;
 			culler.countdown = culler.cull_delay;
 		}
-		if (core->cycle++ == core->dump_cycle)
+		if (core->cycle == core->dump_cycle)
 			dump(core);
+		++core->cycle;
 	}
 }
 

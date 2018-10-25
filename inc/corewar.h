@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 05:16:33 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 10:13:12 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ void				load_champ(t_core *core, const char *path, int pnum);
 void				dump(t_core *core);
 void				error(int id, ...);
 void				notice(int id, ...);
+
+/*
+** ops.c
+*/
+
+t_bool				decode(t_byte *arena, t_proc *p);
 
 /*
 ** process.c
