@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 03:41:17 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 05:29:08 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 	while ((f = ft_getopt(ac, av, "-d:n:")) != -1)
 	{
 		if (f == 'd')
-			core->dcycle = ft_atoi(g_optarg);
+			core->dump_cycle = ft_atoi(g_optarg);
 		else if (f == 'n')
 			core->champions[core->nplayers].id = ft_atoi(g_optarg);
 		else if (f == '\1')
@@ -64,29 +64,48 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 
 static void		execute_war(t_core *core)
 {
-	t_champ	*champ;
-	int		i;
+	t_cullmgr	culler;
 
+	culler.checks = 0;
+	culler.countdown = CYCLE_TO_DIE;
+	culler.cull_delay = CYCLE_TO_DIE;
 	while (core->processes)
 	{
-		if (core->cycle == core->dcycle)
+		if (!--culler.countdown)
+		{
+			cull_processes(core);
+			if (++culler.checks == MAX_CHECKS || core->lives == NBR_LIVE)
+			{
+				culler.checks = 0;
+				culler.cull_delay -= CYCLE_DELTA;
+			}
+			core->lives = 0;
+			culler.countdown = culler.cull_delay;
+		}
+		if (core->cycle++ == core->dump_cycle)
 			dump(core);
-		++core->cycle;
 	}
-	i = 0;
-	while ((champ = &core->champions[i])->id != core->victor)
-		++i;
-	ft_printf("Player %u (%s) wins!\n", UINT_MAX - champ->id, champ->name);
+}
+
+void			aftermath(t_core *core)
+{
+	if (core->victor)
+	{
+		MSG(ANNOUNCE_WINNER, core->cycle,
+			UINT_MAX - core->victor->id, core->victor->name);
+	}
+	else
+		MSG(ANNOUNCE_LOSERS, core->cycle);
 }
 
 int				main(int ac, char *av[])
 {
-	char	**paths;
 	t_core	core;
+	char	**paths;
 	int		i;
 
 	ft_memset(&core, 0, sizeof(t_core));
-	core.dcycle = -1;
+	core.dump_cycle = -1;
 	paths = parse_args(&core, ac, av);
 	if (!core.nplayers)
 		return (1);
@@ -97,7 +116,8 @@ int				main(int ac, char *av[])
 		load_champ(&core, paths[i], i);
 		++i;
 	}
-	core.victor = core.champions[0].id;
+	core.victor = NULL;
 	execute_war(&core);
+	aftermath(&core);
 	return (EXIT_SUCCESS);
 }

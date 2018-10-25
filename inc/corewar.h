@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/24 00:41:42 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 05:16:33 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void				load_champ(t_core *core, const char *path, int pnum);
 
 void				dump(t_core *core);
 void				error(int id, ...);
+void				notice(int id, ...);
 
 /*
 ** process.c
@@ -47,4 +48,5 @@ t_proc				*fork_process(t_core *core, t_proc *process);
 
 extern const t_op	g_ops[];
 extern const char	*g_errmsg[];
+extern const char	*g_notices[];
 #endif

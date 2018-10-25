@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/24 23:39:37 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 05:19:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ const char		*g_errmsg[7] = {
 	"%s: invalid header",
 	"%s: code size does not match size specified in header",
 	"too many champions specified"
+};
+
+const char		*g_notices[2] = {
+	"Cycle %u: Player %u (%s) wins!",
+	"Cycle %u: All players have died without ever really living..."
 };
 
 static void		build_out(char *out, t_byte *arena, int addrlen)
@@ -101,11 +106,21 @@ void			error(int id, ...)
 	va_list	ap;
 
 	va_start(ap, id);
-	if (vasprintf(&msg, g_errmsg[id], ap))
+	if (ft_vasprintf(&msg, g_errmsg[id], ap))
 	{
 		ft_dprintf(STDERR_FILENO, "%&s %s\n", "31m", "Error:", msg);
 		free(msg);
 	}
 	va_end(ap);
 	exit(EXIT_FAILURE);
+}
+
+void			notice(int id, ...)
+{
+	va_list	ap;
+
+	va_start(ap, id);
+	ft_vprintf(g_notices[id], ap);
+	va_end(ap);
+	write(STDOUT_FILENO, "\n", 1);
 }

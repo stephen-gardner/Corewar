@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:37:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 04:57:18 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 05:22:07 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include "ft_printf.h"
 
-int	ft_vasprint(char **ret, const char *fmt, va_list ap)
+int	ft_vasprintf(char **ret, const char *fmt, va_list ap)
 {
 	*ret = NULL;
 	return (process(ret, ULONG_MAX, fmt, ap));

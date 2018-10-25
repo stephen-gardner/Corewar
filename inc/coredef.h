@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/24 07:04:50 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/25 05:27:55 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@
 
 # define REV				ft_revbytes
 # define ERR				error
+# define MSG				notice
 # define SYS_ERR			ERR(DEFAULT_ERR, strerror(errno))
 
 # define CORE_POS(x)		(((x) + MEM_SIZE) % MEM_SIZE)
@@ -87,5 +88,11 @@ enum	e_errmsg
 	INVALID_HEADER,
 	SIZE_MISMATCH,
 	TOO_MANY_CHAMPS
+};
+
+enum	e_notices
+{
+	ANNOUNCE_WINNER,
+	ANNOUNCE_LOSERS
 };
 #endif
