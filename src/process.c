@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/23 22:01:39 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 00:17:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_proc	*fork_process(t_core *core, t_proc *process)
 	if (!(clone = malloc(sizeof(t_proc))))
 		SYS_ERR;
 	ft_memcpy(clone, process, sizeof(t_proc));
-	clone->op = NULL;
+	clone->instr.op = NULL;
 	clone->next = core->processes;
 	core->processes = clone;
 	return (clone);

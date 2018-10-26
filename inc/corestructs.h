@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 10:03:31 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 00:17:37 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,9 @@ typedef struct		s_header
 	char			comment[COMMENT_LENGTH + 1];
 }					t_header;
 
-typedef struct		s_target
-{
-	t_byte			*end;
-	t_byte			*params[3];
-	t_byte			types[3];
-}					t_target;
-
 typedef struct		s_op
 {
-	const char		*instr;
+	const char		*name;
 	t_ushrt			latency;
 	t_byte			opcode;
 	t_byte			nparams;
@@ -41,13 +34,20 @@ typedef struct		s_op
 	t_bool			trunc : 1;
 }					t_op;
 
+typedef struct		s_instr
+{
+	t_op			*op;
+	t_byte			*epc;
+	t_byte			*args[3];
+	t_byte			atypes[3];
+	t_uint			ecycle;
+}					t_instr;
+
 typedef struct		s_proc
 {
-	t_uint			registers[REG_NUMBER];
 	t_byte			*pc;
-	t_op			*op;
-	t_target		target;
-	t_uint			ecycle;
+	t_uint			registers[REG_NUMBER];
+	t_instr			instr;
 	t_bool			carry : 1;
 	t_bool			lived : 1;
 	struct s_proc	*next;

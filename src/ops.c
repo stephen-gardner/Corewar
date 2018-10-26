@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 10:19:39 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 00:19:04 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,70 +32,53 @@ const t_op	g_ops[17] = {
 	{"undefined", 0, 0x00, 0, {0}, 0, 0}
 };
 
-static t_bool	set_register(t_byte *arena, t_byte **pos, t_proc *p, int i)
+static t_bool	set_param(t_byte *arena, t_proc *p, t_byte **pos, int i)
 {
-	t_byte	n;
+	t_instr	*instr;
 
-	n = **pos;
-	if (n > REG_NUMBER)
+	instr = &p->instr;
+	if (!(instr->atypes[i] & OP(p)->ptypes[i]))
 		return (FALSE);
-	p->target.params[i] = (t_byte *)&p->registers[n - 1];
-	*pos = ABS_POS(arena, *pos, 1);
-	return (TRUE);
-}
-
-static t_bool	set_params(t_byte *arena, t_proc *p)
-{
-	t_byte	*pos;
-	int		i;
-
-	i = 0;
-	pos = ABS_POS(arena, p->pc, 2);
-	while (i < p->op->nparams)
+	if (instr->atypes[i] & T_R)
 	{
-		if (!(p->target.types[i] & p->op->ptypes[i]))
+		if (**pos > REG_NUMBER)
 			return (FALSE);
-		if ((p->target.types[i] & T_R) && !set_register(arena, &pos, p, i))
-			return (FALSE);
-		else
-		{
-			p->target.params[i] = pos;
-			if (p->target.types[i] & T_D)
-				pos = ABS_POS(arena, pos, DIR_SIZE);
-			else
-				pos = ABS_POS(arena, pos, IND_SIZE);
-		}
-		++i;
+		instr->args[i] = (t_byte *)&p->registers[**pos - 1];
+		*pos = ABS_POS(arena, *pos, 1);
+		return (TRUE);
 	}
-	p->target.end = pos;
+	instr->args[i] = *pos;
+	if (instr->atypes[i] & T_D)
+		*pos = ABS_POS(arena, *pos, DIR_SIZE);
+	else
+		*pos = ABS_POS(arena, *pos, IND_SIZE);
 	return (TRUE);
 }
 
 t_bool			decode(t_byte *arena, t_proc *p)
 {
+	t_byte	*pos;
 	t_byte	acb;
-	t_byte	type;
 	int		i;
 
+	pos = p->instr.epc;
+	acb = *pos;
 	i = 0;
-	acb = *ABS_POS(arena, p->pc, 1);
-	while (i < p->op->nparams)
+	while (i < OP(p)->nparams)
 	{
-		type = acb & 0xC0;
-		if (type == 0x40)
-			p->target.types[i] = T_R;
-		else if (type == 0x80)
-			p->target.types[i] = T_D;
+		if ((acb & 0xC0) == 0x40)
+			p->instr.atypes[i] = T_R;
+		else if ((acb & 0xC) == 0x80)
+			p->instr.atypes[i] = T_D;
 		else
-			p->target.types[i] = T_I;
+			p->instr.atypes[i] = T_I;
+		if (!set_param(arena, p, &pos, i))
+			return (FALSE);
 		acb <<= 2;
 		++i;
 	}
-	while (i++ < 5)
-	{
-		if (acb & 0xC0)
-			return (FALSE);
-		acb <<= 2;
-	}
-	return (set_params(arena, p));
+	if (acb)
+		return (FALSE);
+	p->instr.epc = pos;
+	return (TRUE);
 }
