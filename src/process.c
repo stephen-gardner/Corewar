@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 00:17:52 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 07:04:54 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,35 @@ t_uint	cull_processes(t_core *core)
 		processes = &(*processes)->next;
 	}
 	return (count);
+}
+
+void	execute_processes(t_core *core, t_proc *p)
+{
+	t_instr	*instr;
+
+	while (p)
+	{
+		if (!(instr = &p->instr)->op)
+		{
+			if ((t_uint)(*p->pc - 1) < g_ops_size)
+			{
+				instr->op = &g_ops[*p->pc - 1];
+				instr->ecycle = core->cycle + instr->op->latency;
+				instr->epc = ABS_POS(core->arena, p->pc, 1);
+			}
+			else
+				p->pc = ABS_POS(core->arena, p->pc, 1);
+		}
+		else if (core->cycle == instr->ecycle)
+		{
+			if (instr->op->cbyte)
+				decode(core->arena, p);
+			instr->op->run(core, p);
+			p->pc = instr->epc;
+			instr->op = NULL;
+		}
+		p = p->next;
+	}
 }
 
 /*

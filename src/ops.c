@@ -6,31 +6,33 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 00:19:04 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 06:21:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-const t_op	g_ops[17] = {
-	{"live", 10, 0x01, 1, {T_D}, 0, 0},
-	{"ld", 5, 0x02, 2, {T_D | T_I, T_R}, 1, 0},
-	{"st", 5, 0x03, 2, {T_R, T_I | T_R}, 1, 0},
-	{"add", 10, 0x04, 3, {T_R, T_R, T_R}, 1, 0},
-	{"sub", 10, 0x05, 3, {T_R, T_R, T_R}, 1, 0},
-	{"and", 6, 0x06, 3, {T_R | T_D | T_I, T_R | T_I | T_D, T_R}, 1, 0},
-	{"or", 6, 0x07, 3, {T_R | T_I | T_D, T_R | T_I | T_D, T_R}, 1, 0},
-	{"xor", 6, 0x08, 3, {T_R | T_I | T_D, T_R | T_I | T_D, T_R}, 1, 0},
-	{"zjmp", 20, 0x09, 1, {T_D}, 0, 1},
-	{"ldi", 25, 0x0A, 3, {T_R | T_D | T_I, T_D | T_R, T_R}, 1, 1},
-	{"sti", 25, 0x0B, 3, {T_R, T_R | T_D | T_I, T_D | T_R}, 1, 1},
-	{"fork", 800, 0x0C, 1, {T_D}, 0, 1},
-	{"lld", 10, 0x0D, 2, {T_D | T_I, T_R}, 1, 0},
-	{"lldi", 50, 0x0E, 3, {T_R | T_D | T_I, T_D | T_R, T_R}, 1, 1},
-	{"lfork", 1000, 0x0F, 1, {T_D}, 0, 1},
-	{"aff", 2, 0x10, 1, {T_R}, 1, 0},
-	{"undefined", 0, 0x00, 0, {0}, 0, 0}
+const t_op		g_ops[17] = {
+	{"live", op_nop, 10, 0x01, 1, {T_D}, 0, 0},
+	{"ld", op_nop, 5, 0x02, 2, {T_D | T_I, T_R}, 1, 0},
+	{"st", op_nop, 5, 0x03, 2, {T_R, T_I | T_R}, 1, 0},
+	{"add", op_nop, 10, 0x04, 3, {T_R, T_R, T_R}, 1, 0},
+	{"sub", op_nop, 10, 0x05, 3, {T_R, T_R, T_R}, 1, 0},
+	{"and", op_nop, 6, 0x06, 3, {T_R | T_D | T_I, T_R | T_I | T_D, T_R}, 1, 0},
+	{"or", op_nop, 6, 0x07, 3, {T_R | T_I | T_D, T_R | T_I | T_D, T_R}, 1, 0},
+	{"xor", op_nop, 6, 0x08, 3, {T_R | T_I | T_D, T_R | T_I | T_D, T_R}, 1, 0},
+	{"zjmp", op_nop, 20, 0x09, 1, {T_D}, 0, 1},
+	{"ldi", op_nop, 25, 0x0A, 3, {T_R | T_D | T_I, T_D | T_R, T_R}, 1, 1},
+	{"sti", op_nop, 25, 0x0B, 3, {T_R, T_R | T_D | T_I, T_D | T_R}, 1, 1},
+	{"fork", op_nop, 800, 0x0C, 1, {T_D}, 0, 1},
+	{"lld", op_nop, 10, 0x0D, 2, {T_D | T_I, T_R}, 1, 0},
+	{"lldi", op_nop, 50, 0x0E, 3, {T_R | T_D | T_I, T_D | T_R, T_R}, 1, 1},
+	{"lfork", op_nop, 1000, 0x0F, 1, {T_D}, 0, 1},
+	{"aff", op_nop, 2, 0x10, 1, {T_R}, 1, 0},
+	{"undefined", op_nop, 0, 0x00, 0, {0}, 0, 0}
 };
+
+const t_uint	g_ops_size = sizeof(g_ops) / sizeof(t_op);
 
 static t_bool	set_param(t_byte *arena, t_proc *p, t_byte **pos, int i)
 {
@@ -81,4 +83,10 @@ t_bool			decode(t_byte *arena, t_proc *p)
 		return (FALSE);
 	p->instr.epc = pos;
 	return (TRUE);
+}
+
+void			op_nop(t_core *core, t_proc *p)
+{
+	UNUSED(core);
+	UNUSED(p);
 }

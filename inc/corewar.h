@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 10:13:12 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 06:17:59 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void				notice(int id, ...);
 */
 
 t_bool				decode(t_byte *arena, t_proc *p);
+void				op_nop(t_core *core, t_proc *proc);
 
 /*
 ** process.c
@@ -44,6 +45,7 @@ t_bool				decode(t_byte *arena, t_proc *p);
 
 t_proc				*add_process(t_core *core, t_uint id);
 t_uint				cull_processes(t_core *core);
+void				execute_processes(t_core *core, t_proc *p);
 t_proc				*fork_process(t_core *core, t_proc *process);
 
 /*
@@ -53,6 +55,7 @@ t_proc				*fork_process(t_core *core, t_proc *process);
 */
 
 extern const t_op	g_ops[];
+extern const t_uint	g_ops_size;
 extern const char	*g_errmsg[];
 extern const char	*g_notices[];
 #endif

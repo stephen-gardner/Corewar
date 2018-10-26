@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 00:17:37 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 06:20:13 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,13 @@
 # include "coredef.h"
 # include "libft.h"
 
-typedef struct		s_header
-{
-	t_uint			magic;
-	char			prog_name[PROG_NAME_LENGTH + 1];
-	t_uint			prog_size;
-	char			comment[COMMENT_LENGTH + 1];
-}					t_header;
+struct s_core;
+struct s_proc;
 
 typedef struct		s_op
 {
 	const char		*name;
+	void			(*run)(struct s_core *, struct s_proc *p);
 	t_ushrt			latency;
 	t_byte			opcode;
 	t_byte			nparams;
@@ -36,7 +32,7 @@ typedef struct		s_op
 
 typedef struct		s_instr
 {
-	t_op			*op;
+	const t_op		*op;
 	t_byte			*epc;
 	t_byte			*args[3];
 	t_byte			atypes[3];
@@ -79,4 +75,12 @@ typedef struct		s_cullmgr
 	t_uint			countdown;
 	t_uint			cull_delay;
 }					t_cullmgr;
+
+typedef struct		s_header
+{
+	t_uint			magic;
+	char			prog_name[PROG_NAME_LENGTH + 1];
+	t_uint			prog_size;
+	char			comment[COMMENT_LENGTH + 1];
+}					t_header;
 #endif

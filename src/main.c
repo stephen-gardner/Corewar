@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 07:16:36 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 05:52:30 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static void		execute_war(t_core *core)
 	culler.cull_delay = CYCLE_TO_DIE;
 	while (core->processes)
 	{
+		execute_processes(core, core->processes);
 		if (!--culler.countdown)
 		{
 			cull_processes(core);
