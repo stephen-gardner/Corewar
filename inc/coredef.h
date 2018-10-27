@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 00:12:19 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 07:50:41 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ enum	e_errmsg
 enum	e_notices
 {
 	ANNOUNCE_WINNER,
+	ANNOUNCE_LIVE,
 	ANNOUNCE_LOSERS
 };
 #endif

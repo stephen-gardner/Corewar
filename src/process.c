@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 07:04:54 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 07:14:24 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,28 +59,29 @@ t_uint	cull_processes(t_core *core)
 	return (count);
 }
 
+// TODO: Decide on behavior for failed decode
+
 void	execute_processes(t_core *core, t_proc *p)
 {
 	t_instr	*instr;
 
 	while (p)
 	{
-		if (!(instr = &p->instr)->op)
+		instr = &p->instr;
+		if (!instr->op)
 		{
 			if ((t_uint)(*p->pc - 1) < g_ops_size)
-			{
 				instr->op = &g_ops[*p->pc - 1];
-				instr->ecycle = core->cycle + instr->op->latency;
-				instr->epc = ABS_POS(core->arena, p->pc, 1);
-			}
 			else
-				p->pc = ABS_POS(core->arena, p->pc, 1);
+				instr->op = &g_ops[g_ops_size - 1];
+			instr->epc = ABS_POS(core->arena, p->pc, 1);
+			instr->ecycle = core->cycle + instr->op->latency;
 		}
-		else if (core->cycle == instr->ecycle)
+		if (core->cycle == instr->ecycle)
 		{
-			if (instr->op->cbyte)
-				decode(core->arena, p);
-			instr->op->run(core, p);
+			if (instr->op->cbyte && !decode(core->arena, p))
+				instr->op = &g_ops[g_ops_size - 1];
+			p->carry = instr->op->run(core, p);
 			p->pc = instr->epc;
 			instr->op = NULL;
 		}

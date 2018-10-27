@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 06:17:59 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 07:34:07 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 # include "libft.h"
 # include <errno.h>
 # include <string.h>
+
+/*
+** coreio.c
+*/
+
+t_uint				read_data(t_core *core, t_instr *instr, int a);
+void				write_data(t_core *core, t_byte *dst, t_proc *p, int a);
 
 /*
 ** load.c
@@ -37,7 +44,8 @@ void				notice(int id, ...);
 */
 
 t_bool				decode(t_byte *arena, t_proc *p);
-void				op_nop(t_core *core, t_proc *proc);
+t_bool				op_live(t_core *core, t_proc *p);
+t_bool				op_nop(t_core *core, t_proc *p);
 
 /*
 ** process.c

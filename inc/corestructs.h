@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 06:20:13 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 07:18:07 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,25 @@
 struct s_core;
 struct s_proc;
 
+typedef struct		s_header
+{
+	t_uint			magic;
+	char			prog_name[PROG_NAME_LENGTH + 1];
+	t_uint			prog_size;
+	char			comment[COMMENT_LENGTH + 1];
+}					t_header;
+
+typedef struct		s_champ
+{
+	t_uint			id;
+	char			name[PROG_NAME_LENGTH + 1];
+	char			comment[COMMENT_LENGTH + 1];
+}					t_champ;
+
 typedef struct		s_op
 {
 	const char		*name;
-	void			(*run)(struct s_core *, struct s_proc *p);
+	t_bool			(*run)(struct s_core *, struct s_proc *p);
 	t_ushrt			latency;
 	t_byte			opcode;
 	t_byte			nparams;
@@ -42,19 +57,13 @@ typedef struct		s_instr
 typedef struct		s_proc
 {
 	t_byte			*pc;
+	t_champ			*champ;
 	t_uint			registers[REG_NUMBER];
 	t_instr			instr;
 	t_bool			carry : 1;
 	t_bool			lived : 1;
 	struct s_proc	*next;
 }					t_proc;
-
-typedef struct		s_champ
-{
-	t_uint			id;
-	char			name[PROG_NAME_LENGTH + 1];
-	char			comment[COMMENT_LENGTH + 1];
-}					t_champ;
 
 typedef struct		s_core
 {
@@ -68,19 +77,4 @@ typedef struct		s_core
 	t_uint			lives;
 	t_byte			nplayers;
 }					t_core;
-
-typedef struct		s_cullmgr
-{
-	t_uint			checks;
-	t_uint			countdown;
-	t_uint			cull_delay;
-}					t_cullmgr;
-
-typedef struct		s_header
-{
-	t_uint			magic;
-	char			prog_name[PROG_NAME_LENGTH + 1];
-	t_uint			prog_size;
-	char			comment[COMMENT_LENGTH + 1];
-}					t_header;
 #endif

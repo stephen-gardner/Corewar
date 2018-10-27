@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 05:19:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 07:52:29 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ const char		*g_errmsg[7] = {
 	"too many champions specified"
 };
 
-const char		*g_notices[2] = {
+const char		*g_notices[3] = {
 	"Cycle %u: Player %u (%s) wins!",
+	"A process shows that player %u (%s) is alive",
 	"Cycle %u: All players have died without ever really living..."
 };
 

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/25 07:11:09 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 07:29:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static void	load_header(int fd, const char *path, t_header *header)
 
 void		load_champ(t_core *core, const char *path, int pnum)
 {
+	t_proc		*p;
 	t_champ		*champ;
 	t_byte		*pc;
 	t_header	header;
@@ -67,6 +68,8 @@ void		load_champ(t_core *core, const char *path, int pnum)
 	if (read(fd, pc, header.prog_size) != header.prog_size)
 		IO_ERR(path);
 	ft_memset(core->owner + (pc - core->arena), pnum, header.prog_size);
-	add_process(core, champ->id)->pc = pc;
+	p = add_process(core, champ->id);
+	p->pc = pc;
+	p->champ = champ;
 	close(fd);
 }

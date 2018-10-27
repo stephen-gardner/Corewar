@@ -6,14 +6,14 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 06:21:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 07:32:22 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
 const t_op		g_ops[17] = {
-	{"live", op_nop, 10, 0x01, 1, {T_D}, 0, 0},
+	{"live", op_live, 10, 0x01, 1, {T_D}, 0, 0},
 	{"ld", op_nop, 5, 0x02, 2, {T_D | T_I, T_R}, 1, 0},
 	{"st", op_nop, 5, 0x03, 2, {T_R, T_I | T_R}, 1, 0},
 	{"add", op_nop, 10, 0x04, 3, {T_R, T_R, T_R}, 1, 0},
@@ -85,8 +85,9 @@ t_bool			decode(t_byte *arena, t_proc *p)
 	return (TRUE);
 }
 
-void			op_nop(t_core *core, t_proc *p)
+t_bool			op_nop(t_core *core, t_proc *p)
 {
 	UNUSED(core);
 	UNUSED(p);
+	return (p->carry);
 }

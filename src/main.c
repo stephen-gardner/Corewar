@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 05:52:30 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/26 21:53:03 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,26 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 
 static void		execute_war(t_core *core)
 {
-	t_cullmgr	culler;
+	t_uint	checks;
+	t_uint	countdown;
+	t_uint	cull_delay;
 
-	culler.checks = 0;
-	culler.countdown = CYCLE_TO_DIE;
-	culler.cull_delay = CYCLE_TO_DIE;
+	checks = 0;
+	countdown = CYCLE_TO_DIE;
+	cull_delay = CYCLE_TO_DIE;
 	while (core->processes)
 	{
 		execute_processes(core, core->processes);
-		if (!--culler.countdown)
+		if (!--countdown)
 		{
 			cull_processes(core);
-			if (++culler.checks == MAX_CHECKS || core->lives == NBR_LIVE)
+			if (++checks == MAX_CHECKS || core->lives == NBR_LIVE)
 			{
-				culler.checks = 0;
-				culler.cull_delay -= CYCLE_DELTA;
+				checks = 0;
+				cull_delay -= CYCLE_DELTA;
 			}
 			core->lives = 0;
-			culler.countdown = culler.cull_delay;
+			countdown = cull_delay;
 		}
 		if (core->cycle == core->dump_cycle)
 			dump(core);
