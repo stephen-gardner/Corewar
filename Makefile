@@ -15,10 +15,19 @@ SRC_DIR = src
 OBJ_DIR = obj
 
 SRC = \
+	coreio\
 	main\
 	load\
 	msg\
 	ops\
+	ops/op_add\
+	ops/op_and\
+	ops/op_ld\
+	ops/op_live\
+	ops/op_or\
+	ops/op_st\
+	ops/op_sub\
+	ops/op_xor\
 	process
 
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
