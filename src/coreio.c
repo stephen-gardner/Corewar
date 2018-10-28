@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 01:09:10 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 07:31:45 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:13:18 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@ t_uint	read_data(t_core *core, t_instr *instr, int a)
 	int		bytes;
 	int		i;
 
-	if (instr->atypes[a] == T_R)
+	if (instr->atypes[a] & T_R)
 		return (*((t_uint *)instr->args[a]));
 	res = 0;
 	dst = (t_byte *)&res;
-	bytes = (instr->atypes[a] == T_I) ? IND_SIZE : DIR_SIZE;
+	if ((instr->atypes[a] & T_D) && !instr->op->trunc)
+		bytes = DIR_SIZE;
+	else
+		bytes = IND_SIZE;
 	i = 0;
 	while (i < bytes)
 	{

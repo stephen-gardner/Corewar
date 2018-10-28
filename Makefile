@@ -28,6 +28,7 @@ SRC = \
 	ops/op_st\
 	ops/op_sub\
 	ops/op_xor\
+	ops/op_zjmp\
 	process
 
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
