@@ -25,6 +25,7 @@ SRC = \
 	ops/op_fork\
 	ops/op_ld\
 	ops/op_ldi\
+	ops/op_lfork\
 	ops/op_live\
 	ops/op_lld\
 	ops/op_lldi\
