@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 20:24:30 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 20:40:46 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/28 00:18:05 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,7 @@ t_bool	op_zjmp(t_core *core, t_proc *p)
 		val = read_data(core, &p->instr, 0);
 		p->instr.epc = IDX_POS(core->arena, p->pc, val);
 	}
+	else
+		p->instr.epc += DIR_SIZE;
 	return (p->carry);
 }

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 22:19:37 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 23:32:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/28 00:16:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ t_bool	op_fork(t_core *core, t_proc *p)
 	instr->args[0] = instr->epc;
 	instr->atypes[0] = instr->op->ptypes[0];
 	clone->pc = IDX_POS(core->arena, p->pc, read_data(core, instr, 0));
+	instr->epc += DIR_SIZE;
 	return (p->carry);
 }
