@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 21:56:52 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 22:12:22 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ t_bool				op_live(t_core *core, t_proc *p);
 t_bool				op_nop(t_core *core, t_proc *p);
 t_bool				op_or(t_core *core, t_proc *p);
 t_bool				op_st(t_core *core, t_proc *p);
+t_bool				op_sti(t_core *core, t_proc *p);
 t_bool				op_sub(t_core *core, t_proc *p);
 t_bool				op_xor(t_core *core, t_proc *p);
 t_bool				op_zjmp(t_core *core, t_proc *p);
