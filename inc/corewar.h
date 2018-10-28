@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 20:40:14 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 21:56:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 ** coreio.c
 */
 
+t_uint				read_core(t_core *core, t_byte *src, int bytes);
 t_uint				read_data(t_core *core, t_instr *instr, int a);
 void				write_data(t_core *core, t_byte *dst, t_proc *p, int a);
 
@@ -47,6 +48,7 @@ t_bool				decode(t_byte *arena, t_proc *p);
 t_bool				op_add(t_core *core, t_proc *p);
 t_bool				op_and(t_core *core, t_proc *p);
 t_bool				op_ld(t_core *core, t_proc *p);
+t_bool				op_ldi(t_core *core, t_proc *p);
 t_bool				op_live(t_core *core, t_proc *p);
 t_bool				op_nop(t_core *core, t_proc *p);
 t_bool				op_or(t_core *core, t_proc *p);
