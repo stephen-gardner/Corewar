@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_fork.c                                          :+:      :+:    :+:   */
+/*   op_lld.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/27 22:19:37 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 23:32:08 by sgardner         ###   ########.fr       */
+/*   Created: 2018/10/27 23:32:25 by sgardner          #+#    #+#             */
+/*   Updated: 2018/10/27 23:53:34 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-t_bool	op_fork(t_core *core, t_proc *p)
+t_bool	op_lld(t_core *core, t_proc *p)
 {
 	t_instr	*instr;
-	t_proc	*clone;
+	t_uint	*dst;
+	t_byte	*src;
 
 	instr = &p->instr;
-	clone = fork_process(core, p);
-	instr->args[0] = instr->epc;
-	instr->atypes[0] = instr->op->ptypes[0];
-	clone->pc = IDX_POS(core->arena, p->pc, read_data(core, instr, 0));
-	return (p->carry);
+	src = ABS_POS(core->arena, p->pc, read_data(core, instr, 0));
+	dst = (t_uint *)instr->args[1];
+	*dst = read_core(core, src, REG_SIZE);
+	return (!*dst);
 }

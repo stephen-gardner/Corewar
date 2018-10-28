@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 22:44:42 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 23:34:37 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 const t_op		g_ops[17] = {
 	{"live", op_live, 10, 0x01, 1, {T_D}, 0, 0},
-	{"ld", op_ld, 5, 0x02, 2, {T_D | T_I, T_R}, 1, 0},
+	{"ld", op_ld, 5, 0x02, 2, {T_I | T_D, T_R}, 1, 0},
 	{"st", op_st, 5, 0x03, 2, {T_R, T_R | T_I}, 1, 0},
 	{"add", op_add, 10, 0x04, 3, {T_R, T_R, T_R}, 1, 0},
 	{"sub", op_sub, 10, 0x05, 3, {T_R, T_R, T_R}, 1, 0},
@@ -25,7 +25,7 @@ const t_op		g_ops[17] = {
 	{"ldi", op_ldi, 25, 0x0A, 3, {T_R | T_I | T_D, T_R | T_D, T_R}, 1, 1},
 	{"sti", op_sti, 25, 0x0B, 3, {T_R, T_R | T_I | T_D, T_R | T_D}, 1, 1},
 	{"fork", op_fork, 800, 0x0C, 1, {T_D}, 0, 1},
-	{"lld", op_nop, 10, 0x0D, 2, {T_I | T_D, T_R}, 1, 0},
+	{"lld", op_lld, 10, 0x0D, 2, {T_I | T_D, T_R}, 1, 0},
 	{"lldi", op_nop, 50, 0x0E, 3, {T_R | T_I | T_D, T_R | T_D, T_R}, 1, 1},
 	{"lfork", op_nop, 1000, 0x0F, 1, {T_D}, 0, 1},
 	{"aff", op_nop, 2, 0x10, 1, {T_R}, 1, 0},

@@ -26,6 +26,7 @@ SRC = \
 	ops/op_ld\
 	ops/op_ldi\
 	ops/op_live\
+	ops/op_lld\
 	ops/op_or\
 	ops/op_st\
 	ops/op_sti\

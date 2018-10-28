@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 22:34:18 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/27 23:33:00 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ t_bool				op_fork(t_core *core, t_proc *p);
 t_bool				op_ld(t_core *core, t_proc *p);
 t_bool				op_ldi(t_core *core, t_proc *p);
 t_bool				op_live(t_core *core, t_proc *p);
+t_bool				op_lld(t_core *core, t_proc *p);
 t_bool				op_nop(t_core *core, t_proc *p);
 t_bool				op_or(t_core *core, t_proc *p);
 t_bool				op_st(t_core *core, t_proc *p);
