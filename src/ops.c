@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/28 00:04:30 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/29 04:30:14 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ const t_op		g_ops[17] = {
 	{"lldi", op_lldi, 50, 0x0E, 3, {T_R | T_I | T_D, T_R | T_D, T_R}, 1, 1},
 	{"lfork", op_lfork, 1000, 0x0F, 1, {T_D}, 0, 1},
 	{"aff", op_nop, 2, 0x10, 1, {T_R}, 1, 0},
-	{"undefined", op_nop, 0, 0x00, 0, {0}, 0, 0}
+	{"undefined", op_nop, 1, 0x00, 0, {0}, 0, 0}
 };
 
 const t_uint	g_ops_size = sizeof(g_ops) / sizeof(t_op);
@@ -63,21 +63,22 @@ t_bool			decode(t_byte *arena, t_proc *p)
 	t_byte	acb;
 	int		i;
 
-	pos = p->instr.epc;
-	acb = *pos;
-	i = 0;
-	while (i < OP(p)->nparams)
+	acb = *p->instr.epc;
+	pos = ABS_POS(arena, p->instr.epc, 1);
+	i = -1;
+	while (++i < OP(p)->nparams)
 	{
-		if ((acb & 0xC0) == 0x40)
+		if (!(acb & 0xC0))
+			return (FALSE);
+		else if ((acb & 0xC0) == 0x40)
 			p->instr.atypes[i] = T_R;
-		else if ((acb & 0xC) == 0x80)
+		else if ((acb & 0xC0) == 0x80)
 			p->instr.atypes[i] = T_D;
 		else
 			p->instr.atypes[i] = T_I;
 		if (!set_param(arena, p, &pos, i))
 			return (FALSE);
 		acb <<= 2;
-		++i;
 	}
 	if (acb)
 		return (FALSE);

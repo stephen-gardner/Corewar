@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 20:24:30 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/28 00:18:05 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/29 04:19:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 t_bool	op_zjmp(t_core *core, t_proc *p)
 {
-	t_uint	val;
+	t_instr	*instr;
+	t_uint	off;
 
+	instr = &p->instr;
 	if (p->carry)
 	{
-		val = read_data(core, &p->instr, 0);
-		p->instr.epc = IDX_POS(core->arena, p->pc, val);
+		off = read_core(core, instr->epc, DIR_SIZE, TRUE);
+		instr->epc = IDX_POS(core->arena, p->pc, off);
 	}
 	else
-		p->instr.epc += DIR_SIZE;
+		instr->epc = ABS_POS(core->arena, instr->epc, IND_SIZE);
 	return (p->carry);
 }

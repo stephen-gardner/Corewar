@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 07:14:24 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/29 04:32:05 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 **  process list. Returns pointer to process.
 */
 
-t_proc	*add_process(t_core *core, t_uint id)
+t_proc		*add_process(t_core *core, t_uint id)
 {
 	t_proc	*process;
 
@@ -35,7 +35,7 @@ t_proc	*add_process(t_core *core, t_uint id)
 **  survivors. Returns number of processes that have been culled.
 */
 
-t_uint	cull_processes(t_core *core)
+t_uint		cull_processes(t_core *core)
 {
 	t_proc	**processes;
 	t_proc	*weakling;
@@ -61,7 +61,17 @@ t_uint	cull_processes(t_core *core)
 
 // TODO: Decide on behavior for failed decode
 
-void	execute_processes(t_core *core, t_proc *p)
+static void	set_op(t_core *core, t_instr *instr, t_byte *pc)
+{
+	if ((t_uint)(*pc - 1) < g_ops_size)
+		instr->op = &g_ops[*pc - 1];
+	else
+		instr->op = &g_ops[g_ops_size - 1];
+	instr->epc = ABS_POS(core->arena, pc, 1);
+	instr->ecycle = core->cycle + instr->op->latency;
+}
+
+void		execute_processes(t_core *core, t_proc *p)
 {
 	t_instr	*instr;
 
@@ -69,21 +79,14 @@ void	execute_processes(t_core *core, t_proc *p)
 	{
 		instr = &p->instr;
 		if (!instr->op)
-		{
-			if ((t_uint)(*p->pc - 1) < g_ops_size)
-				instr->op = &g_ops[*p->pc - 1];
-			else
-				instr->op = &g_ops[g_ops_size - 1];
-			instr->epc = ABS_POS(core->arena, p->pc, 1);
-			instr->ecycle = core->cycle + instr->op->latency;
-		}
+			set_op(core, instr, p->pc);
 		if (core->cycle == instr->ecycle)
 		{
 			if (instr->op->cbyte && !decode(core->arena, p))
 				instr->op = &g_ops[g_ops_size - 1];
 			p->carry = instr->op->run(core, p);
 			p->pc = instr->epc;
-			instr->op = NULL;
+			set_op(core, instr, p->pc);
 		}
 		p = p->next;
 	}
@@ -94,7 +97,7 @@ void	execute_processes(t_core *core, t_proc *p)
 **  Returns pointer to clone.
 */
 
-t_proc	*fork_process(t_core *core, t_proc *process)
+t_proc		*fork_process(t_core *core, t_proc *process)
 {
 	t_proc	*clone;
 

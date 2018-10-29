@@ -6,13 +6,13 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 01:09:10 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 22:54:35 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/29 04:19:13 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-t_uint	read_core(t_core *core, t_byte *src, int bytes)
+t_uint	read_core(t_core *core, t_byte *src, int n, t_bool trunc)
 {
 	t_byte	*dst;
 	t_uint	res;
@@ -21,42 +21,36 @@ t_uint	read_core(t_core *core, t_byte *src, int bytes)
 	i = 0;
 	res = 0;
 	dst = (t_byte *)&res;
-	while (i < bytes)
+	while (i < n)
 	{
-		dst[i] = *ABS_POS(core->arena, src, i);
+		dst[(n - 1) - i] = *ABS_POS(core->arena, src, i);
 		++i;
 	}
-	res >>= ((DIR_SIZE - bytes) << 3);
+	if (n == IND_SIZE || trunc)
+		res >>= ((DIR_SIZE - IND_SIZE) << 3);
 	return (res);
 }
 
 t_uint	read_data(t_core *core, t_instr *instr, int a)
 {
-	int		bytes;
-
 	if (instr->atypes[a] & T_R)
 		return (*((t_uint *)instr->args[a]));
-	if (instr->atypes[a] & T_D)
-	{
-		bytes = (instr->op->trunc) ? IND_SIZE : DIR_SIZE;
-		instr->atypes[a] += (DIR_SIZE - bytes);
-	}
-	else
-		bytes = IND_SIZE;
-	return (read_core(core, instr->args[a], bytes));
+	if (instr->atypes[a] & T_I)
+		return (read_core(core, instr->args[a], IND_SIZE, FALSE));
+	return (read_core(core, instr->args[a], DIR_SIZE, instr->op->trunc));
 }
 
 void	write_data(t_core *core, t_byte *dst, t_proc *p, int a)
 {
 	t_byte	*src;
 	t_byte	*tmp;
-	int		bytes;
+	int		n;
 	int		i;
 
 	i = 0;
 	src = (t_byte *)&p->instr.args[a];
-	bytes = (p->instr.atypes[a] == T_I) ? IND_SIZE : DIR_SIZE;
-	while (i < bytes)
+	n = (p->instr.atypes[a] == T_I) ? IND_SIZE : DIR_SIZE;
+	while (i < n)
 	{
 		tmp = ABS_POS(core->arena, dst, i);
 		*tmp = src[i];
