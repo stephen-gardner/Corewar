@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 04:30:14 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/29 05:01:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static t_bool	set_param(t_byte *arena, t_proc *p, t_byte **pos, int i)
 	t_instr	*instr;
 
 	instr = &p->instr;
-	if (!(instr->atypes[i] & OP(p)->ptypes[i]))
+	if (!(instr->atypes[i] & instr->op->ptypes[i]))
 		return (FALSE);
 	if (instr->atypes[i] & T_R)
 	{
@@ -50,7 +50,7 @@ static t_bool	set_param(t_byte *arena, t_proc *p, t_byte **pos, int i)
 		return (TRUE);
 	}
 	instr->args[i] = *pos;
-	if (instr->atypes[i] & T_D)
+	if ((instr->atypes[i] & T_D) && !instr->op->trunc)
 		*pos = ABS_POS(arena, *pos, DIR_SIZE);
 	else
 		*pos = ABS_POS(arena, *pos, IND_SIZE);
