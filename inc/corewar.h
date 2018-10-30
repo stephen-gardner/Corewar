@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 21:49:32 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/30 00:29:14 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void				notice(int id, ...);
 
 t_bool				decode(t_byte *arena, t_proc *p);
 t_bool				op_add(t_core *core, t_proc *p);
+t_bool				op_aff(t_core *core, t_proc *p);
 t_bool				op_and(t_core *core, t_proc *p);
 t_bool				op_fork(t_core *core, t_proc *p);
 t_bool				op_ld(t_core *core, t_proc *p);

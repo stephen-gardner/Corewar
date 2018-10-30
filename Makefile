@@ -21,6 +21,7 @@ SRC = \
 	msg\
 	ops\
 	ops/op_add\
+	ops/op_aff\
 	ops/op_and\
 	ops/op_fork\
 	ops/op_ld\

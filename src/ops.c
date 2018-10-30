@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 05:01:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/30 00:29:35 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ const t_op		g_ops[17] = {
 	{"lld", op_lld, 10, 0x0D, 2, {T_I | T_D, T_R}, 1, 0},
 	{"lldi", op_lldi, 50, 0x0E, 3, {T_R | T_I | T_D, T_R | T_D, T_R}, 1, 1},
 	{"lfork", op_lfork, 1000, 0x0F, 1, {T_D}, 0, 1},
-	{"aff", op_nop, 2, 0x10, 1, {T_R}, 1, 0},
+	{"aff", op_aff, 2, 0x10, 1, {T_R}, 1, 0},
 	{"undefined", op_nop, 1, 0x00, 0, {0}, 0, 0}
 };
 
