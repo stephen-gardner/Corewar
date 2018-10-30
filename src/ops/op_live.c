@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 07:26:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 07:35:11 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/29 20:11:17 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ t_bool	op_live(t_core *core, t_proc *p)
 	int		i;
 
 	instr = &p->instr;
-	instr->args[0] = instr->epc;
-	instr->atypes[0] = T_D;
-	id = read_data(core, instr, 0);
+	id = read_core(core, instr->epc, DIR_SIZE, FALSE);
 	i = 0;
 	while (i < core->nplayers && core->champions[i].id != id)
 		++i;
@@ -32,7 +30,7 @@ t_bool	op_live(t_core *core, t_proc *p)
 		core->victor = p->champ;
 		notice(ANNOUNCE_LIVE, UINT_MAX - core->victor->id, core->victor->name);
 	}
-	p->instr.epc = ABS_POS(core->arena, p->pc, DIR_SIZE);
+	instr->epc = ABS_POS(core->arena, instr->epc, DIR_SIZE);
 	p->lived = TRUE;
 	++core->lives;
 	return (p->carry);
