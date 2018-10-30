@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 21:53:03 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/30 03:33:20 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,36 +62,7 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 	return (paths);
 }
 
-static void		execute_war(t_core *core)
-{
-	t_uint	checks;
-	t_uint	countdown;
-	t_uint	cull_delay;
-
-	checks = 0;
-	countdown = CYCLE_TO_DIE;
-	cull_delay = CYCLE_TO_DIE;
-	while (core->processes)
-	{
-		execute_processes(core, core->processes);
-		if (!--countdown)
-		{
-			cull_processes(core);
-			if (++checks == MAX_CHECKS || core->lives == NBR_LIVE)
-			{
-				checks = 0;
-				cull_delay -= CYCLE_DELTA;
-			}
-			core->lives = 0;
-			countdown = cull_delay;
-		}
-		if (core->cycle == core->dump_cycle)
-			dump(core);
-		++core->cycle;
-	}
-}
-
-void			aftermath(t_core *core)
+static void		aftermath(t_core *core)
 {
 	if (core->victor)
 	{
@@ -100,6 +71,31 @@ void			aftermath(t_core *core)
 	}
 	else
 		MSG(ANNOUNCE_LOSERS, core->cycle);
+}
+
+static void		execute_war(t_core *core)
+{
+	static t_uint	checks = 0;
+	static t_uint	countdown = CYCLE_TO_DIE;
+	static t_uint	cull_delay = CYCLE_TO_DIE;
+
+	execute_processes(core, core->processes);
+	if (!--countdown)
+	{
+		cull_processes(core);
+		if (++checks == MAX_CHECKS || core->lives == NBR_LIVE)
+		{
+			checks = 0;
+			cull_delay -= CYCLE_DELTA;
+		}
+		core->lives = 0;
+		countdown = cull_delay;
+	}
+	if (core->cycle == core->dump_cycle)
+		dump(core);
+	++core->cycle;
+	if (!core->processes)
+		aftermath(core);
 }
 
 int				main(int ac, char *av[])
@@ -122,6 +118,5 @@ int				main(int ac, char *av[])
 	}
 	core.victor = NULL;
 	execute_war(&core);
-	aftermath(&core);
 	return (EXIT_SUCCESS);
 }
