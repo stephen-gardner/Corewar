@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 04:05:02 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/29 21:49:32 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_bool				op_zjmp(t_core *core, t_proc *p);
 t_proc				*add_process(t_core *core, t_uint id);
 t_uint				cull_processes(t_core *core);
 void				execute_processes(t_core *core, t_proc *p);
-t_proc				*fork_process(t_core *core, t_proc *process);
+t_proc				*fork_process(t_core *core, t_proc *process, t_byte *fpc);
 
 /*
 ** #############################################################################

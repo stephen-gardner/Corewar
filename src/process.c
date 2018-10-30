@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 04:32:05 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/29 21:53:02 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_uint		cull_processes(t_core *core)
 
 // TODO: Decide on behavior for failed decode
 
-static void	set_op(t_core *core, t_instr *instr, t_byte *pc)
+static void	exec_op(t_core *core, t_instr *instr, t_byte *pc)
 {
 	if ((t_uint)(*pc - 1) < g_ops_size)
 		instr->op = &g_ops[*pc - 1];
@@ -79,14 +79,14 @@ void		execute_processes(t_core *core, t_proc *p)
 	{
 		instr = &p->instr;
 		if (!instr->op)
-			set_op(core, instr, p->pc);
+			exec_op(core, instr, p->pc);
 		if (core->cycle == instr->ecycle)
 		{
 			if (instr->op->cbyte && !decode(core->arena, p))
 				instr->op = &g_ops[g_ops_size - 1];
 			p->carry = instr->op->run(core, p);
 			p->pc = instr->epc;
-			set_op(core, instr, p->pc);
+			exec_op(core, instr, p->pc);
 		}
 		p = p->next;
 	}
@@ -97,15 +97,16 @@ void		execute_processes(t_core *core, t_proc *p)
 **  Returns pointer to clone.
 */
 
-t_proc		*fork_process(t_core *core, t_proc *process)
+t_proc		*fork_process(t_core *core, t_proc *process, t_byte *fpc)
 {
 	t_proc	*clone;
 
 	if (!(clone = malloc(sizeof(t_proc))))
 		SYS_ERR;
 	ft_memcpy(clone, process, sizeof(t_proc));
-	clone->instr.op = NULL;
 	clone->next = core->processes;
 	core->processes = clone;
+	clone->pc = fpc;
+	exec_op(core, &clone->instr, clone->pc);
 	return (clone);
 }
