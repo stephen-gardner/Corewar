@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 04:31:54 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 12:00:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@
 # include "libft.h"
 # include <errno.h>
 # include <string.h>
+
+/*
+** #############################################################################
+** # CORE FUNCTIOONS                                                           #
+** #############################################################################
+*/
 
 /*
 ** coreio.c
@@ -45,6 +51,25 @@ void				notice(int id, ...);
 */
 
 t_bool				decode(t_byte *arena, t_proc *p);
+
+/*
+** process.c
+*/
+
+t_uint				cull_processes(t_core *core);
+void				execute_processes(t_core *core, t_proc *p);
+t_proc				*fork_process(t_core *core, t_proc *p, t_byte *fpc);
+
+/*
+** #############################################################################
+** # INSTRUCTION SET                                                           #
+** #############################################################################
+*/
+
+/*
+** ./ops/op_*.c
+*/
+
 t_bool				op_add(t_core *core, t_proc *p);
 t_bool				op_aff(t_core *core, t_proc *p);
 t_bool				op_and(t_core *core, t_proc *p);
@@ -62,14 +87,6 @@ t_bool				op_sti(t_core *core, t_proc *p);
 t_bool				op_sub(t_core *core, t_proc *p);
 t_bool				op_xor(t_core *core, t_proc *p);
 t_bool				op_zjmp(t_core *core, t_proc *p);
-
-/*
-** process.c
-*/
-
-t_uint				cull_processes(t_core *core);
-void				execute_processes(t_core *core, t_proc *p);
-t_proc				*fork_process(t_core *core, t_proc *process, t_byte *fpc);
 
 /*
 ** #############################################################################

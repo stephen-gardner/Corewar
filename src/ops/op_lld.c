@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 23:32:25 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 04:25:19 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 08:59:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@ t_bool	op_lld(t_core *core, t_proc *p)
 	t_byte	*src;
 
 	instr = &p->instr;
-	src = ABS_POS(core->arena, p->pc, read_data(core, instr, 0));
 	dst = (t_uint *)instr->args[1];
-	*dst = read_core(core, src, REG_SIZE, FALSE);
+	if (instr->atypes[0] == T_D)
+		*dst = read_data(core, instr, 0);
+	else
+	{
+		src = ABS_POS(core->arena, p->pc, read_data(core, instr, 0));
+		*dst = read_core(core, src, REG_SIZE, FALSE);
+	}
 	return (!*dst);
 }

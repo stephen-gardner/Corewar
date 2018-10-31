@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 04:25:47 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 05:46:34 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ static void	load_header(int fd, const char *path, t_header *header)
 void		load_champ(t_core *core, const char *path, int pnum)
 {
 	t_proc		*p;
-	t_champ		*champ;
 	t_byte		*pc;
+	t_champ		*champ;
 	t_header	header;
 	int			fd;
 

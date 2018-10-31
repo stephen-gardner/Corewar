@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/30 22:30:03 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 12:06:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,4 @@ t_bool			decode(t_byte *arena, t_proc *p)
 		return (invalid_acb(arena, p));
 	p->instr.epc = pos;
 	return (TRUE);
-}
-
-t_bool			op_nop(t_core *core, t_proc *p)
-{
-	UNUSED(core);
-	UNUSED(p);
-	return (p->carry);
 }

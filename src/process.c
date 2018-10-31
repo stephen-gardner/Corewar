@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 04:34:26 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 12:22:08 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@
 
 t_uint		cull_processes(t_core *core)
 {
-	t_proc	**processes;
+	t_proc	**procs;
 	t_proc	*weakling;
 	t_uint	count;
 
 	count = 0;
-	processes = &core->processes;
-	while (*processes)
+	procs = &core->processes;
+	while (*procs)
 	{
-		if (!(*processes)->lived)
+		if (!(*procs)->lived)
 		{
-			weakling = *processes;
-			*processes = (*processes)->next;
+			weakling = *procs;
+			*procs = (*procs)->next;
 			free(weakling);
 			++count;
 			continue ;
 		}
-		(*processes)->lived = FALSE;
-		processes = &(*processes)->next;
+		(*procs)->lived = FALSE;
+		procs = &(*procs)->next;
 	}
 	return (count);
 }
@@ -73,15 +73,15 @@ void		execute_processes(t_core *core, t_proc *p)
 	}
 }
 
-t_proc		*fork_process(t_core *core, t_proc *process, t_byte *fpc)
+t_proc		*fork_process(t_core *core, t_proc *p, t_byte *fpc)
 {
 	t_proc	*clone;
 
 	if (!(clone = ft_memalloc(sizeof(t_proc))))
 		SYS_ERR;
-	if (process)
+	if (p)
 	{
-		ft_memcpy(clone, process, sizeof(t_proc));
+		ft_memcpy(clone, p, sizeof(t_proc));
 		clone->lived = FALSE;
 	}
 	clone->next = core->processes;

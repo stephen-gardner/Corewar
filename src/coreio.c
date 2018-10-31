@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 01:09:10 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 04:31:10 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 12:05:30 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_uint	read_core(t_core *core, t_byte *src, int n, t_bool trunc)
 	dst = (t_byte *)&res;
 	while (++i < n)
 		dst[(n - 1) - i] = *ABS_POS(core->arena, src, i);
-	if (n == IND_SIZE || trunc)
+	if (trunc)
 		res >>= ((DIR_SIZE - IND_SIZE) << 3);
 	return (res);
 }

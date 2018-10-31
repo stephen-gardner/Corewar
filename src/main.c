@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 04:18:47 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 12:17:26 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ static void		aftermath(t_core *core)
 static void		execute_war(t_core *core)
 {
 	static t_uint	checks = 0;
-	static t_uint	countdown = CYCLE_TO_DIE;
-	static t_uint	cull_delay = CYCLE_TO_DIE;
+	static t_uint	countdown = CYCLE_TO_DIE + 1;
+	static int		cull_delay = CYCLE_TO_DIE;
 
 	while (TRUE)
 	{
@@ -91,7 +91,7 @@ static void		execute_war(t_core *core)
 				cull_delay -= CYCLE_DELTA;
 			}
 			core->lives = 0;
-			countdown = cull_delay;
+			countdown = (cull_delay > 0) ? cull_delay : 1;
 		}
 		if (!core->processes)
 			return (aftermath(core));
@@ -109,7 +109,6 @@ int				main(int ac, char *av[])
 	int		i;
 
 	ft_memset(&core, 0, sizeof(t_core));
-	core.cycle = 1;
 	core.dump_cycle = -1;
 	core.victor = NULL;
 	paths = parse_args(&core, ac, av);
