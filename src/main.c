@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 12:17:26 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 14:24:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ static void		execute_war(t_core *core)
 		}
 		if (!core->processes)
 			return (aftermath(core));
+		if (!(core->cycle % 10))
+			age_arena(core->epoch);
 		if (core->cycle++ == core->dump_cycle)
 			dump(core);
 		if (core->gui)

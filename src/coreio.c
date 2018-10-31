@@ -6,11 +6,23 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 01:09:10 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 12:05:30 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 14:25:08 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+void	age_arena(t_byte *epoch)
+{
+	int	i;
+
+	i = -1;
+	while (++i < MEM_SIZE)
+	{
+		if (epoch[i] < 254)
+			++epoch[i];
+	}
+}
 
 t_uint	read_core(t_core *core, t_byte *src, int n, t_bool trunc)
 {
@@ -52,5 +64,6 @@ void	write_data(t_core *core, t_byte *dst, t_proc *p, int a)
 		tmp = ABS_POS(core->arena, dst, ((n - 1) - i));
 		*tmp = src[i];
 		core->owner[tmp - core->arena] = p->champ - core->champions;
+		core->epoch[tmp - core->arena] = 0;
 	}
 }
