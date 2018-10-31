@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 20:08:01 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/30 22:37:48 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@
 */
 
 # define T_R				1
-# define T_D				2
-# define T_I				4
+# define T_I				2
+# define T_D				4
 
 /*
 ** Champions
@@ -90,13 +90,16 @@ enum	e_errmsg
 	CHAMP_TOO_SMALL,
 	INVALID_HEADER,
 	SIZE_MISMATCH,
-	TOO_MANY_CHAMPS
+	TOO_MANY_CHAMPS,
+	NERRMSGS
 };
 
 enum	e_notices
 {
 	ANNOUNCE_WINNER,
 	ANNOUNCE_LIVE,
-	ANNOUNCE_LOSERS
+	ANNOUNCE_LOSERS,
+	LAUNCH_GUI,
+	NNOTICES
 };
 #endif

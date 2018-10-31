@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/26 07:52:29 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/30 22:39:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-const char		*g_errmsg[7] = {
+const char		*g_errmsg[NERRMSGS] = {
 	"%s",
 	"%s: %s",
 	"%s: exceeds max champion size (%u > %u)",
@@ -25,20 +25,21 @@ const char		*g_errmsg[7] = {
 	"too many champions specified"
 };
 
-const char		*g_notices[3] = {
+const char		*g_notices[NNOTICES] = {
 	"Cycle %u: Player %u (%s) wins!",
 	"A process shows that player %u (%s) is alive",
-	"Cycle %u: All players have died without ever really living..."
+	"Cycle %u: All players have died without ever really living...",
+	"Launching GUI..."
 };
 
-static void		build_out(char *out, t_byte *arena, int addrlen)
+static void		build_dump(char *out, t_byte *arena, int addrlen)
 {
 	size_t	line;
 	size_t	i;
 
 	i = 0;
 	line = 0;
-	out += ft_sprintf(out, "0x%.*x: ", addrlen, 0);
+	out += ft_sprintf(out, "0x%.*x : ", addrlen, 0);
 	while (i < MEM_SIZE)
 	{
 		if (++line == DUMP_LEN)
@@ -46,19 +47,20 @@ static void		build_out(char *out, t_byte *arena, int addrlen)
 			line = 0;
 			out += ft_sprintf(out, "%.2x\n", arena[i++]);
 			if (i < MEM_SIZE)
-				out += ft_sprintf(out, "%#.*x: ", addrlen, i);
+				out += ft_sprintf(out, "%#.*x : ", addrlen, i);
 			continue ;
 		}
 		out += ft_sprintf(out, "%.2x ", arena[i++]);
 	}
 }
 
-static size_t	calc_olen(int *addrlen, size_t msize)
+static size_t	dumplen(int *addrlen)
 {
-	int		alen;
+	int	msize;
+	int	alen;
 
 	alen = 0;
-	if (!msize)
+	if (!(msize = MEM_SIZE))
 		alen = 1;
 	while (msize)
 	{
@@ -66,7 +68,7 @@ static size_t	calc_olen(int *addrlen, size_t msize)
 		msize /= 16;
 	}
 	*addrlen = alen;
-	return (((MEM_SIZE / DUMP_LEN) * (alen + 4)) + (MEM_SIZE * 3));
+	return (((MEM_SIZE / DUMP_LEN) * (alen + 5)) + (MEM_SIZE * 3));
 }
 
 /*
@@ -81,15 +83,16 @@ void			dump(t_core *core)
 	int		slen;
 	int		addrlen;
 
-	olen = calc_olen(&addrlen, MEM_SIZE);
+	olen = dumplen(&addrlen);
+	slen = (DUMP_LEN * 3) + addrlen + 4;
 	if (!(out = malloc(olen + 1)))
 		SYS_ERR;
-	slen = (DUMP_LEN * 3) + addrlen + 3;
-	if (!(sep = malloc(slen)))
+	if (!(sep = malloc(slen + 1)))
 		SYS_ERR;
+	sep[slen] = '\0';
 	ft_memset(sep, '-', slen);
-	build_out(out, core->arena, addrlen);
-	ft_printf("%s\nCORE DUMP [CYCLE %u]\n%s\n", sep, core->cycle, sep);
+	build_dump(out, core->arena, addrlen);
+	ft_printf("%s\nCORE DUMP [CYCLE %u]\n%s\n", sep, --core->cycle, sep);
 	write(STDOUT_FILENO, out, olen);
 	free(out);
 	free(sep);

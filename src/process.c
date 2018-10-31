@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 21:53:02 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/30 22:47:14 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ t_proc		*add_process(t_core *core, t_uint id)
 
 	if (!(process = ft_memalloc(sizeof(t_proc))))
 		SYS_ERR;
-	process->registers[0] = id;
 	process->next = core->processes;
 	core->processes = process;
+	process->registers[0] = id;
+	process->pid = ++core->lpid;
 	return (process);
 }
 
@@ -58,8 +59,6 @@ t_uint		cull_processes(t_core *core)
 	}
 	return (count);
 }
-
-// TODO: Decide on behavior for failed decode
 
 static void	exec_op(t_core *core, t_instr *instr, t_byte *pc)
 {
@@ -107,6 +106,7 @@ t_proc		*fork_process(t_core *core, t_proc *process, t_byte *fpc)
 	clone->next = core->processes;
 	core->processes = clone;
 	clone->pc = fpc;
+	clone->pid = ++core->lpid;
 	exec_op(core, &clone->instr, clone->pc);
 	return (clone);
 }

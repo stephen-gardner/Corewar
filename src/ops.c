@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/30 00:29:35 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/30 22:30:03 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,35 @@ const t_op		g_ops[17] = {
 };
 
 const t_uint	g_ops_size = sizeof(g_ops) / sizeof(t_op);
+
+static t_bool	invalid_acb(t_byte *arena, t_proc *p)
+{
+	t_instr	*instr;
+	t_byte	acb;
+	int		i;
+
+	i = 0;
+	instr = &p->instr;
+	acb = *instr->epc;
+	instr->epc = ABS_POS(arena, instr->epc, 1);
+	while (acb && i < instr->op->nparams)
+	{
+		if ((acb & 0xC0) == 0x40)
+			instr->epc = ABS_POS(arena, instr->epc, T_R);
+		else if ((acb & 0xC0) == 0x80)
+		{
+			if (instr->op->trunc)
+				instr->epc = ABS_POS(arena, instr->epc, T_I);
+			else
+				instr->epc = ABS_POS(arena, instr->epc, T_D);
+		}
+		else if ((acb & 0xC0) == 0xC0)
+			instr->epc = ABS_POS(arena, instr->epc, T_I);
+		acb <<= 2;
+		++i;
+	}
+	return (FALSE);
+}
 
 static t_bool	set_param(t_byte *arena, t_proc *p, t_byte **pos, int i)
 {
@@ -69,7 +98,7 @@ t_bool			decode(t_byte *arena, t_proc *p)
 	while (++i < OP(p)->nparams)
 	{
 		if (!(acb & 0xC0))
-			return (FALSE);
+			return (invalid_acb(arena, p));
 		else if ((acb & 0xC0) == 0x40)
 			p->instr.atypes[i] = T_R;
 		else if ((acb & 0xC0) == 0x80)
@@ -77,11 +106,11 @@ t_bool			decode(t_byte *arena, t_proc *p)
 		else
 			p->instr.atypes[i] = T_I;
 		if (!set_param(arena, p, &pos, i))
-			return (FALSE);
+			return (invalid_acb(arena, p));
 		acb <<= 2;
 	}
 	if (acb)
-		return (FALSE);
+		return (invalid_acb(arena, p));
 	p->instr.epc = pos;
 	return (TRUE);
 }
