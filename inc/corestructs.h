@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/30 22:43:16 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 13:47:59 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct		s_core
 {
 	t_byte			arena[MEM_SIZE];
 	t_byte			owner[MEM_SIZE];
+	t_byte			epoch[MEM_SIZE];
 	t_champ			champions[MAX_PLAYERS];
 	t_champ			*victor;
 	t_proc			*processes;
