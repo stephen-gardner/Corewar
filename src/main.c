@@ -6,13 +6,12 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/30 22:36:29 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 04:18:47 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 #include "ft_getopt.h"
-#include "ft_printf.h"
 #include <limits.h>
 #include <stdlib.h>
 
@@ -23,16 +22,15 @@ static t_uint	find_id(t_core *core)
 
 	if (!core->nplayers)
 		return (0);
-	i = 0;
+	i = -1;
 	id = core->champions[core->nplayers - 1].id + 1;
-	while (i < core->nplayers - 1)
+	while (++i < core->nplayers - 1)
 	{
 		if (id == core->champions[core->nplayers].id)
 		{
-			i = 0;
+			i = -1;
 			++id;
 		}
-		++i;
 	}
 	return (id);
 }
@@ -87,7 +85,7 @@ static void		execute_war(t_core *core)
 		if (!--countdown)
 		{
 			cull_processes(core);
-			if (++checks == MAX_CHECKS || core->lives == NBR_LIVE)
+			if (++checks == MAX_CHECKS || core->lives >= NBR_LIVE)
 			{
 				checks = 0;
 				cull_delay -= CYCLE_DELTA;
@@ -111,18 +109,18 @@ int				main(int ac, char *av[])
 	int		i;
 
 	ft_memset(&core, 0, sizeof(t_core));
+	core.cycle = 1;
 	core.dump_cycle = -1;
+	core.victor = NULL;
 	paths = parse_args(&core, ac, av);
 	if (!core.nplayers)
 		return (1);
-	i = 0;
-	while (i < core.nplayers)
+	i = -1;
+	while (++i < core.nplayers)
 	{
 		core.champions[i].id = UINT_MAX - core.champions[i].id;
 		load_champ(&core, paths[i], i);
-		++i;
 	}
-	core.victor = NULL;
 	if (core.gui)
 	{
 		MSG(LAUNCH_GUI);

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/27 07:29:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 04:25:47 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void		load_champ(t_core *core, const char *path, int pnum)
 	if (read(fd, pc, header.prog_size) != header.prog_size)
 		IO_ERR(path);
 	ft_memset(core->owner + (pc - core->arena), pnum, header.prog_size);
-	p = add_process(core, champ->id);
-	p->pc = pc;
+	p = fork_process(core, NULL, pc);
+	p->registers[0] = champ->id;
 	p->champ = champ;
 	close(fd);
 }

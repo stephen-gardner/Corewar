@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 01:09:10 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/30 22:44:55 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/10/31 04:31:10 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,11 @@ t_uint	read_core(t_core *core, t_byte *src, int n, t_bool trunc)
 	t_uint	res;
 	int		i;
 
-	i = 0;
+	i = -1;
 	res = 0;
 	dst = (t_byte *)&res;
-	while (i < n)
-	{
+	while (++i < n)
 		dst[(n - 1) - i] = *ABS_POS(core->arena, src, i);
-		++i;
-	}
 	if (n == IND_SIZE || trunc)
 		res >>= ((DIR_SIZE - IND_SIZE) << 3);
 	return (res);
@@ -47,14 +44,13 @@ void	write_data(t_core *core, t_byte *dst, t_proc *p, int a)
 	int		n;
 	int		i;
 
-	i = 0;
+	i = -1;
 	src = p->instr.args[a];
 	n = (p->instr.atypes[a] == T_I) ? IND_SIZE : DIR_SIZE;
-	while (i < n)
+	while (++i < n)
 	{
 		tmp = ABS_POS(core->arena, dst, ((n - 1) - i));
 		*tmp = src[i];
 		core->owner[tmp - core->arena] = p->champ - core->champions;
-		++i;
 	}
 }
