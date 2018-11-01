@@ -6,40 +6,39 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 12:22:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/01 07:54:20 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 #include <stdlib.h>
 
-/*
-** Kills processes that have not yet lived, and resets the lived state for
-**  survivors. Returns number of processes that have been culled.
-*/
-
-t_uint		cull_processes(t_core *core)
+t_uint		cull_processes(t_core *core, t_proc **procs)
 {
-	t_proc	**procs;
-	t_proc	*weakling;
-	t_uint	count;
+	static t_uint	checks;
+	t_proc			*weakling;
 
-	count = 0;
-	procs = &core->processes;
 	while (*procs)
 	{
-		if (!(*procs)->lived)
+		if (core->cycle - (*procs)->lived >= core->ccycle)
 		{
 			weakling = *procs;
 			*procs = (*procs)->next;
 			free(weakling);
-			++count;
 			continue ;
 		}
-		(*procs)->lived = FALSE;
 		procs = &(*procs)->next;
 	}
-	return (count);
+	if (++checks >= MAX_CHECKS || core->lives >= NBR_LIVE)
+	{
+		checks = 0;
+		core->lives = 0;
+		if (core->ccycle > CYCLE_DELTA)
+			core->ccycle -= CYCLE_DELTA;
+		else
+			core->ccycle = 0;
+	}
+	return ((core->ccycle > 0) ? core->ccycle : 1);
 }
 
 static void	exec_op(t_core *core, t_instr *instr, t_byte *pc)
@@ -59,8 +58,6 @@ void		execute_processes(t_core *core, t_proc *p)
 	while (p)
 	{
 		instr = &p->instr;
-		if (!instr->op)
-			exec_op(core, instr, p->pc);
 		if (core->cycle == instr->ecycle)
 		{
 			if (instr->op->cbyte && !decode(core->arena, p))
@@ -80,10 +77,7 @@ t_proc		*fork_process(t_core *core, t_proc *p, t_byte *fpc)
 	if (!(clone = ft_memalloc(sizeof(t_proc))))
 		SYS_ERR;
 	if (p)
-	{
 		ft_memcpy(clone, p, sizeof(t_proc));
-		clone->lived = FALSE;
-	}
 	clone->next = core->processes;
 	core->processes = clone;
 	clone->pc = fpc;

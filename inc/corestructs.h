@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 13:47:59 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/01 07:54:30 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ typedef struct		s_proc
 	t_byte			*pc;
 	t_champ			*champ;
 	t_uint			pid;
+	t_uint			lived;
 	t_uint			registers[REG_NUMBER];
 	t_instr			instr;
 	t_bool			carry : 1;
-	t_bool			lived : 1;
 	struct s_proc	*next;
 }					t_proc;
 
@@ -75,7 +75,8 @@ typedef struct		s_core
 	t_champ			*victor;
 	t_proc			*processes;
 	t_uint			cycle;
-	t_uint			dump_cycle;
+	t_uint			ccycle;
+	t_uint			dcycle;
 	t_uint			lpid;
 	t_uint			lives;
 	t_byte			nplayers;

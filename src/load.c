@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 05:46:34 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/01 07:45:17 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,6 @@ static void	load_header(int fd, const char *path, t_header *header)
 		ERR(CHAMP_TOO_LARGE, path, header->prog_size, CHAMP_MAX_SIZE);
 }
 
-/*
-** Loads champion from file, verifies that its data is correct, and loads its
-**  code to the appropriate position in the arena. Spawns a new process for the
-**  champion and sets its PC to its start position.
-*/
-
 void		load_champ(t_core *core, const char *path, int pnum)
 {
 	t_proc		*p;
@@ -67,7 +61,7 @@ void		load_champ(t_core *core, const char *path, int pnum)
 	pc = &core->arena[(MEM_SIZE / core->nplayers) * pnum];
 	if (read(fd, pc, header.prog_size) != header.prog_size)
 		IO_ERR(path);
-	ft_memset(core->owner + (pc - core->arena), pnum, header.prog_size);
+	ft_memset(core->owner + (pc - core->arena), pnum + 1, header.prog_size);
 	p = fork_process(core, NULL, pc);
 	p->registers[0] = champ->id;
 	p->champ = champ;

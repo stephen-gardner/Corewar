@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 01:09:10 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 14:25:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/01 07:57:03 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	write_data(t_core *core, t_byte *dst, t_proc *p, int a)
 	{
 		tmp = ABS_POS(core->arena, dst, ((n - 1) - i));
 		*tmp = src[i];
-		core->owner[tmp - core->arena] = p->champ - core->champions;
+		core->owner[tmp - core->arena] = (p->champ - core->champions) + 1;
 		core->epoch[tmp - core->arena] = 0;
 	}
 }

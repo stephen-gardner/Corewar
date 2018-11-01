@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 14:23:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/01 07:41:46 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ void				write_data(t_core *core, t_byte *dst, t_proc *p, int a);
 void				load_champ(t_core *core, const char *path, int pnum);
 
 /*
+** main.c
+*/
+
+void				execute_war(t_core *core);
+
+/*
 ** msg.c
 */
 
@@ -57,7 +63,7 @@ t_bool				decode(t_byte *arena, t_proc *p);
 ** process.c
 */
 
-t_uint				cull_processes(t_core *core);
+t_uint				cull_processes(t_core *core, t_proc **procs);
 void				execute_processes(t_core *core, t_proc *p);
 t_proc				*fork_process(t_core *core, t_proc *p, t_byte *fpc);
 
