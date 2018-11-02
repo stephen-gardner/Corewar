@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/01 07:59:44 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/01 10:59:57 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,15 @@ static void		build_dump(char *out, t_byte *arena, int addrlen)
 	out += ft_sprintf(out, "0x%.*x : ", addrlen, 0);
 	while (i < MEM_SIZE)
 	{
-		out += ft_sprintf(out, "%.2x ", arena[i++]);
 		if (++line == DUMP_LEN)
 		{
 			line = 0;
-			out += ft_sprintf(out, "\n", arena[i++]);
+			out += ft_sprintf(out, "%.2x \n", arena[i++]);
 			if (i < MEM_SIZE)
 				out += ft_sprintf(out, "%#.*x : ", addrlen, i);
 			continue ;
 		}
+		out += ft_sprintf(out, "%.2x ", arena[i++]);
 	}
 }
 
