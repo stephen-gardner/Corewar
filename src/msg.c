@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/01 10:59:57 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/03 04:47:16 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@ const char		*g_errmsg[NERRMSGS] = {
 	"%s: exceeds max champion size (%u > %u)",
 	"%s: too small to be a champion",
 	"%s: invalid header",
+	"No champions\nUsage: corewar [-g] [-d cycle] <[-n id] champion ...>",
 	"%s: code size does not match size specified in header",
 	"too many champions specified"
 };
 
 const char		*g_notices[NNOTICES] = {
-	"Cycle %u: Player %u (%s) wins!",
-	"A process shows that player %u (%s) is alive",
-	"Cycle %u: All players have died without ever really living...",
+	"\x1b[32mPlayer %u (%s) wins!\x1b[0m",
+	"\x1b[36m%s has won the game for its team:\x1b[0m",
+	"\x1b[33mA process shows that player %u (%s) is alive\x1b[0m",
+	"\x1b[31mAll players have died without ever really living...\x1b[0m",
+	"\x1b[35m\"%s\"\x1b[0m",
 	"Launching GUI..."
 };
 

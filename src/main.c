@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/01 07:47:00 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/03 04:43:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,32 @@
 #include <limits.h>
 #include <stdlib.h>
 
-static void		aftermath(t_core *core)
+static void		aftermath(t_core *core, t_champ *victor)
 {
-	if (core->victor)
+	t_champ	*victors[MAX_PLAYERS];
+	int		n;
+	int		i;
+
+	if (victor)
 	{
-		MSG(ANNOUNCE_WINNER, core->cycle,
-			UINT_MAX - core->victor->id, core->victor->name);
+		n = 0;
+		i = -1;
+		while (++i < core->nplayers)
+		{
+			if (core->champions[i].id == victor->id)
+				victors[n++] = &core->champions[i];
+		}
+		if (n > 1)
+			MSG(ANNOUNCE_WINNER_TEAM, victor->name);
+		i = -1;
+		while (++i < n)
+		{
+			MSG(ANNOUNCE_WINNER, ID(victor->id), victors[i]->name);
+			MSG(CHAMP_COMMENT, victors[i]->comment);
+		}
 	}
 	else
-		MSG(ANNOUNCE_LOSERS, core->cycle);
+		MSG(ANNOUNCE_LOSERS);
 }
 
 void			execute_war(t_core *core)
@@ -38,7 +55,7 @@ void			execute_war(t_core *core)
 		if (!--countdown)
 			countdown = cull_processes(core, &core->processes);
 		if (!core->processes)
-			return (aftermath(core));
+			return (aftermath(core, core->victor));
 		if (!(core->cycle % 10))
 			age_arena(core->epoch);
 		if (core->gui)
@@ -105,7 +122,7 @@ int				main(int ac, char *av[])
 	core.victor = NULL;
 	paths = parse_args(&core, ac, av);
 	if (!core.nplayers)
-		return (1);
+		ERR(NO_PLAYERS);
 	i = -1;
 	while (++i < core.nplayers)
 	{

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 07:26:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/01 03:11:13 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/03 04:03:46 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ t_bool	op_live(t_core *core, t_proc *p)
 	if (i < core->nplayers)
 	{
 		p->champ = &core->champions[i];
-		core->victor = p->champ;
-		notice(ANNOUNCE_LIVE, UINT_MAX - core->victor->id, core->victor->name);
+		core->victor = &core->champions[i];
+		notice(ANNOUNCE_LIVE, ID(core->victor->id), core->victor->name);
 	}
 	instr->epc = ABS_POS(core->arena, instr->epc, DIR_SIZE);
 	p->lived = core->cycle;

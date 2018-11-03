@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/30 22:37:48 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/03 04:43:51 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@
 # define IDX_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + REL_POS(x)))
 # define ABS_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + (x)))
 
+# define ID(id)				(UINT_MAX - id)
 # define OP(p)				(p->instr.op)
 
 /*
@@ -89,6 +90,7 @@ enum	e_errmsg
 	CHAMP_TOO_LARGE,
 	CHAMP_TOO_SMALL,
 	INVALID_HEADER,
+	NO_PLAYERS,
 	SIZE_MISMATCH,
 	TOO_MANY_CHAMPS,
 	NERRMSGS
@@ -97,8 +99,10 @@ enum	e_errmsg
 enum	e_notices
 {
 	ANNOUNCE_WINNER,
+	ANNOUNCE_WINNER_TEAM,
 	ANNOUNCE_LIVE,
 	ANNOUNCE_LOSERS,
+	CHAMP_COMMENT,
 	LAUNCH_GUI,
 	NNOTICES
 };
