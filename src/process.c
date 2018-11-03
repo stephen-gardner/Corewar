@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/01 07:54:20 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/03 09:20:57 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		execute_processes(t_core *core, t_proc *p)
 		instr = &p->instr;
 		if (core->cycle == instr->ecycle)
 		{
-			if (instr->op->cbyte && !decode(core->arena, p))
+			if (instr->op->cbyte && !decode(core->arena, p, instr))
 				instr->op = &g_ops[g_ops_size - 1];
 			p->carry = instr->op->run(core, p);
 			p->pc = instr->epc;

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/01 07:41:46 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/03 09:21:12 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void				notice(int id, ...);
 ** ops.c
 */
 
-t_bool				decode(t_byte *arena, t_proc *p);
+t_bool				decode(t_byte *arena, t_proc *p, t_instr *instr);
 
 /*
 ** process.c

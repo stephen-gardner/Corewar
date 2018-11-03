@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/31 12:06:52 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/03 09:27:56 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,83 +34,55 @@ const t_op		g_ops[17] = {
 
 const t_uint	g_ops_size = sizeof(g_ops) / sizeof(t_op);
 
-static t_bool	invalid_acb(t_byte *arena, t_proc *p)
+static t_bool	set_param(t_byte *arena, t_proc *p, t_instr *instr, int i)
 {
-	t_instr	*instr;
-	t_byte	acb;
-	int		i;
+	t_bool	res;
 
-	i = 0;
-	instr = &p->instr;
-	acb = *instr->epc;
-	instr->epc = ABS_POS(arena, instr->epc, 1);
-	while (acb && i < instr->op->nparams)
-	{
-		if ((acb & 0xC0) == 0x40)
-			instr->epc = ABS_POS(arena, instr->epc, T_R);
-		else if ((acb & 0xC0) == 0x80)
-		{
-			if (instr->op->trunc)
-				instr->epc = ABS_POS(arena, instr->epc, T_I);
-			else
-				instr->epc = ABS_POS(arena, instr->epc, T_D);
-		}
-		else if ((acb & 0xC0) == 0xC0)
-			instr->epc = ABS_POS(arena, instr->epc, T_I);
-		acb <<= 2;
-		++i;
-	}
-	return (FALSE);
-}
-
-static t_bool	set_param(t_byte *arena, t_proc *p, t_byte **pos, int i)
-{
-	t_instr	*instr;
-
-	instr = &p->instr;
+	res = TRUE;
 	if (!(instr->atypes[i] & instr->op->ptypes[i]))
-		return (FALSE);
+		res = FALSE;
 	if (instr->atypes[i] & T_R)
 	{
-		if (**pos > REG_NUMBER)
-			return (FALSE);
-		instr->args[i] = (t_byte *)&p->registers[**pos - 1];
-		*pos = ABS_POS(arena, *pos, 1);
-		return (TRUE);
+		if (*instr->epc > REG_NUMBER)
+			res = FALSE;
+		else
+			instr->args[i] = (t_byte *)&p->registers[*instr->epc - 1];
+		instr->epc = ABS_POS(arena, instr->epc, 1);
+		return (res);
 	}
-	instr->args[i] = *pos;
+	instr->args[i] = instr->epc;
 	if ((instr->atypes[i] & T_D) && !instr->op->trunc)
-		*pos = ABS_POS(arena, *pos, DIR_SIZE);
+		instr->epc = ABS_POS(arena, instr->epc, DIR_SIZE);
 	else
-		*pos = ABS_POS(arena, *pos, IND_SIZE);
-	return (TRUE);
+		instr->epc = ABS_POS(arena, instr->epc, IND_SIZE);
+	return (res);
 }
 
-t_bool			decode(t_byte *arena, t_proc *p)
+t_bool			decode(t_byte *arena, t_proc *p, t_instr *instr)
 {
-	t_byte	*pos;
+	t_bool	res;
 	t_byte	acb;
 	int		i;
 
-	acb = *p->instr.epc;
-	pos = ABS_POS(arena, p->instr.epc, 1);
+	res = TRUE;
+	acb = *instr->epc;
+	instr->epc = ABS_POS(arena, instr->epc, 1);
 	i = -1;
-	while (++i < OP(p)->nparams)
+	while (++i < instr->op->nparams)
 	{
 		if (!(acb & 0xC0))
-			return (invalid_acb(arena, p));
+			res = FALSE;
 		else if ((acb & 0xC0) == 0x40)
 			p->instr.atypes[i] = T_R;
 		else if ((acb & 0xC0) == 0x80)
 			p->instr.atypes[i] = T_D;
 		else
 			p->instr.atypes[i] = T_I;
-		if (!set_param(arena, p, &pos, i))
-			return (invalid_acb(arena, p));
+		if ((acb & 0xC0) && !set_param(arena, p, instr, i))
+			res = FALSE;
 		acb <<= 2;
 	}
 	if (acb)
-		return (invalid_acb(arena, p));
-	p->instr.epc = pos;
-	return (TRUE);
+		res = FALSE;
+	return (res);
 }
