@@ -69,7 +69,10 @@ SRC = \
 	ft_strstr\
 	ft_strsub\
 	ft_strtrim\
-	ft_strupcase
+	ft_strupcase\
+	ft_isdigit\
+	ft_isspace\
+	ft_strsplit2
 
 # [ PRINTF ]
 

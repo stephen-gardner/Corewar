@@ -9,25 +9,32 @@ CC = gcc
 CFLAGS += -Wall -Werror -Wextra
 CFLAGS += -Wno-unused-parameter -Wno-unused-result
 CFLAGS += #-Ofast -funroll-loops
-CFLAGS += -g #-fsanitize=address
+CFLAGS += -g -fsanitize=address
 INC = -I inc -I libft/inc
 LIBFT = libft/libft.a
 SRC_DIR = src
 OBJ_DIR = obj
 
+ASM_FILES = char_array count error file_op header_utils hexdump instruction_utils instructions is_operand label_utils main operand_error output queue_add resolve_labels string trim util validate_header whitespace zaz_op
+ASM_OBJECTS = $(addprefix obj/asm/, $(addsuffix .o, $(ASM_FILES)))
+ASM = asm
+
+DISASM_FILES = file_op instruction main print stdin util zaz_op
+DISASM_OBJECTS = $(addprefix obj/disasm/, $(addsuffix .o, $(DISASM_FILES)))
+DISASM = disasm
 
 UNAME	:= $(shell uname -s)
 
 ifeq ($(UNAME),Linux)
-	MLX = libmlx/minilibx_linux/
-	INC += -I $(MLX) -I inc/linux
-	LIB += -L $(MLX) -lmlx -lXext -lX11 -lm
+	MLXDIR = libmlx/minilibx_linux/
+	MLXINC = -I $(MLX) -I inc/linux
+	MLXLIB = -L $(MLX) -lmlx -lXext -lX11 -lm
 endif
 
 ifeq ($(UNAME),Darwin)
-	MLX = libmlx/minilibx_macos/
-	INC += -I $(MLX) -I inc/macos
-	LIB += -L $(MLX) -lmlx -framework OpenGL -framework AppKit
+	MLXDIR = libmlx/minilibx_macos/
+	MLXINC = -I $(MLXDIR) -I inc/macos
+	MLXLIB = -L $(MLXDIR) -lmlx -framework OpenGL -framework AppKit
 endif
 
 
@@ -74,12 +81,12 @@ YELLOW = \033[1;33m
 # RULES                                                                        #
 ################################################################################
 
-all: $(NAME)
+all: $(NAME) $(ASM) $(DISASM)
 
 $(NAME): $(LIBFT) $(OBJ)
-	@make -C $(MLX)
+	@make -C $(MLXDIR)
 	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... "
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LIB) -o $@
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LIB) $(MLXLIB) -o $@
 	@echo "$(GREEN)DONE$(NC)"
 
 $(LIBFT):
@@ -89,7 +96,28 @@ $(LIBFT):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@echo " > Compiling $<..."
-	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
+
+$(DISASM): $(DISASM_OBJECTS) $(LIBFT)
+	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
+
+$(DISASM_OBJECTS): obj/disasm/%.o : src/disasm/%.c | disasmobjdir
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+
+disasmobjdir: objdir
+	mkdir -p obj/disasm
+
+$(ASM): $(ASM_OBJECTS) $(LIBFT)
+	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
+
+$(ASM_OBJECTS): obj/asm/%.o : src/asm/%.c | asmobjdir
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+
+asmobjdir: objdir
+	mkdir -p obj/asm/
+
+objdir:
+	mkdir -p obj/
 
 again:
 	@rm -f $(NAME)
@@ -99,14 +127,17 @@ again:
 	@make
 
 clean:
-	@make clean -C $(MLX)
+	@make clean -C $(MLXDIR)
 	@make -C libft $@
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed$(NC)"
 
+rmchamps:
+	find . -iname "*.cor" -exec rm {} \;
+
 fclean: clean
 	@make -C libft $@
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(ASM) $(DISASM)
 	@echo "$(RED)$(NAME) removed$(NC)"
 
 re: fclean all
