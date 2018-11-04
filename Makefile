@@ -7,12 +7,29 @@
 NAME = corewar
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -Ofast -funroll-loops
-CFLAGS += #-g -fsanitize=address
+CFLAGS += -Wno-unused-parameter -Wno-unused-result
+CFLAGS += #-Ofast -funroll-loops
+CFLAGS += -g #-fsanitize=address
 INC = -I inc -I libft/inc
 LIBFT = libft/libft.a
 SRC_DIR = src
 OBJ_DIR = obj
+
+
+UNAME	:= $(shell uname -s)
+
+ifeq ($(UNAME),Linux)
+	MLX = libmlx/minilibx_linux/
+	INC += -I $(MLX) -I inc/linux
+	LIB += -L $(MLX) -lmlx -lXext -lX11 -lm
+endif
+
+ifeq ($(UNAME),Darwin)
+	MLX = libmlx/minilibx_macos/
+	INC += -I $(MLX) -I inc/macos
+	LIB += -L $(MLX) -lmlx -framework OpenGL -framework AppKit
+endif
+
 
 SRC = \
 	coreio\
@@ -37,7 +54,9 @@ SRC = \
 	ops/op_sub\
 	ops/op_xor\
 	ops/op_zjmp\
-	process
+	process\
+	corewar_gui
+
 
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 
@@ -58,8 +77,9 @@ YELLOW = \033[1;33m
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
+	@make -C $(MLX)
 	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... "
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LIB) -o $@
 	@echo "$(GREEN)DONE$(NC)"
 
 $(LIBFT):
@@ -79,6 +99,7 @@ again:
 	@make
 
 clean:
+	@make clean -C $(MLX)
 	@make -C libft $@
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed$(NC)"
