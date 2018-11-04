@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/01 07:45:17 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/03 19:20:53 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 #include <unistd.h>
 
 #define IO_ERR(path)	ERR(BAD_IO, path, strerror(errno))
+
+t_champ		*find_champ(t_core *core, t_uint id)
+{
+	int	i;
+
+	i = 0;
+	while (i < core->nplayers && core->champions[i].id != id)
+		++i;
+	return ((i < core->nplayers) ? &core->champions[i] : NULL);
+}
 
 /*
 ** Checks if file size is too small, if magic is invalid, if code size doesn't
@@ -61,7 +71,8 @@ void		load_champ(t_core *core, const char *path, int pnum)
 	pc = &core->arena[(MEM_SIZE / core->nplayers) * pnum];
 	if (read(fd, pc, header.prog_size) != header.prog_size)
 		IO_ERR(path);
-	ft_memset(core->owner + (pc - core->arena), pnum + 1, header.prog_size);
+	ft_memset(core->owner + (pc - core->arena),
+		(find_champ(core, champ->id) - core->champions) + 1, header.prog_size);
 	p = fork_process(core, NULL, pc);
 	p->registers[0] = champ->id;
 	p->champ = champ;

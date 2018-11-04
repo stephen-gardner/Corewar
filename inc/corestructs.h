@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/01 07:54:30 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/04 00:56:54 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 struct s_core;
 struct s_proc;
+struct s_instr;
 
 typedef struct		s_header
 {
@@ -36,7 +37,7 @@ typedef struct		s_champ
 typedef struct		s_op
 {
 	const char		*name;
-	t_bool			(*run)(struct s_core *, struct s_proc *p);
+	t_bool			(*run)(struct s_core *, struct s_proc *, struct s_instr *);
 	t_ushrt			latency;
 	t_byte			opcode;
 	t_byte			nparams;
