@@ -1,0 +1,18 @@
+@02/28/2018
+DONE to be done: NORME
+
+@02/26/2018
+DONE-- support for multi-line comments?
+DONE-- make blank name and blank comment into a warning
+DONE-- implement the -a option
+----------
+DONE-- add cmdline option -a to output original source file + comments with binary hexdump of each instruction
+DONE-- destroy instruction linked list, test for mem leaks 
+DONE-- write error/quit procedure
+DONE-- implement support for label:instruction
+DONE -- implement support for multiline names/comments ?
+PARTIAL-- nicer/more verbose error messages
+DONE-- make MAX_CHAMP_SIZE into warning not error
+-- more tests against zaz's asm
+DONE-- finish norme
+
