@@ -4,31 +4,43 @@
 # SETTINGS                                                                     #
 ################################################################################
 
-NAME = corewar
+#NAME = corewar
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
 CFLAGS += -Wno-unused-parameter -Wno-unused-result
-CFLAGS += #-Ofast -funroll-loops
+#CFLAGS += -Ofast -funroll-loops
 CFLAGS += -g -fsanitize=address
 INC = -I inc -I libft/inc
 LIBFT = libft/libft.a
-SRC_DIR = src
-OBJ_DIR = obj
+SRC_DIR = src/
+OBJ_DIR = obj/
 
-ASM_FILES = char_array count error file_op header_utils hexdump instruction_utils instructions is_operand label_utils main operand_error output queue_add resolve_labels string trim util validate_header whitespace zaz_op
-ASM_OBJECTS = $(addprefix obj/asm/, $(addsuffix .o, $(ASM_FILES)))
+VM = vm
+VMDIR = vm/
+VM_FILES = coreio corewar_gui load main msg ops process ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
+VMOBJDIR= $(addprefix $(OBJ_DIR), $(VMDIR))
+VM_OBJECTS=$(addprefix $(VMOBJDIR), $(addsuffix .o, $(VM_FILES)))
+
 ASM = asm
+ASMDIR = asm/
+ASM_FILES = char_array count error file_op header_utils hexdump instruction_utils instructions is_operand label_utils main operand_error output queue_add resolve_labels string trim util validate_header whitespace zaz_op
+ASMOBJDIR = $(addprefix $(OBJ_DIR), $(ASMDIR))
+ASM_OBJECTS = $(addprefix $(ASMOBJDIR), $(addsuffix .o, $(ASM_FILES)))
 
-DISASM_FILES = file_op instruction main print stdin util zaz_op
-DISASM_OBJECTS = $(addprefix obj/disasm/, $(addsuffix .o, $(DISASM_FILES)))
 DISASM = disasm
+DISASMDIR = disasm/
+DISASM_FILES = file_op instruction main print stdin util zaz_op
+DISASMOBJDIR = $(addprefix $(OBJ_DIR), $(DISASMDIR))
+DISASM_OBJECTS = $(addprefix $(DISASMOBJDIR), $(addsuffix .o, $(DISASM_FILES)))
+
+BINARIES = $(VM) $(ASM) $(DISASM)
 
 UNAME	:= $(shell uname -s)
 
 ifeq ($(UNAME),Linux)
 	MLXDIR = libmlx/minilibx_linux/
-	MLXINC = -I $(MLX) -I inc/linux
-	MLXLIB = -L $(MLX) -lmlx -lXext -lX11 -lm
+	MLXINC = -I $(MLXDIR) -I inc/linux
+	MLXLIB = -L $(MLXDIR) -lmlx -lXext -lX11 -lm
 endif
 
 ifeq ($(UNAME),Darwin)
@@ -37,35 +49,7 @@ ifeq ($(UNAME),Darwin)
 	MLXLIB = -L $(MLXDIR) -lmlx -framework OpenGL -framework AppKit
 endif
 
-
-SRC = \
-	coreio\
-	main\
-	load\
-	msg\
-	ops\
-	ops/op_add\
-	ops/op_aff\
-	ops/op_and\
-	ops/op_fork\
-	ops/op_ld\
-	ops/op_ldi\
-	ops/op_lfork\
-	ops/op_live\
-	ops/op_lld\
-	ops/op_lldi\
-	ops/op_nop\
-	ops/op_or\
-	ops/op_st\
-	ops/op_sti\
-	ops/op_sub\
-	ops/op_xor\
-	ops/op_zjmp\
-	process\
-	corewar_gui
-
-
-OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
+LIBMLX = $(addprefix $(MLXDIR), libmlx.a)
 
 ################################################################################
 # COLORS                                                                       #
@@ -81,63 +65,62 @@ YELLOW = \033[1;33m
 # RULES                                                                        #
 ################################################################################
 
-all: $(NAME) $(ASM) $(DISASM)
+all: $(VM) $(ASM) $(DISASM)
+#------------------------------------------------------------------------------
+$(VM): $(VM_OBJECTS) $(LIBFT) $(LIBMLX)
+	$(CC) $(CFLAGS) $(INC) $(LIB) $(MLXLIB) $^ -o $@
 
-$(NAME): $(LIBFT) $(OBJ)
-	@make -C $(MLXDIR)
-	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... "
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LIB) $(MLXLIB) -o $@
-	@echo "$(GREEN)DONE$(NC)"
+$(VM_OBJECTS): $(VMOBJDIR)%.o : src/vm/%.c | $(VMOBJDIR)
+	$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
 
-$(LIBFT):
-	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... "
-	@make -C libft
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@echo " > Compiling $<..."
-	@$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
-
-$(DISASM): $(DISASM_OBJECTS) $(LIBFT)
-	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
-
-$(DISASM_OBJECTS): obj/disasm/%.o : src/disasm/%.c | disasmobjdir
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@
-
-disasmobjdir: objdir
-	mkdir -p obj/disasm
-
+$(VMOBJDIR): $(OBJ_DIR)
+	mkdir -p $@
+	mkdir -p $@/ops
+#------------------------------------------------------------------------------
 $(ASM): $(ASM_OBJECTS) $(LIBFT)
 	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
 
-$(ASM_OBJECTS): obj/asm/%.o : src/asm/%.c | asmobjdir
+$(ASM_OBJECTS): $(ASMOBJDIR)%.o : src/asm/%.c | $(ASMOBJDIR)
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-asmobjdir: objdir
-	mkdir -p obj/asm/
+$(ASMOBJDIR): $(OBJ_DIR)
+	mkdir -p $@
+#------------------------------------------------------------------------------
+$(DISASM): $(DISASM_OBJECTS) $(LIBFT)
+	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
 
-objdir:
-	mkdir -p obj/
+$(DISASM_OBJECTS): $(DISASMOBJDIR)%.o : src/disasm/%.c | $(DISASMOBJDIR)
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+
+$(DISASMOBJDIR): $(OBJ_DIR)
+	mkdir -p $@
+#------------------------------------------------------------------------------
+$(LIBFT):
+	make -C libft/
+
+$(LIBMLX):
+	make -C $(MLXDIR)
+
+$(OBJ_DIR):
+	mkdir -p $@
+#------------------------------------------------------------------------------
 
 again:
-	@rm -f $(NAME)
-	@rm -rf $(OBJ_DIR)
-	@echo "$(RED)Object files removed"
-	@echo "$(NAME) removed$(NC)"
-	@make
+	rm -f $(VM_OBJECTS)
+	make vm
 
 clean:
-	@make clean -C $(MLXDIR)
-	@make -C libft $@
-	@rm -rf $(OBJ_DIR)
+	make $@ -C $(MLXDIR)
+	make $@ -C libft/
+	rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed$(NC)"
 
-rmchamps:
+clean2:
 	find . -iname "*.cor" -exec rm {} \;
 
 fclean: clean
-	@make -C libft $@
-	@rm -f $(NAME) $(ASM) $(DISASM)
-	@echo "$(RED)$(NAME) removed$(NC)"
+	make $@ -C libft/
+	rm -f $(BINARIES)
+	@echo "$(RED)$(BINARIES) removed$(NC)"
 
 re: fclean all
