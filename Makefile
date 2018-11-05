@@ -7,8 +7,8 @@
 NAME = corewar
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -Wno-unused-parameter -Wno-unused-result
-CFLAGS += -Ofast -funroll-loops
+#CFLAGS += -Wno-unused-parameter -Wno-unused-result
+#CFLAGS += -Ofast -funroll-loops
 #CFLAGS += -g -fsanitize=address
 INC = -I inc -I libft/inc
 LIBFT = libft/libft.a
@@ -39,13 +39,13 @@ DISASM_OBJECTS = $(addprefix $(DISASMOBJDIR), $(addsuffix .o, $(DISASM_FILES)))
 UNAME	:= $(shell uname -s)
 
 ifeq ($(UNAME),Linux)
-	MLXDIR = libmlx/minilibx_linux/
+	MLXDIR = libmlx/linux/
 	MLXINC = -I $(MLXDIR) -I inc/linux
 	MLXLIB = -L $(MLXDIR) -lmlx -lXext -lX11 -lm
 endif
 
 ifeq ($(UNAME),Darwin)
-	MLXDIR = libmlx/minilibx_macos/
+	MLXDIR = libmlx/macos/
 	MLXINC = -I $(MLXDIR) -I inc/macos
 	MLXLIB = -L $(MLXDIR) -lmlx -framework OpenGL -framework AppKit
 endif
