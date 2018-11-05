@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 20:24:30 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 19:15:53 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 06:39:11 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_bool	op_zjmp(t_core *core, t_proc *p, t_instr *instr)
 {
-	t_uint	off;
+	int32_t	off;
 
 	if (p->carry)
 	{

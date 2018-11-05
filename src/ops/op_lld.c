@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 23:32:25 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 22:52:00 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/04 16:28:18 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 t_bool	op_lld(t_core *core, t_proc *p, t_instr *instr)
 {
-	t_uint	*dst;
 	t_byte	*src;
-	t_uint	off;
+	int32_t	*dst;
+	int32_t	off;
 
-	dst = (t_uint *)instr->args[1];
+	dst = (int32_t *)instr->args[1];
 	if (instr->atypes[0] & T_D)
 		*dst = read_arg(core, p, 0);
 	else

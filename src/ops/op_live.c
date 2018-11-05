@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 07:26:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 18:02:43 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/04 16:03:20 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 t_bool	op_live(t_core *core, t_proc *p, t_instr *instr)
 {
-	t_uint	id;
+	int32_t	id;
 	t_champ	*champ;
 
 	id = read_core(core, instr->epc, DIR_SIZE, FALSE);
@@ -26,7 +26,7 @@ t_bool	op_live(t_core *core, t_proc *p, t_instr *instr)
 		notice(ANNOUNCE_LIVE, ID(champ->id), champ->name);
 	}
 	instr->epc = ABS_POS(core->arena, instr->epc, DIR_SIZE);
-	p->lived = core->cycle;
+	p->lcycle = core->cycle;
 	++core->lives;
 	return (p->carry);
 }

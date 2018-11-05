@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 04:43:51 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 07:34:53 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 # define MAX_PLAYERS		4
 
 # define DUMP_LEN			32
+
+/*
+** GUI
+*/
+
+# define GFX_AGE_SPEED		10
 
 /*
 ** Every CYCLE_TO_DIE cycles, the VM kills processes that have not yet called
@@ -72,12 +78,11 @@
 # define SYS_ERR			ERR(DEFAULT_ERR, strerror(errno))
 
 # define CORE_POS(x)		(((x) + MEM_SIZE) % MEM_SIZE)
-# define REL_POS(x)			((short)(x) % IDX_MOD)
+# define REL_POS(x)			((x) % IDX_MOD)
 # define IDX_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + REL_POS(x)))
 # define ABS_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + (x)))
 
-# define ID(id)				(UINT_MAX - id)
-# define OP(p)				(p->instr.op)
+# define ID(id)				(~(id) + 1)
 
 /*
 ** Error Messages

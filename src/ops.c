@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 22:20:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 07:04:18 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static t_bool	set_param(t_byte *arena, t_proc *p, t_instr *instr, int i)
 		res = FALSE;
 	if (instr->atypes[i] & T_R)
 	{
-		if (*instr->epc > REG_NUMBER)
+		if ((t_byte)(*instr->epc - 1) >= REG_NUMBER)
 			res = FALSE;
 		else
 			instr->args[i] = (t_byte *)&p->registers[*instr->epc - 1];
@@ -82,7 +82,5 @@ t_bool			decode(t_byte *arena, t_proc *p, t_instr *instr)
 			res = FALSE;
 		acb <<= 2;
 	}
-	if (acb)
-		res = FALSE;
 	return (res);
 }

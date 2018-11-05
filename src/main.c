@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 04:43:50 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 07:24:49 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void			execute_war(t_core *core)
 			countdown = cull_processes(core, &core->processes);
 		if (!core->processes)
 			return (aftermath(core, core->victor));
-		if (!(core->cycle % 10))
+		if (core->gui && !(core->cycle % GFX_AGE_SPEED))
 			age_arena(core->epoch);
 		if (core->gui)
 			break ;
@@ -65,7 +65,7 @@ void			execute_war(t_core *core)
 
 static t_uint	find_id(t_core *core)
 {
-	t_uint	id;
+	int32_t	id;
 	int		i;
 
 	if (!core->nplayers)
@@ -126,7 +126,7 @@ int				main(int ac, char *av[])
 	i = -1;
 	while (++i < core.nplayers)
 	{
-		core.champions[i].id = UINT_MAX - core.champions[i].id;
+		core.champions[i].id = ID(core.champions[i].id) - 1;
 		load_champ(&core, paths[i], i);
 	}
 	if (core.gui)

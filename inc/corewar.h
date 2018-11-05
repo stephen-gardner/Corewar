@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/04 01:08:42 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 07:18:26 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "coredef.h"
 # include "libft.h"
 # include <errno.h>
+# include <stdint.h>
 # include <string.h>
 
 /*
@@ -29,15 +30,15 @@
 */
 
 void				age_arena(t_byte *epoch);
-t_uint				read_arg(t_core *core, t_proc *p, int a);
-t_uint				read_core(t_core *core, t_byte *src, int n, t_bool trunc);
+int32_t				read_arg(t_core *core, t_proc *p, int a);
+int32_t				read_core(t_core *core, t_byte *src, int n, t_bool trunc);
 void				write_core(t_core *core, t_byte *dst, t_proc *p, int a);
 
 /*
 ** load.c
 */
 
-t_champ				*find_champ(t_core *core, t_uint id);
+t_champ				*find_champ(t_core *core, int32_t id);
 void				load_champ(t_core *core, const char *path, int pnum);
 
 /*

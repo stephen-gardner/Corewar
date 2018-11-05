@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 08:19:47 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 18:33:00 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 04:22:48 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 t_bool	op_or(t_core *core, t_proc *p, t_instr *instr)
 {
-	t_uint	*dst;
+	uint32_t	*dst;
 
-	dst = (t_uint *)instr->args[2];
-	*dst = read_arg(core, p, 0) | read_arg(core, p, 1);
+	dst = (uint32_t *)instr->args[2];
+	*dst = (uint32_t)read_arg(core, p, 0) | (uint32_t)read_arg(core, p, 1);
 	return (!*dst);
 }

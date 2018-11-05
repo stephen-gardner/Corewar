@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/04 00:56:54 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/04 16:03:00 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CORESTRUCTS_H
 # include "coredef.h"
 # include "libft.h"
+# include <stdint.h>
 
 struct s_core;
 struct s_proc;
@@ -21,15 +22,15 @@ struct s_instr;
 
 typedef struct		s_header
 {
-	t_uint			magic;
+	uint32_t		magic;
 	char			prog_name[PROG_NAME_LENGTH + 1];
-	t_uint			prog_size;
+	uint32_t		prog_size;
 	char			comment[COMMENT_LENGTH + 1];
 }					t_header;
 
 typedef struct		s_champ
 {
-	t_uint			id;
+	int32_t			id;
 	char			name[PROG_NAME_LENGTH + 1];
 	char			comment[COMMENT_LENGTH + 1];
 }					t_champ;
@@ -59,10 +60,10 @@ typedef struct		s_proc
 {
 	t_byte			*pc;
 	t_champ			*champ;
-	t_uint			pid;
-	t_uint			lived;
-	t_uint			registers[REG_NUMBER];
+	int32_t			registers[REG_NUMBER];
 	t_instr			instr;
+	t_uint			pid;
+	t_uint			lcycle;
 	t_bool			carry : 1;
 	struct s_proc	*next;
 }					t_proc;
