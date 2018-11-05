@@ -1,12 +1,12 @@
 #!/bin/bash
-p1='./vm_new '
-p2='./REF/corewar '
+p1='../vm '
+p2='./zaz_vm'
 #echo 'enter champion file name'
 #read champ
 #echo $champ
-champ='champs/_.cor'
-dump=5000
-increment=100
+champ='champions/_.cor'
+dump=0
+increment=1
 while true; do
     $p1 $champ -d $dump | grep '0x' | grep ' : ' > out1.txt
     $p2 $champ -d $dump | grep '0x' | grep ' : ' > out2.txt
