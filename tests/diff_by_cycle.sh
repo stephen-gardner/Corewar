@@ -22,4 +22,3 @@ while true; do
     dump=$(expr $dump + $increment)
 done
 echo $dump
-
