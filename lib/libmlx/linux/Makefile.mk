@@ -31,7 +31,7 @@ SRC	= mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
 	mlx_rgb.c mlx_destroy_image.c
 
 OBJ	=$(SRC:.c=.o)
-CFLAGS	= -O3 -I$(INC)
+CFLAGS	= -O3 -I$(INC) -Wno-unused-result -lX11 -LXext
 
 all	: $(NAME) $(DOCP)
 
@@ -44,4 +44,4 @@ do_cp	:
 
 
 clean	:
-	rm -f $(OBJ) $(NAME) *~ core *.core
+	rm -f $(OBJ) $(NAME) libmlx_$(HT).a *~ core *.core

@@ -31,10 +31,10 @@
 # define KEY_D		100
 # define KEY_T		116
 # define KEY_Y		121
-# define KEY_V		118
 # define KEY_C		99
 # define KEY_P		112
 # define KEY_M		109
+# define KEY_V		118
 # define KEY_H		104
 # define KEY_1		49
 # define KEY_2		50
@@ -46,5 +46,7 @@
 # define KEY_8		56
 # define KEY_9		57
 # define KEY_0		48
+# define KEY_MINUS	45
+# define KEY_PLUS	61
 
 #endif

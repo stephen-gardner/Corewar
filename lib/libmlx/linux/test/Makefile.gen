@@ -1,5 +1,5 @@
-INC=/usr/X11/include
-HT=x86_64
+INC=/usr/include
+HT=Linux
 DOCP=do_cp
 
 

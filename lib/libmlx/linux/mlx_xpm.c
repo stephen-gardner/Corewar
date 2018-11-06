@@ -5,10 +5,10 @@
 ** Login   <ol@epitech.net>
 ** 
 ** Started on  Tue Dec 11 15:25:27 2001 olivier crouzet
-** Last update Sat Oct  1 14:40:55 2005 Olivier Crouzet
+** Last update Sat Oct  1 14:56:13 2005 Olivier Crouzet
 */
 
-
+#include	<string.h>
 #include	"mlx_int.h"
 
 extern struct s_col_name mlx_col_name[];
@@ -74,12 +74,18 @@ int	mlx_int_get_col_name(char *str,int size)
   return (result);
 }
 
-int	mlx_int_get_text_rgb(char *name)
+int	mlx_int_get_text_rgb(char *name, char *end)
 {
   int	i;
+  char	buff[64];
 
   if (*name == '#')
     return (strtol(name+1,0,16));
+  if (end)
+    {
+      snprintf(buff, 64, "%s %s", name, end);
+      name = buff;
+    }
   i = 0;
   while (mlx_col_name[i].name)
     {
@@ -167,10 +173,11 @@ void	*mlx_int_parse_xpm(t_xvar *xvar,void *info,int info_size,char *(*f)())
 	RETURN;
       j = 0;
       while (tab[j] && strcmp(tab[j++],"c"));
+
       if (!tab[j])
 	RETURN;
       
-      if ((rgb_col = mlx_int_get_text_rgb(tab[j]))==-1)
+      if ((rgb_col = mlx_int_get_text_rgb(tab[j], tab[j+1]))==-1)
 	{
 	  if (!(clip_data = malloc(4*width*height)) ||   /* ok, nice size .. */
 	      !(clip_img = XCreateImage(xvar->display, xvar->visual,
@@ -183,7 +190,7 @@ void	*mlx_int_parse_xpm(t_xvar *xvar,void *info,int info_size,char *(*f)())
       if (method)
 	colors_direct[mlx_int_get_col_name(line,cpp)] =
 	  rgb_col>=0?mlx_get_color_value(xvar, rgb_col):rgb_col;
-    else
+      else
 	{
 	  colors[i].name = mlx_int_get_col_name(line,cpp);
 	  colors[i].col = rgb_col>=0?mlx_get_color_value(xvar,rgb_col):rgb_col;

@@ -17,6 +17,10 @@ INC = -I inc
 SRC_DIR = src
 OBJ_DIR = obj
 
+ifeq ($(shell uname -s),Linux)
+	CFLAGS += -Wno-unused-result
+endif
+
 # [ BASE ]
 
 SRC = \

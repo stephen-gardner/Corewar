@@ -20,6 +20,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <stdlib.h>
+# include <math.h>
 # include "corewar.h"
 
 # define BLOCK_DEFAULT_COLOR    0xbfbfbf	//grey, 75% lum

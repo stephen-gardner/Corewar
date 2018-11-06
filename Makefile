@@ -10,8 +10,10 @@ CFLAGS += -Wall -Werror -Wextra
 #CFLAGS += -Wno-unused-parameter -Wno-unused-result
 #CFLAGS += -Ofast -funroll-loops
 #CFLAGS += -g -fsanitize=address
-INC = -I inc -I libft/inc
-LIBFT = libft/libft.a
+INC = -I inc -I lib/libft/inc
+LIBFTDIR = lib/libft/
+LIBFT = $(LIBFTDIR)libft.a
+MLXDIR = lib/libmlx/
 SRC_DIR = src/
 OBJ_DIR = obj/
 
@@ -39,19 +41,19 @@ DISASM_OBJECTS = $(addprefix $(DISASMOBJDIR), $(addsuffix .o, $(DISASM_FILES)))
 UNAME	:= $(shell uname -s)
 
 ifeq ($(UNAME),Linux)
-	MLXDIR = libmlx/linux/
-	MLXINC = -I $(MLXDIR) -I inc/linux
-	MLXLIB = -L $(MLXDIR) -lmlx -lXext -lX11 -lm
+	MLXDIR := $(MLXDIR)linux/
+	MLXINC = -I $(MLXDIR) -I inc/linux/
+	MLXLIB = -L $(MLXDIR) -lX11 -lXext -lmlx -lbsd -lm
 endif
 
 ifeq ($(UNAME),Darwin)
-	MLXDIR = libmlx/macos/
-	MLXINC = -I $(MLXDIR) -I inc/macos
+	MLXDIR := $(MLXDIR)macos/
+	MLXINC = -I $(MLXDIR) -I inc/macos/
 	MLXLIB = -L $(MLXDIR) -lmlx -framework OpenGL -framework AppKit
 endif
 
-LIBMLX = $(addprefix $(MLXDIR), libmlx.a)
 
+LIBMLX = $(addprefix $(MLXDIR), libmlx.a)
 BINARIES = $(VM) $(ASM) $(DISASM) $(LIBMLX) $(LIBFT)
 
 ################################################################################
@@ -72,7 +74,7 @@ all: $(NAME)
 corewar: $(VM) $(ASM) $(DISASM)
 #------------------------------------------------------------------------------
 $(VM): $(VM_OBJECTS) $(LIBFT) $(LIBMLX)
-	$(CC) $(CFLAGS) $(INC) $(LIB) $(MLXLIB) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LIB) $(MLXLIB)
 
 $(VM_OBJECTS): $(VMOBJDIR)%.o : $(VMSRCDIR)%.c | $(VMOBJDIR)
 	$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
@@ -100,7 +102,7 @@ $(DISASMOBJDIR): $(OBJ_DIR)
 	mkdir -p $@
 #------------------------------------------------------------------------------
 $(LIBFT):
-	make -C libft/
+	make -C $(LIBFTDIR)
 
 $(LIBMLX):
 	make -C $(MLXDIR)
@@ -115,7 +117,7 @@ again:
 
 clean:
 	make $@ -C $(MLXDIR)
-	@make $@ -C libft/
+	@make $@ -C $(LIBFTDIR)
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed$(NC)"
 
@@ -123,7 +125,7 @@ rmcor:
 	find . -iname "*.cor" -exec rm {} \;
 
 fclean: clean
-	@make $@ -C libft/
+	@make $@ -C $(LIBFTDIR)
 	@rm -f $(BINARIES)
 	@echo "$(RED)$(BINARIES) removed$(NC)"
 

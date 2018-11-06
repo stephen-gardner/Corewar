@@ -83,8 +83,7 @@ int	mlx_int_egal_img(XImage *img1,XImage *img2)
 }
 
 
-void	*mlx_xpm_file_to_image(t_xvar *xvar,char *filename,
-			       int *width,int *height)
+void	*mlx_xpm_file_to_image(t_xvar *xvar,char *filename, int *width,int *height)
 {
   return (mlx_int_xpm_f_image(xvar,width,height,XpmReadFileToImage,filename));
 }

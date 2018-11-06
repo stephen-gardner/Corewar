@@ -245,22 +245,22 @@ int	corewar_gui_info_panel(t_corewar_gui *g)
 
 	mlx_string_put(g->mlx, g->win, STATE_Y, STATE_X, INFO_TEXT_COLOR, ptr);
 	ptr = (char *)&fps;
-	sprintf(ptr, FPS_STR, g->fps);
+	ft_sprintf(ptr, FPS_STR, g->fps);
 	mlx_string_put(g->mlx, g->win, FPS_Y, FPS_X, INFO_TEXT_COLOR, ptr);
-	sprintf(ptr, CPF_STR, g->cpf);
+	ft_sprintf(ptr, CPF_STR, g->cpf);
 	mlx_string_put(g->mlx, g->win, CPF_Y, CPF_X, INFO_TEXT_COLOR, ptr);
-	sprintf(ptr, CPS_STR, g->fps * g->cpf);
+	ft_sprintf(ptr, CPS_STR, g->fps * g->cpf);
 	mlx_string_put(g->mlx, g->win, CPS_Y, CPS_X, INFO_TEXT_COLOR, ptr);
-	sprintf(ptr, PROC_NUM, g->nproc);
+	ft_sprintf(ptr, PROC_NUM, g->nproc);
 	mlx_string_put(g->mlx, g->win, PROC_NUM_Y, PROC_NUM_X, INFO_TEXT_COLOR, ptr);
-	sprintf(ptr, CYCLE_NUM, g->core->cycle);
+	ft_sprintf(ptr, CYCLE_NUM, g->core->cycle);
 	mlx_string_put(g->mlx, g->win, CYCLE_NUM_Y, CYCLE_NUM_X, INFO_TEXT_COLOR, ptr);
 
 	i = 0;
 	x = PLAYER_X + (GUI_CHAR_HEIGHT * 2);
 	while (i < g->core->nplayers)
 	{
-		sprintf(ptr, PLAYER_NUM, i, g->core->champions[i].id);
+		ft_sprintf(ptr, PLAYER_NUM, i, g->core->champions[i].id);
 		mlx_string_put(g->mlx, g->win, PLAYER_Y, x, INFO_TEXT_COLOR, ptr);
         x+= GUI_CHAR_HEIGHT;
 		mlx_string_put(g->mlx, g->win, PLAYER_Y, x,	g->p_colors[i + 1][0], g->core->champions[i].name);
@@ -279,7 +279,7 @@ int	corewar_gui_info_panel(t_corewar_gui *g)
 			{
 				mlx_string_put(g->mlx, g->win, PLAYER_Y, x, INFO_TEXT_COLOR, GUI_WINNER1);	x+= GUI_CHAR_HEIGHT;
 				mlx_string_put(g->mlx, g->win, PLAYER_Y, x, g->p_colors[i + 1][0], g->core->victor->name);	x+= GUI_CHAR_HEIGHT;
-				sprintf(ptr, GUI_COMMENT_QUOTES, g->core->victor->comment);
+				ft_sprintf(ptr, GUI_COMMENT_QUOTES, g->core->victor->comment);
 				mlx_string_put(g->mlx, g->win, PLAYER_Y, x, g->p_colors[i + 1][0], ptr);	x+= GUI_CHAR_HEIGHT;
 				break ;		
 			}
