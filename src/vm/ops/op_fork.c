@@ -6,22 +6,18 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 22:19:37 by sgardner          #+#    #+#             */
-/*   Updated: 2018/10/29 21:32:33 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/04 16:27:25 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-t_bool	op_fork(t_core *core, t_proc *p)
+t_bool	op_fork(t_core *core, t_proc *p, t_instr *instr)
 {
-	t_instr	*instr;
-	t_byte	*fpc;
+	int32_t	off;
 
-	instr = &p->instr;
-	instr->args[0] = instr->epc;
-	instr->atypes[0] = instr->op->ptypes[0];
-	fpc = IDX_POS(core->arena, p->pc, read_data(core, instr, 0));
+	off = read_core(core, instr->epc, IND_SIZE, FALSE);
 	instr->epc = ABS_POS(core->arena, instr->epc, IND_SIZE);
-	fork_process(core, p, fpc);
+	fork_process(core, p, IDX_POS(core->arena, p->pc, off));
 	return (p->carry);
 }

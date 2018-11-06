@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 09:27:56 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 07:04:18 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ const t_op		g_ops[17] = {
 	{"lldi", op_lldi, 50, 0x0E, 3, {T_R | T_I | T_D, T_R | T_D, T_R}, 1, 1},
 	{"lfork", op_lfork, 1000, 0x0F, 1, {T_D}, 0, 1},
 	{"aff", op_aff, 2, 0x10, 1, {T_R}, 1, 0},
-	{"undefined", op_nop, 1, 0x00, 0, {0}, 0, 0}
+	{"nop", op_nop, 1, 0x00, 0, {0}, 0, 0}
 };
 
 const t_uint	g_ops_size = sizeof(g_ops) / sizeof(t_op);
@@ -43,7 +43,7 @@ static t_bool	set_param(t_byte *arena, t_proc *p, t_instr *instr, int i)
 		res = FALSE;
 	if (instr->atypes[i] & T_R)
 	{
-		if (*instr->epc > REG_NUMBER)
+		if ((t_byte)(*instr->epc - 1) >= REG_NUMBER)
 			res = FALSE;
 		else
 			instr->args[i] = (t_byte *)&p->registers[*instr->epc - 1];
@@ -82,7 +82,5 @@ t_bool			decode(t_byte *arena, t_proc *p, t_instr *instr)
 			res = FALSE;
 		acb <<= 2;
 	}
-	if (acb)
-		res = FALSE;
 	return (res);
 }

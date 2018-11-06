@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/03 04:47:16 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 23:56:13 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@ const char		*g_errmsg[NERRMSGS] = {
 };
 
 const char		*g_notices[NNOTICES] = {
-	"\x1b[32mPlayer %u (%s) wins!\x1b[0m",
+	"\x1b[32mPlayer %d (%s) wins!\x1b[0m",
 	"\x1b[36m%s has won the game for its team:\x1b[0m",
-	"\x1b[33mA process shows that player %u (%s) is alive\x1b[0m",
+	"\x1b[33mA process shows that player %d (%s) is alive\x1b[0m",
 	"\x1b[31mAll players have died without ever really living...\x1b[0m",
 	"\x1b[35m\"%s\"\x1b[0m",
-	"Launching GUI..."
+	"Launching GUI...",
+	"\x1b[1;36mCycle %u\x1b[0;36m - The war is over!\x1b[0m"
 };
 
 static void		build_dump(char *out, t_byte *arena, int addrlen)

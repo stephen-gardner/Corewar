@@ -7,8 +7,7 @@
 NAME = corewar
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
-#CFLAGS += -Wno-unused-parameter -Wno-unused-result
-CFLAGS += -Ofast -funroll-loops
+CFLAGS += -Ofast -funroll-loops -Wno-unused-result
 #CFLAGS += -g #-fsanitize=address
 INC = -I inc -I lib/libft/inc
 LIBFTDIR = lib/libft/

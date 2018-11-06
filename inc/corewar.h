@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/04 00:54:18 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/05 07:18:26 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "coredef.h"
 # include "libft.h"
 # include <errno.h>
+# include <stdint.h>
 # include <string.h>
-# include "corewar_gui.h"
 
 /*
 ** #############################################################################
@@ -29,15 +29,18 @@
 ** coreio.c
 */
 
+void				corewar_gui_init(t_core *core);
+
 void				age_arena(t_byte *epoch);
-t_uint				read_core(t_core *core, t_byte *src, int n, t_bool trunc);
-t_uint				read_data(t_core *core, t_instr *instr, int a);
-void				write_data(t_core *core, t_byte *dst, t_proc *p, int a);
+int32_t				read_arg(t_core *core, t_proc *p, int a);
+int32_t				read_core(t_core *core, t_byte *src, int n, t_bool trunc);
+void				write_core(t_core *core, t_byte *dst, t_proc *p, int a);
 
 /*
 ** load.c
 */
 
+t_champ				*find_champ(t_core *core, int32_t id);
 void				load_champ(t_core *core, const char *path, int pnum);
 
 /*
@@ -78,23 +81,23 @@ t_proc				*fork_process(t_core *core, t_proc *p, t_byte *fpc);
 ** ./ops/op_*.c
 */
 
-t_bool				op_add(t_core *core, t_proc *p);
-t_bool				op_aff(t_core *core, t_proc *p);
-t_bool				op_and(t_core *core, t_proc *p);
-t_bool				op_fork(t_core *core, t_proc *p);
-t_bool				op_ld(t_core *core, t_proc *p);
-t_bool				op_ldi(t_core *core, t_proc *p);
-t_bool				op_lfork(t_core *core, t_proc *p);
-t_bool				op_live(t_core *core, t_proc *p);
-t_bool				op_lld(t_core *core, t_proc *p);
-t_bool				op_lldi(t_core *core, t_proc *p);
-t_bool				op_nop(t_core *core, t_proc *p);
-t_bool				op_or(t_core *core, t_proc *p);
-t_bool				op_st(t_core *core, t_proc *p);
-t_bool				op_sti(t_core *core, t_proc *p);
-t_bool				op_sub(t_core *core, t_proc *p);
-t_bool				op_xor(t_core *core, t_proc *p);
-t_bool				op_zjmp(t_core *core, t_proc *p);
+t_bool				op_add(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_aff(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_and(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_fork(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_ld(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_ldi(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_lfork(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_live(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_lld(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_lldi(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_nop(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_or(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_st(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_sti(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_sub(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_xor(t_core *core, t_proc *p, t_instr *instr);
+t_bool				op_zjmp(t_core *core, t_proc *p, t_instr *instr);
 
 /*
 ** #############################################################################
