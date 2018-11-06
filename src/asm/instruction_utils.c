@@ -18,7 +18,7 @@ bool	is_instruction(char *str)
 	int	tab_size;
 
 	i = 0;
-	tab_size = sizeof(g_op_tab) / sizeof(t_op);
+	tab_size = (int)(sizeof(g_op_tab) / sizeof(t_op));
 	while (i < tab_size - 1)
 	{
 		if (ft_strcmp(str, g_op_tab[i].name) == 0)
@@ -34,12 +34,12 @@ t_op	find_instruction(char *instruction)
 	int	tab_size;
 
 	i = 0;
-	tab_size = sizeof(g_op_tab) / sizeof(t_op);
+	tab_size = (int)(sizeof(g_op_tab) / sizeof(t_op));
 	while (i < tab_size - 1)
 	{
 		if (ft_strcmp(instruction, g_op_tab[i].name) == 0)
 			return (g_op_tab[i]);
 		i++;
 	}
-	return (g_op_tab[tab_size]);
+	return (g_op_tab[tab_size - 1]);
 }
