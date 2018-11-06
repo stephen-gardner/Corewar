@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 07:34:53 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 00:39:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ enum	e_notices
 	ANNOUNCE_LOSERS,
 	CHAMP_COMMENT,
 	LAUNCH_GUI,
+	WAR_OVER,
 	NNOTICES
 };
 #endif

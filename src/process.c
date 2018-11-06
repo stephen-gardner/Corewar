@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 06:38:06 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 00:17:17 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ void		execute_processes(t_core *core, t_proc *p)
 
 t_proc		*fork_process(t_core *core, t_proc *p, t_byte *fpc)
 {
-	t_proc	*clone;
+	static t_uint	lpid;
+	t_proc			*clone;
 
 	if (!(clone = ft_memalloc(sizeof(t_proc))))
 		SYS_ERR;
@@ -86,7 +87,7 @@ t_proc		*fork_process(t_core *core, t_proc *p, t_byte *fpc)
 	clone->next = core->processes;
 	core->processes = clone;
 	clone->pc = fpc;
-	clone->pid = ++core->lpid;
+	clone->pid = ++lpid;
 	clone->instr.op = NOP;
 	return (clone);
 }

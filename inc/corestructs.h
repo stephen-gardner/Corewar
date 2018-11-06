@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/04 16:03:00 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/05 23:11:45 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ typedef struct		s_core
 	t_uint			cycle;
 	t_uint			ccycle;
 	t_uint			dcycle;
-	t_uint			lpid;
 	t_uint			lives;
 	t_byte			nplayers;
 	t_bool			gui : 1;

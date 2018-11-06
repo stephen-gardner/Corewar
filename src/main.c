@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 07:24:49 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 00:36:08 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,27 @@ static void		aftermath(t_core *core, t_champ *victor)
 	int		n;
 	int		i;
 
-	if (victor)
+	MSG(WAR_OVER, core->cycle);
+	if (!victor)
 	{
-		n = 0;
-		i = -1;
-		while (++i < core->nplayers)
-		{
-			if (core->champions[i].id == victor->id)
-				victors[n++] = &core->champions[i];
-		}
-		if (n > 1)
-			MSG(ANNOUNCE_WINNER_TEAM, victor->name);
-		i = -1;
-		while (++i < n)
-		{
-			MSG(ANNOUNCE_WINNER, ID(victor->id), victors[i]->name);
-			MSG(CHAMP_COMMENT, victors[i]->comment);
-		}
-	}
-	else
 		MSG(ANNOUNCE_LOSERS);
+		return ;
+	}
+	n = 0;
+	i = -1;
+	while (++i < core->nplayers)
+	{
+		if (core->champions[i].id == victor->id)
+			victors[n++] = &core->champions[i];
+	}
+	if (n > 1)
+		MSG(ANNOUNCE_WINNER_TEAM, victor->name);
+	i = -1;
+	while (++i < n)
+	{
+		MSG(ANNOUNCE_WINNER, ID(victor->id), victors[i]->name);
+		MSG(CHAMP_COMMENT, victors[i]->comment);
+	}
 }
 
 void			execute_war(t_core *core)
@@ -63,13 +64,13 @@ void			execute_war(t_core *core)
 	}
 }
 
-static t_uint	find_id(t_core *core)
+static t_uint	find_id(const t_core *core)
 {
 	int32_t	id;
 	int		i;
 
 	if (!core->nplayers)
-		return (0);
+		return (1);
 	i = -1;
 	id = core->champions[core->nplayers - 1].id + 1;
 	while (++i < core->nplayers - 1)
@@ -119,14 +120,13 @@ int				main(int ac, char *av[])
 	ft_memset(&core, 0, sizeof(t_core));
 	core.ccycle = CYCLE_TO_DIE;
 	core.dcycle = -1;
-	core.victor = NULL;
 	paths = parse_args(&core, ac, av);
 	if (!core.nplayers)
 		ERR(NO_PLAYERS);
 	i = -1;
 	while (++i < core.nplayers)
 	{
-		core.champions[i].id = ID(core.champions[i].id) - 1;
+		core.champions[i].id = ID(core.champions[i].id);
 		load_champ(&core, paths[i], i);
 	}
 	if (core.gui)
