@@ -57,45 +57,12 @@ int	hsl_to_rgb(float h, float s, float l)
 	return (rgb);
 }
 
-void	corewar_gui_make_pcolors(t_corewar_gui *g)
-{
-	int i;
-	int j;
-	float	hues[] = {0, 60, 120, 240};	//red, yellow, green, blue
-//	float	hues[] = {120, 240, 0, 180};	//zaz's corewar colors
-	float fstep = (float)LUM_RANGE / (float)MAX_LUM_STEPS;
-
-	i = 0;
-
-	j = 0;
-	while (j < MAX_LUM_STEPS)
-		g->p_colors[i][j++] = BLOCK_DEFAULT_COLOR;
-	i = 1;
-	while (i < MAX_PLAYERS + 1)
-	{
-		j = 0;
-		while (j < MAX_LUM_STEPS)
-		{
-			float f3 = (float)LUM_START - (float)(j * fstep);
-			int rgb = hsl_to_rgb((float)hues[i - 1], (float)100, (float)f3);
-			g->p_colors[i][j] = rgb;
-			j++;
-		}
-		i++;
-	}
-	return ;
-}
-
 void	corewar_gui_clean_up(t_corewar_gui *g)
 {
 	if (g == NULL)
 		return ;
 	if (g->mlx != NULL)
 		free(g->mlx);
-//	if (g->arena != NULL)
-//		free(g->arena);
-//	if (g->colors != NULL)
-//		free(g->colors);
 	free(g);
 	return ;
 }
@@ -155,8 +122,6 @@ int	corewar_gui_key_hook(int keycode, t_corewar_gui *g)
 	{
 		if (g->img != NULL)
 			(void)mlx_destroy_image(g->mlx, g->img);
-		if (g->img_dist != NULL)
-			(void)mlx_destroy_image(g->mlx, g->img_dist);
 		if (g->win != NULL)
 			(void)mlx_destroy_window(g->mlx, g->win);
 		(void)corewar_gui_clean_up(g);
@@ -189,7 +154,29 @@ int	corewar_gui_mouse_hook(int button, int x, int y, t_corewar_gui *g)
 
 int	corewar_gui_init_colors(t_corewar_gui *g)
 {
-	(void)corewar_gui_make_pcolors(g);
+	int i;
+	int j;
+	float	hues[] = {0, 60, 120, 240};	//red, yellow, green, blue
+//	float	hues[] = {120, 240, 0, 180};	//zaz's corewar colors
+	float fstep = (float)LUM_RANGE / (float)MAX_LUM_STEPS;
+
+	i = 0;
+	j = 0;
+	while (j < MAX_LUM_STEPS)
+		g->player_colors[i][j++] = BLOCK_DEFAULT_COLOR;
+	i = 1;
+	while (i < MAX_PLAYERS + 1)
+	{
+		j = 0;
+		while (j < MAX_LUM_STEPS)
+		{
+			float f3 = (float)LUM_START - (float)(j * fstep);
+			int rgb = hsl_to_rgb((float)hues[i - 1], (float)100, (float)f3);
+			g->player_colors[i][j] = rgb;
+			j++;
+		}
+		i++;
+	}
 	return (0);
 }
 
@@ -202,7 +189,7 @@ int	corewar_gui_get_color(t_corewar_gui *g, int i, int j)
 	idx = (i * GUI_BLOCK_NUM_COLS + j) % GUI_ARENA_SIZE;
 	owner = g->core->owner[idx]; 	//g->owner[i * GUI_BLOCK_NUM_COLS + j];
 	age = g->core->epoch[idx]; 	//g->age[i * GUI_BLOCK_NUM_COLS + j];
-	return (g->p_colors[owner % (MAX_PLAYERS + 1)][age % MAX_LUM_STEPS]);
+	return (g->player_colors[owner % (MAX_PLAYERS + 1)][age % MAX_LUM_STEPS]);
 }
 
 int	corewar_gui_put_block(t_corewar_gui *g, int i, int j)
@@ -221,7 +208,7 @@ int	corewar_gui_put_block(t_corewar_gui *g, int i, int j)
 	{
 		while (j < j1)
 		{
-			ptr = (int *)&g->img_data[(i * WIN_BLOCK_WIDTH * SZ_INT) + (j * SZ_INT)];
+			ptr = (int *)&g->img_data[(i * WIN_TOTAL_WIDTH * (g->img_bpp/CHAR_BIT)) + (j * g->img_bpp/CHAR_BIT)];
 			*ptr = rgb;
 			j++;
 		}
@@ -243,31 +230,32 @@ int	corewar_gui_info_panel(t_corewar_gui *g)
 	else
 		ptr = STATE_PAUSED;
 
-	mlx_string_put(g->mlx, g->win, STATE_Y, STATE_X, INFO_TEXT_COLOR, ptr);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, STATE_Y, STATE_X, INFO_TEXT_COLOR, ptr);
 	ptr = (char *)&fps;
 	ft_sprintf(ptr, FPS_STR, g->fps);
-	mlx_string_put(g->mlx, g->win, FPS_Y, FPS_X, INFO_TEXT_COLOR, ptr);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, FPS_Y, FPS_X, INFO_TEXT_COLOR, ptr);
 	ft_sprintf(ptr, CPF_STR, g->cpf);
-	mlx_string_put(g->mlx, g->win, CPF_Y, CPF_X, INFO_TEXT_COLOR, ptr);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, CPF_Y, CPF_X, INFO_TEXT_COLOR, ptr);
 	ft_sprintf(ptr, CPS_STR, g->fps * g->cpf);
-	mlx_string_put(g->mlx, g->win, CPS_Y, CPS_X, INFO_TEXT_COLOR, ptr);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, CPS_Y, CPS_X, INFO_TEXT_COLOR, ptr);
 	ft_sprintf(ptr, PROC_NUM, g->nproc);
-	mlx_string_put(g->mlx, g->win, PROC_NUM_Y, PROC_NUM_X, INFO_TEXT_COLOR, ptr);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, PROC_NUM_Y, PROC_NUM_X, INFO_TEXT_COLOR, ptr);
 	ft_sprintf(ptr, CYCLE_NUM, g->core->cycle);
-	mlx_string_put(g->mlx, g->win, CYCLE_NUM_Y, CYCLE_NUM_X, INFO_TEXT_COLOR, ptr);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, CYCLE_NUM_Y, CYCLE_NUM_X, INFO_TEXT_COLOR, ptr);
 
 	i = 0;
 	x = PLAYER_X + (GUI_CHAR_HEIGHT * 2);
 	while (i < g->core->nplayers)
 	{
 		ft_sprintf(ptr, PLAYER_NUM, i, g->core->champions[i].id);
-		mlx_string_put(g->mlx, g->win, PLAYER_Y, x, INFO_TEXT_COLOR, ptr);
-        x+= GUI_CHAR_HEIGHT;
-		mlx_string_put(g->mlx, g->win, PLAYER_Y, x,	g->p_colors[i + 1][0], g->core->champions[i].name);
-        x+= GUI_CHAR_HEIGHT;
+		mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, INFO_TEXT_COLOR, ptr);
+		x += GUI_CHAR_HEIGHT;
+		mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x,	g->player_colors[i + 1][0], g->core->champions[i].name);
+		x += GUI_CHAR_HEIGHT;
 		x += GUI_CHAR_HEIGHT;
 		i++;
 	}
+
 
 	if (g->core->processes == 0)
 	{
@@ -277,10 +265,11 @@ int	corewar_gui_info_panel(t_corewar_gui *g)
 		{
 			if (g->core->victor == &g->core->champions[i])
 			{
-				mlx_string_put(g->mlx, g->win, PLAYER_Y, x, INFO_TEXT_COLOR, GUI_WINNER1);	x+= GUI_CHAR_HEIGHT;
-				mlx_string_put(g->mlx, g->win, PLAYER_Y, x, g->p_colors[i + 1][0], g->core->victor->name);	x+= GUI_CHAR_HEIGHT;
+				mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, INFO_TEXT_COLOR, GUI_WINNER1);	x+= GUI_CHAR_HEIGHT;
+				mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, g->player_colors[i + 1][0], g->core->victor->name);
+				x+= GUI_CHAR_HEIGHT;
 				ft_sprintf(ptr, GUI_COMMENT_QUOTES, g->core->victor->comment);
-				mlx_string_put(g->mlx, g->win, PLAYER_Y, x, g->p_colors[i + 1][0], ptr);	x+= GUI_CHAR_HEIGHT;
+				mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, g->player_colors[i + 1][0], ptr);	x+= GUI_CHAR_HEIGHT;
 				break ;		
 			}
 			i++;
@@ -314,9 +303,9 @@ int	corewar_gui_block_visuals(t_corewar_gui *g)
 
 int	corewar_gui_calc_fps(t_corewar_gui *g)
 {
-	time_t	tloc;
+	time_t		tloc;
 	static	int	current;
-	static	int previous;
+	static	int	previous;
 	static	int	counter;
 
 	counter++;
@@ -335,7 +324,7 @@ int	corewar_gui_calc_fps(t_corewar_gui *g)
 int	corewar_gui_mark_pc(t_corewar_gui *g, int i, int j)
 {
 	int	i1;
-	int j1;
+	int	j1;
 	int	rgb;
 	int	*ptr;
 	int	tmp;
@@ -350,7 +339,7 @@ int	corewar_gui_mark_pc(t_corewar_gui *g, int i, int j)
 		tmp = j;
 		while (j < j1)
 		{
-			ptr = (int *)&g->img_data[(i * WIN_BLOCK_WIDTH * SZ_INT) + (j * SZ_INT)];
+			ptr = (int *)&g->img_data[(i * WIN_TOTAL_WIDTH * (g->img_bpp/CHAR_BIT)) + (j * g->img_bpp/CHAR_BIT)];
 			*ptr = rgb;
 			j++;
 		}
@@ -383,19 +372,15 @@ int	corewar_gui_show_pcs(t_corewar_gui *g)
 	return (0);
 }
 
+
+
 int	corewar_gui_create_images(t_corewar_gui *g)
 {
 	if (g->img != NULL)
 		(void)mlx_destroy_image(g->mlx, g->img);
-	if ((g->img = mlx_new_image(g->mlx, WIN_BLOCK_WIDTH, WIN_BLOCK_HEIGHT))== NULL)
+	if ((g->img = mlx_new_image(g->mlx, WIN_TOTAL_WIDTH, WIN_TOTAL_HEIGHT))== NULL)
 		(void)corewar_gui_fatal_error(g, "mlx_new_image() failed");
 	g->img_data = mlx_get_data_addr(g->img, &g->img_bpp, &g->img_sz, &g->img_endian);
-
-	if (g->img_dist != NULL)
-		(void)mlx_destroy_image(g->mlx, g->img_dist);
-	if ((g->img_dist = mlx_new_image(g->mlx, DIST_WIDTH, DIST_HEIGHT)) == NULL)
-		(void)corewar_gui_fatal_error(g, "mlx_new_image() failed");
-	g->img_dist_data = mlx_get_data_addr(g->img_dist, &g->img_dist_bpp, &g->img_dist_sz, &g->img_dist_endian);
 	return (0);
 }
 
@@ -412,13 +397,13 @@ int	corewar_gui_get_distrib_color(t_corewar_gui *g, int j)
 		right = g->distrib[i];
 		right += left;
 		if (((int)y >= left) && ((int)y <= right))
-			return (g->p_colors[i][MAX_LUM_STEPS / LUM_TEXT_DIV]);
+			return (g->player_colors[i][MAX_LUM_STEPS / LUM_TEXT_DIV]);
 		left = right;
 		i++;
 	}
 	right += g->distrib[0];
 	if (((int)y >= left) && ((int)y <= right))
-		return (g->p_colors[0][0]);
+		return (g->player_colors[0][0]);
 	return (0xffffff);
 }
 
@@ -428,17 +413,19 @@ int	corewar_gui_fill_distrib(t_corewar_gui *g)
 	int	j;
 	int	*ptr;
 
-	i = 0;
-	while (i < DIST_HEIGHT)
+	mlx_string_put_to_image(g->mlx, g->win, g->img, DIST_TEXT_Y_POS, DIST_TEXT_X_POS, INFO_TEXT_COLOR, DIST_TEXT);
+	i = DIST_X_POS;
+	while (i < DIST_HEIGHT + DIST_X_POS)
 	{
-		j = 0;
-		while (j < DIST_WIDTH)
+		j = DIST_Y_POS;
+		while (j < DIST_WIDTH + DIST_Y_POS)
 		{
-			ptr = (int *)&g->img_dist_data[(i * DIST_WIDTH * SZ_INT) + (j * SZ_INT)];
-			if ((i == 0) || (i == DIST_HEIGHT - 1) || (j == 0) || (j == DIST_WIDTH - 1))
+			ptr = (int *)&g->img_data[(i * WIN_TOTAL_WIDTH * (g->img_bpp/CHAR_BIT)) + (j * (g->img_bpp/CHAR_BIT))];
+
+			if ((i == DIST_X_POS) || (i == DIST_X_POS + DIST_HEIGHT - 1) || (j == DIST_Y_POS) || (j == DIST_Y_POS + DIST_WIDTH - 1))
 				*ptr = DIST_BORDER_COLOR;
 			else
-				*ptr = corewar_gui_get_distrib_color(g, j);
+				*ptr = corewar_gui_get_distrib_color(g, j - DIST_Y_POS);
 			j++;
 		}
 		i++;
@@ -450,32 +437,26 @@ int	corewar_gui_loop_hook(t_corewar_gui *g)
 {
 	int	i;
 
-	(void)corewar_gui_calc_fps(g);
+	i = 0;
+	while ((g->state == 1) && (i < g->cpf))
+	{
+		if (g->core->processes)
+			execute_war(g->core);
+		i++;
+	}
 	(void)corewar_gui_create_images(g);
 	(void)corewar_gui_show_pcs(g);
 	(void)corewar_gui_block_visuals(g);
 	(void)corewar_gui_fill_distrib(g);
-	(void)mlx_clear_window(g->mlx, g->win);
+	(void)corewar_gui_calc_fps(g);
 	(void)corewar_gui_info_panel(g);
-	mlx_put_image_to_window(g->mlx, g->win, g->img, 0, 0);
-	mlx_put_image_to_window(g->mlx, g->win, g->img_dist, DIST_Y_POS, DIST_X_POS);
-	mlx_string_put(g->mlx, g->win, DIST_TEXT_Y_POS, DIST_TEXT_X_POS, INFO_TEXT_COLOR, DIST_TEXT);
-	i = 0;
-	if (g->state == 1)
-	{
-		while (i < g->cpf)
-		{
-			if (g->core->processes)
-				execute_war(g->core);
-			i++;
-		}
-	}
+	(void)mlx_put_image_to_window(g->mlx, g->win, g->img, 0, 0);
 	return (0);
 }
 
 int	corewar_gui_expose_hook(t_corewar_gui *g)
 {
-    (void)g;
+	(void)mlx_clear_window(g->mlx, g->win);
 	return (0);
 }
 
@@ -486,7 +467,7 @@ void	corewar_gui_init(t_core *core)
 	g->core = core;
 	if ((g->mlx = mlx_init()) == NULL)
 		corewar_gui_fatal_error(g, "mlx_init() failed");
-	mlx_do_key_autorepeaton(g->mlx);
+	(void)mlx_do_key_autorepeaton(g->mlx);
 	g->win = mlx_new_window(g->mlx, WIN_TOTAL_WIDTH, WIN_TOTAL_HEIGHT, WIN_BLOCK_TITLE);
 	if (g->win == NULL)
 		corewar_gui_fatal_error(g, "mlx_new_window() failed");
@@ -499,4 +480,5 @@ void	corewar_gui_init(t_core *core)
 	(void)mlx_loop_hook(g->mlx, corewar_gui_loop_hook, g);
 	(void)mlx_loop(g->mlx);
 	(void)corewar_gui_clean_up(g);
+	return ;
 }

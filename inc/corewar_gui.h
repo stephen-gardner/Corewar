@@ -21,6 +21,7 @@
 # include <errno.h>
 # include <stdlib.h>
 # include <math.h>
+# include <limits.h>
 # include "corewar.h"
 
 # define BLOCK_DEFAULT_COLOR    0xbfbfbf	//grey, 75% lum
@@ -134,21 +135,21 @@ typedef struct s_corewar_gui
 	void			*mlx;
 	void			*win;
 	void			*img;
-	int				img_bpp;
-	int				img_sz;
-	int				img_endian;
+	int			img_bpp;
+	int			img_sz;
+	int			img_endian;
 	char			*img_data;
-	int				state;
-	int				fps;
-	int				cpf;
-	unsigned long	nproc;
+	int			state;
+	int			fps;
+	int			cpf;
+	unsigned long		nproc;
 	char			pc_box[MEM_SIZE];
-	int				p_colors[MAX_PLAYERS + 1][MAX_LUM_STEPS];
-	int				distrib[MAX_PLAYERS + 1];
+	int			player_colors[MAX_PLAYERS + 1][MAX_LUM_STEPS];
+	int			distrib[MAX_PLAYERS + 1];
 	void			*img_dist;
-	int				img_dist_bpp;
-	int				img_dist_sz;
-	int				img_dist_endian;
+	int			img_dist_bpp;
+	int			img_dist_sz;
+	int			img_dist_endian;
 	char			*img_dist_data;
 
 } t_corewar_gui;
@@ -156,7 +157,6 @@ typedef struct s_corewar_gui
 void	corewar_gui_clean_up(t_corewar_gui *g);
 void	corewar_gui_fatal_error(t_corewar_gui *g, char *msg);
 void	corewar_gui_init(t_core *core);
-void	corewar_gui_make_pcolors(t_corewar_gui *g);
 void	corewar_gui_random_age(t_corewar_gui *g);
 void	corewar_gui_random_fill_arena(t_corewar_gui *g);
 void	corewar_gui_set_owner(t_corewar_gui *g);

@@ -42,6 +42,8 @@ void	*mlx_init();
 ** Basic actions
 */
 
+int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, int x, int y, int color, char *string);	//@asarandi
+
 void	*mlx_new_window(void *mlx_ptr, int size_x, int size_y, char *title);
 /*
 **  return void *0 if failed
