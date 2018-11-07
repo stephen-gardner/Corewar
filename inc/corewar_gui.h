@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 03:08:18 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/06 23:56:06 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/07 07:38:31 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define GUI_NUM_COLS		64	//128, 256
 # define GUI_CHAR_WIDTH		9
 # define GUI_CHAR_HEIGHT	15
+# define GCH				GUI_CHAR_HEIGHT
 # define GUI_ROW_SPACING	0
 # define GUI_COL_SPACING	4
 # define GUI_ROW_HEIGHT		(GUI_CHAR_HEIGHT + GUI_ROW_SPACING)
@@ -82,7 +83,7 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define CPF_MAX			20
 # define LUM_TEXT_DIV	5
 # define GUI_WINNER1 "game over! the winner is:"
-# define GUI_COMMENT_QUOTES "\"%s\""
+# define GUI_COMMENT_QUOTES "\"%.*s\""
 # define GUI_PC_MARK_SZ	2
 # define INFO_PANEL_X	(GUI_BLOCK_ARENA_X_POS)
 # define INFO_PANEL_Y	(WIN_BLOCK_WIDTH)
@@ -90,15 +91,7 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define STATE_Y			(INFO_PANEL_Y + 10)
 # define STATE_PAUSED	"game state: **paused**"
 # define STATE_RUNNING	"game state: **running**"
-# define FPS_STR			"frames per second: %d"
-# define FPS_X			(STATE_X + GUI_CHAR_HEIGHT * 2)
-# define FPS_Y			(INFO_PANEL_Y + 10)
-# define CPF_STR			"cycles per frame: %d"
-# define CPF_X			(FPS_X + GUI_CHAR_HEIGHT)
-# define CPF_Y			(INFO_PANEL_Y + 10)
-# define CPS_STR			"cycles per second: %d"
-# define CPS_X			(CPF_X + GUI_CHAR_HEIGHT)
-# define CPS_Y			(INFO_PANEL_Y + 10)
+
 # define PROC_NUM		"total processes: %lu"
 # define PROC_NUM_X		(CPS_X + GUI_CHAR_HEIGHT * 2)
 # define PROC_NUM_Y		(INFO_PANEL_Y + 10)
@@ -112,15 +105,49 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define PLAYER_NUM		"player %d, id: 0x%08x"
 # define INFO_TEXT_COLOR	COLOR_WHITE
 # define GUI_CONTROLS_INFO "use [space] to start/pause execution; [0-9] keys and [+-] keys to adjust cycles per second; [q] to quit"
+//-----------------------------------------------------------------------------
 # define DIST_WIDTH	(INFO_PANEL_WIDTH - (GUI_BLOCK_ARENA_Y_POS * 3))
 # define DIST_HEIGHT	(GUI_BLOCK_HEIGHT + 2)
 # define DIST_Y_POS	(INFO_PANEL_Y_POS + GUI_BLOCK_ARENA_Y_POS)
 # define DIST_X_POS	(WIN_BLOCK_HEIGHT - (GUI_CHAR_HEIGHT * 3))
 # define DIST_BORDER_COLOR 0xffffff
 # define DIST_TEXT_Y_POS	(INFO_PANEL_Y_POS + GUI_BLOCK_ARENA_Y_POS)
-# define DIST_TEXT_X_POS	(DIST_X_POS - (GUI_CHAR_HEIGHT * 1) - 2)
+# define DIST_TEXT_X_POS	(DIST_X_POS - (GUI_CHAR_HEIGHT * 1) - 4)
 # define DIST_TEXT		"arena distribution"
+//-----------------------------------------------------------------------------
+#define LIVE_BAR_TEXT_STR "live breakdown for current period"
+#define LIVE_BAR_TEXT_Y_POS	(INFO_PANEL_Y_POS + GUI_BLOCK_ARENA_Y_POS)
+#define LIVE_BAR_TEXT_X_POS	(LIVE_BAR_X_POS - (GUI_CHAR_HEIGHT * 1) - 4)
+#define LIVE_BAR_HEIGHT 	(GUI_BLOCK_HEIGHT + 2)
+#define LIVE_BAR_WIDTH		(INFO_PANEL_WIDTH - (GUI_BLOCK_ARENA_Y_POS * 3))
+#define LIVE_BAR_X_POS		(WIN_BLOCK_HEIGHT - (GUI_CHAR_HEIGHT * 6))
+#define LIVE_BAR_Y_POS		(INFO_PANEL_Y_POS + GUI_BLOCK_ARENA_Y_POS)
+#define LIVE_BAR_BORDER_COLOR	0xffffff
+#define LIVE_BAR_DEFAULT_COLOR	0xffffff
+#define DISTRIB_DEFAULT_COLOR	0xffffff
+//-----------------------------------------------------------------------------
+#define CYCLE_TO_DIE_STR	"cycle to die: %u"
+#define CYCLE_DELTA_STR		"cycle delta: %u"
+#define NBR_LIVE_STR		"nbr_live: %u/%u"
+#define MAX_CHECKS_STR		"max_checks: %u/%u"
+#define LAST_LIVE_STR		"last live: %u"
+#define	LIVES_IN_PERIOD_STR	"lives in current period: %d"
+//-----------------------------------------------------------------------------
+# define FPS_STR			"fps [%d] * cpf [%d] = cps [%d]"
+# define FPS_X			(STATE_X + GUI_CHAR_HEIGHT * 2)
+# define FPS_Y			(INFO_PANEL_Y + 10)
+# define CPF_STR			"cycles per frame: %d"
+# define CPF_X			(FPS_X + GUI_CHAR_HEIGHT)
+# define CPF_Y			(INFO_PANEL_Y + 10)
+# define CPS_STR			"cycles per second: %d"
+# define CPS_X			(CPF_X + GUI_CHAR_HEIGHT)
+# define CPS_Y			(INFO_PANEL_Y + 10)
+//-----------------------------------------------------------------------------
 # define GUI_PC_BOX_COLOR 0xffffff
+# define INFO_PANEL_TEXT_MAX_LEN	(INFO_PANEL_WIDTH - (GUI_BLOCK_ARENA_Y_POS * 3))
+# define IPTML INFO_PANEL_TEXT_MAX_LEN
+# define MAX_STRING_LEN	(IPTML / (GUI_CHAR_WIDTH - 2))
+# define MSL MAX_STRING_LEN
 
 typedef	struct	s_line
 {

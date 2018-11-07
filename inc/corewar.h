@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 07:18:26 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 04:53:44 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@
 /*
 ** coreio.c
 */
-
 void				corewar_gui_init(t_core *core);
-
 void				age_arena(t_byte *epoch);
 int32_t				read_arg(t_core *core, t_proc *p, int a);
 int32_t				read_core(t_core *core, t_byte *src, int n, t_bool trunc);
@@ -67,7 +65,7 @@ t_bool				decode(t_byte *arena, t_proc *p, t_instr *instr);
 ** process.c
 */
 
-t_uint				cull_processes(t_core *core, t_proc **procs);
+void				cull_processes(t_core *core, t_cull *culler, t_proc **p);
 void				execute_processes(t_core *core, t_proc *p);
 t_proc				*fork_process(t_core *core, t_proc *p, t_byte *fpc);
 

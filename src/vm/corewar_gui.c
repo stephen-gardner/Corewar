@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 03:06:53 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/06 19:54:05 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/07 07:35:13 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,45 +218,60 @@ int	corewar_gui_put_block(t_corewar_gui *g, int i, int j)
 	return (0);
 }
 
+
 int	corewar_gui_info_panel(t_corewar_gui *g)
 {
-	char	fps[1000];
-	char	*ptr;
+	char	text[COMMENT_LENGTH + 1];
+	char	*s;
 	int		i;
 	int		x;
+	int		y;
+	int		c;
 
-	if (g->state == 1)
-		ptr = STATE_RUNNING;
-	else
-		ptr = STATE_PAUSED;
+	y = INFO_PANEL_Y + 10;
+	x = INFO_PANEL_X;
+	c = INFO_TEXT_COLOR;
 
-	mlx_string_put_to_image(g->mlx, g->win, g->img, STATE_Y, STATE_X, INFO_TEXT_COLOR, ptr);
-	ptr = (char *)&fps;
-	ft_sprintf(ptr, FPS_STR, g->fps);
-	mlx_string_put_to_image(g->mlx, g->win, g->img, FPS_Y, FPS_X, INFO_TEXT_COLOR, ptr); 
-	ft_sprintf(ptr, CPF_STR, g->cpf);
-	mlx_string_put_to_image(g->mlx, g->win, g->img, CPF_Y, CPF_X, INFO_TEXT_COLOR, ptr);
-	ft_sprintf(ptr, CPS_STR, g->fps * g->cpf);
-	mlx_string_put_to_image(g->mlx, g->win, g->img, CPS_Y, CPS_X, INFO_TEXT_COLOR, ptr);
-	ft_sprintf(ptr, PROC_NUM, g->nproc);
-	mlx_string_put_to_image(g->mlx, g->win, g->img, PROC_NUM_Y, PROC_NUM_X, INFO_TEXT_COLOR, ptr);
-	ft_sprintf(ptr, CYCLE_NUM, g->core->cycle);
-	mlx_string_put_to_image(g->mlx, g->win, g->img, CYCLE_NUM_Y, CYCLE_NUM_X, INFO_TEXT_COLOR, ptr);
+	g->state == 1 ? (s = STATE_RUNNING) : (s = STATE_PAUSED);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT * 2;
+	s = (char *)&text;
+	ft_sprintf(s, FPS_STR, g->fps, g->cpf, g->fps * g->cpf);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT * 2;
+
+	ft_sprintf(s, PROC_NUM, g->nproc);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT;
+	ft_sprintf(s, CYCLE_NUM, g->core->cycle);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT * 2;
+
+
+	ft_sprintf(s, CYCLE_TO_DIE_STR, g->core->cull.ctd);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT;
+	ft_sprintf(s, CYCLE_DELTA_STR, CYCLE_DELTA);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT * 2;
+	ft_sprintf(s, NBR_LIVE_STR, g->core->cull.nbr_lives, NBR_LIVE);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT;
+	ft_sprintf(s, MAX_CHECKS_STR, g->core->cull.checks, MAX_CHECKS);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT;
+
+#define GUI_STRING "%.*s"
 
 	i = 0;
-	x = PLAYER_X + (GUI_CHAR_HEIGHT * 2);
+	x += GUI_CHAR_HEIGHT * 2;
 	while (i < g->core->nplayers)
 	{
-		ft_sprintf(ptr, PLAYER_NUM, i, g->core->champions[i].id);
-		mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, INFO_TEXT_COLOR, ptr);
-		x += GUI_CHAR_HEIGHT;
-		mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x,	g->player_colors[i + 1][0], g->core->champions[i].name);
-		x += GUI_CHAR_HEIGHT;
-		x += GUI_CHAR_HEIGHT;
+		ft_sprintf(s, PLAYER_NUM, i, g->core->champions[i].id);
+		mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GUI_CHAR_HEIGHT;
+		ft_sprintf(s, GUI_STRING, MSL, g->core->champions[i].name);
+		mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, g->player_colors[i + 1][0], s); x += GCH;
+
+		ft_sprintf(s, LAST_LIVE_STR, g->core->champions[i].last_live);
+		mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GCH;
+		ft_sprintf(s, LIVES_IN_PERIOD_STR, g->core->champions[i].plives);
+		mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, s); x += GCH * 2;
 		i++;
 	}
 
-
+//end of the game, print winner name
 	if (g->core->processes == 0)
 	{
 		i = 0;
@@ -265,16 +280,23 @@ int	corewar_gui_info_panel(t_corewar_gui *g)
 		{
 			if (g->core->victor == &g->core->champions[i])
 			{
-				mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, INFO_TEXT_COLOR, GUI_WINNER1);	x+= GUI_CHAR_HEIGHT;
-				mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, g->player_colors[i + 1][0], g->core->victor->name);
-				x+= GUI_CHAR_HEIGHT;
-				ft_sprintf(ptr, GUI_COMMENT_QUOTES, g->core->victor->comment);
-				mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, g->player_colors[i + 1][0], ptr);	x+= GUI_CHAR_HEIGHT;
+				mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, c, GUI_WINNER1);	x+= GUI_CHAR_HEIGHT;
+				ft_sprintf(s, GUI_STRING, MSL, g->core->victor->name);
+				mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, g->player_colors[i + 1][0], s); x += GCH;
+//				mlx_string_put_to_image(g->mlx, g->win, g->img, y, x, g->player_colors[i + 1][0], g->core->victor->name);
+//				x += GUI_CHAR_HEIGHT;
+				sprintf(s, GUI_COMMENT_QUOTES, MSL - 3, g->core->victor->comment);
+				text[46] = 0;
+				mlx_string_put_to_image(g->mlx, g->win, g->img, PLAYER_Y, x, g->player_colors[i + 1][0], s);	x+= GUI_CHAR_HEIGHT;
 				break ;		
 			}
 			i++;
 		}
 	}
+
+
+	mlx_string_put_to_image(g->mlx, g->win, g->img, LIVE_BAR_TEXT_Y_POS, LIVE_BAR_TEXT_X_POS, INFO_TEXT_COLOR, LIVE_BAR_TEXT_STR);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, DIST_TEXT_Y_POS, DIST_TEXT_X_POS, INFO_TEXT_COLOR, DIST_TEXT);
 	return (0);
 }
 
@@ -383,7 +405,72 @@ int	corewar_gui_create_images(t_corewar_gui *g)
 	g->img_data = mlx_get_data_addr(g->img, &g->img_bpp, &g->img_sz, &g->img_endian);
 	return (0);
 }
+//----------------------------------------------------------------------------------------------
 
+
+int	corewar_gui_live_bar_color(t_corewar_gui *g, int j)
+{
+	if (g->core->cull.plives == 0)
+		return (g->player_colors[0][MAX_LUM_STEPS / LUM_TEXT_DIV]);
+
+
+	float percent[MAX_PLAYERS];
+	float one_percent = (float)g->core->cull.plives / (float)100;
+	int i = 0;
+	while (i < MAX_PLAYERS)
+	{
+		percent[i] = 0;
+		if (g->core->champions[i].plives > 0)
+		{
+			percent[i] = (float)g->core->champions[i].plives / (float)one_percent;
+		}
+		i++;
+	}
+	float position = (float)j / ((float)LIVE_BAR_WIDTH / (float)100);
+
+	i = 0;
+	float sum = 0;
+	while (i < MAX_PLAYERS)
+	{
+		sum += percent[i];
+		if (position <= sum)
+		{
+			return (g->player_colors[i + 1][MAX_LUM_STEPS / LUM_TEXT_DIV]);
+		}
+		i++;
+	}
+	return (LIVE_BAR_DEFAULT_COLOR);
+}
+
+
+
+int	corewar_gui_lives_bar(t_corewar_gui *g)
+{
+	int	i;
+	int	j;
+	int	*ptr;
+
+	i = LIVE_BAR_X_POS;
+	while (i < LIVE_BAR_HEIGHT + LIVE_BAR_X_POS)
+	{
+		j = LIVE_BAR_Y_POS;
+		while (j < LIVE_BAR_WIDTH + LIVE_BAR_Y_POS)
+		{
+			ptr = (int *)&g->img_data[(i * WIN_TOTAL_WIDTH * (g->img_bpp/CHAR_BIT)) + (j * (g->img_bpp/CHAR_BIT))];
+
+			if ((i == LIVE_BAR_X_POS) || (i == LIVE_BAR_X_POS + LIVE_BAR_HEIGHT - 1) ||
+					(j == LIVE_BAR_Y_POS) || (j == LIVE_BAR_Y_POS + LIVE_BAR_WIDTH - 1))
+				*ptr = LIVE_BAR_BORDER_COLOR;
+			else
+				*ptr = corewar_gui_live_bar_color(g, j - LIVE_BAR_Y_POS);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+//----------------------------------------------------------------------------------------------
 int	corewar_gui_get_distrib_color(t_corewar_gui *g, int j)
 {
 	float x = DIST_WIDTH;
@@ -404,7 +491,7 @@ int	corewar_gui_get_distrib_color(t_corewar_gui *g, int j)
 	right += g->distrib[0];
 	if (((int)y >= left) && ((int)y <= right))
 		return (g->player_colors[0][0]);
-	return (0xffffff);
+	return (DISTRIB_DEFAULT_COLOR);
 }
 
 int	corewar_gui_fill_distrib(t_corewar_gui *g)
@@ -413,7 +500,6 @@ int	corewar_gui_fill_distrib(t_corewar_gui *g)
 	int	j;
 	int	*ptr;
 
-	mlx_string_put_to_image(g->mlx, g->win, g->img, DIST_TEXT_Y_POS, DIST_TEXT_X_POS, INFO_TEXT_COLOR, DIST_TEXT);
 	i = DIST_X_POS;
 	while (i < DIST_HEIGHT + DIST_X_POS)
 	{
@@ -432,7 +518,7 @@ int	corewar_gui_fill_distrib(t_corewar_gui *g)
 	}
 	return (0);
 }
-
+//----------------------------------------------------------------------------------------------
 int	corewar_gui_loop_hook(t_corewar_gui *g)
 {
 	int	i;
@@ -447,6 +533,7 @@ int	corewar_gui_loop_hook(t_corewar_gui *g)
 	(void)corewar_gui_create_images(g);
 	(void)corewar_gui_show_pcs(g);
 	(void)corewar_gui_block_visuals(g);
+	(void)corewar_gui_lives_bar(g);
 	(void)corewar_gui_fill_distrib(g);
 	(void)corewar_gui_calc_fps(g);
 	(void)mlx_put_image_to_window(g->mlx, g->win, g->img, 0, 0);

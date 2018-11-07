@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 07:20:11 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 22:18:07 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 #include <unistd.h>
 
 #define IO_ERR(path)	ERR(BAD_IO, path, strerror(errno))
+
+/*
+** Finds first champion with given ID.
+*/
 
 t_champ		*find_champ(t_core *core, int32_t id)
 {
@@ -28,6 +32,7 @@ t_champ		*find_champ(t_core *core, int32_t id)
 }
 
 /*
+** Loads the header.
 ** Checks if file size is too small, if magic is invalid, if code size doesn't
 **  match size specified in header, and if code size is too large.
 */
@@ -53,6 +58,14 @@ static void	load_header(int fd, const char *path, t_header *header)
 	if (header->prog_size > CHAMP_MAX_SIZE)
 		ERR(CHAMP_TOO_LARGE, path, header->prog_size, CHAMP_MAX_SIZE);
 }
+
+/*
+** Loads the champion data, and its code into the core.
+** Spawn a process for the champion and sets the process' owning champion to
+**  the first one with the same ID (for team play). Sets its PC to its starting
+**  position, and its r1 register to the assigned champion ID.
+** If GUI is enabled, Sets the owner for the bytes loaded into the core.
+*/
 
 void		load_champ(t_core *core, const char *path, int pnum)
 {

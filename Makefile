@@ -133,6 +133,14 @@ clean:
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed$(NC)"
 
+testasm:
+	bash -c 'for f in tests/champions/*.s; do ./asm $$f; done'
+asmtest: testasm
+
+testgui:
+	bash -c './vm -q -g tests/champions/Gagnant.cor tests/champions/Douceur_power.cor tests/champions/overwatch.cor tests/champions/Asombra.cor'
+guitest: testgui
+
 rmcor:
 	find . -iname "*.cor" -exec rm {} \;
 

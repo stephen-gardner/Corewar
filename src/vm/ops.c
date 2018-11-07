@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 07:04:18 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 23:37:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@ const t_op		g_ops[17] = {
 
 const t_uint	g_ops_size = sizeof(g_ops) / sizeof(t_op);
 
+/*
+** For the given coding bits, the argument of given index has its pointer set to
+**  either a register or a position in the core, and the PC is advanced by the
+**  size of the data.
+** If any arguments are of the wrong type for the instruction, it will not be
+**  executed, but the PC is still advanced according to the arguments specified
+**  by the coding byte up to the number of required arguments.
+*/
+
 static t_bool	set_param(t_byte *arena, t_proc *p, t_instr *instr, int i)
 {
 	t_bool	res;
@@ -57,6 +66,21 @@ static t_bool	set_param(t_byte *arena, t_proc *p, t_instr *instr, int i)
 		instr->epc = ABS_POS(arena, instr->epc, IND_SIZE);
 	return (res);
 }
+
+/*
+** Decodes the coding byte for instruction and sets pointers to arguments.
+** Any data in the coding byte that comes after the number of required arguments
+**  is discarded.
+**
+** 00b = Invalid
+** 01b = Register
+** 10b = Direct value
+** 11b = Indirect value
+**
+** Ex: 0x78 = 01 11 10 00 -> Register, Indirect, Direct
+**     0x38 = 00 11 10 00 -> Invalid
+**     0x57 = 01 01 01 11 -> Valid for instruction that takes three registers
+*/
 
 t_bool			decode(t_byte *arena, t_proc *p, t_instr *instr)
 {
