@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 03:08:18 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/04 20:57:27 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/06 20:15:04 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <math.h>
 # include <limits.h>
 # include "corewar.h"
+
+int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, int x, int y, int color, char *string);
 
 # define BLOCK_DEFAULT_COLOR    0xbfbfbf	//grey, 75% lum
 # define CONSOLE_TEXT_RED	"\033[0;31m"

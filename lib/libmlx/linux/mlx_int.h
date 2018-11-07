@@ -15,12 +15,8 @@
 */
 
 
-#include <X11/XKBlib.h>	//@asarandi
-#include <bsd/string.h>	//@asarandi
-
 #include	<stdlib.h>
 #include	<stdio.h>
-#include	<string.h>
 #include	<string.h>
 #include        <unistd.h>
 #include        <fcntl.h>
@@ -115,13 +111,6 @@ typedef struct	s_xvar
   int		decrgb[6];
 } t_xvar;
 
-int	mlx_int_get_visual(t_xvar *xvar); //@asarandi
-int	mlx_int_set_win_event_mask(t_xvar *xvar); //@asarandi
-unsigned int mlx_get_color_value(void *mlx_ptr, int color); //@asarandi
-int	color_map_1(void *win,int w,int h); //@asarandi
-int	color_map_2(unsigned char *data,int bpp,int sl,int w,int h,int endian, int type); //@asarandi
-int	mlx_int_str_str(char *str,char *find,int len); //@asarandi
-int	mlx_int_str_str_cote(char *str,char *find,int len); //@asarandi
 
 int	mlx_int_do_nothing();
 int	mlx_int_get_good_color();

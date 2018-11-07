@@ -8,7 +8,7 @@
 ** Last update Sat Oct  1 14:56:13 2005 Olivier Crouzet
 */
 
-#include	<string.h>
+
 #include	"mlx_int.h"
 
 extern struct s_col_name mlx_col_name[];

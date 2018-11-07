@@ -7,7 +7,7 @@
 NAME = corewar
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -Ofast -funroll-loops -Wno-unused-result
+#CFLAGS += -Ofast -funroll-loops -Wno-unused-result
 #CFLAGS += -g #-fsanitize=address
 INC = -I inc -I lib/libft/inc
 LIBFTDIR = lib/libft/
@@ -19,6 +19,19 @@ OBJ_DIR = obj/
 VM = vm
 VMDIR = vm/
 VM_FILES = coreio corewar_gui load main msg ops process ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
+
+UNAME	:= $(shell uname -s)
+
+ifeq ($(UNAME),Darwin)
+	PLATFORM = macos
+	VM_FILES += macos/mlx_string_put_to_image
+endif
+
+ifeq ($(UNAME),Linux)
+	PLATFORM = linux
+	VM_FILES += linux/mlx_string_put_to_image
+endif
+
 VMSRCDIR = $(addprefix $(SRC_DIR), $(VMDIR))
 VMOBJDIR = $(addprefix $(OBJ_DIR), $(VMDIR))
 VM_OBJECTS=$(addprefix $(VMOBJDIR), $(addsuffix .o, $(VM_FILES)))
@@ -37,7 +50,6 @@ DISASMSRCDIR = $(addprefix $(SRC_DIR), $(DISASMDIR))
 DISASMOBJDIR = $(addprefix $(OBJ_DIR), $(DISASMDIR))
 DISASM_OBJECTS = $(addprefix $(DISASMOBJDIR), $(addsuffix .o, $(DISASM_FILES)))
 
-UNAME	:= $(shell uname -s)
 
 ifeq ($(UNAME),Linux)
 	MLXDIR := $(MLXDIR)linux/
@@ -81,6 +93,7 @@ $(VM_OBJECTS): $(VMOBJDIR)%.o : $(VMSRCDIR)%.c | $(VMOBJDIR)
 $(VMOBJDIR): $(OBJ_DIR)
 	mkdir -p $@
 	mkdir -p $@/ops
+	mkdir -p $@/$(PLATFORM)
 #------------------------------------------------------------------------------
 $(ASM): $(ASM_OBJECTS) $(LIBFT)
 	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@

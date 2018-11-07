@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 03:06:53 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/04 20:57:30 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/06 19:54:05 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ int	corewar_gui_info_panel(t_corewar_gui *g)
 	mlx_string_put_to_image(g->mlx, g->win, g->img, STATE_Y, STATE_X, INFO_TEXT_COLOR, ptr);
 	ptr = (char *)&fps;
 	ft_sprintf(ptr, FPS_STR, g->fps);
-	mlx_string_put_to_image(g->mlx, g->win, g->img, FPS_Y, FPS_X, INFO_TEXT_COLOR, ptr);
+	mlx_string_put_to_image(g->mlx, g->win, g->img, FPS_Y, FPS_X, INFO_TEXT_COLOR, ptr); 
 	ft_sprintf(ptr, CPF_STR, g->cpf);
 	mlx_string_put_to_image(g->mlx, g->win, g->img, CPF_Y, CPF_X, INFO_TEXT_COLOR, ptr);
 	ft_sprintf(ptr, CPS_STR, g->fps * g->cpf);
@@ -449,14 +449,14 @@ int	corewar_gui_loop_hook(t_corewar_gui *g)
 	(void)corewar_gui_block_visuals(g);
 	(void)corewar_gui_fill_distrib(g);
 	(void)corewar_gui_calc_fps(g);
-	(void)corewar_gui_info_panel(g);
 	(void)mlx_put_image_to_window(g->mlx, g->win, g->img, 0, 0);
+	(void)corewar_gui_info_panel(g);
 	return (0);
 }
 
 int	corewar_gui_expose_hook(t_corewar_gui *g)
 {
-	(void)mlx_clear_window(g->mlx, g->win);
+    (void)g;
 	return (0);
 }
 
