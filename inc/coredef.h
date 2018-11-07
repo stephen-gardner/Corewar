@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 05:58:44 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 06:12:12 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ enum	e_errmsg
 	NO_PLAYERS,
 	SIZE_MISMATCH,
 	TOO_MANY_CHAMPS,
-	USAGE,
 	NERRMSGS
 };
 

@@ -15,9 +15,9 @@ SRC_DIR = src
 OBJ_DIR = obj
 
 SRC = \
+	champ\
 	coreio\
 	main\
-	load\
 	msg\
 	ops\
 	ops/op_add\

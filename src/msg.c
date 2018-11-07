@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 03:58:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 06:16:43 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@ const char		*g_errmsg[NERRMSGS] = {
 	"%s: exceeds max champion size (%u > %u)",
 	"%s: too small to be a champion",
 	"%s: invalid header",
-	"No champions",
+	"No champions specified",
 	"%s: code size does not match size specified in header",
-	"too many champions specified",
-	"Usage: corewar [-g] [-d cycle] [-q] <[-n id] champion ...>"
+	"too many champions specified"
 };
 
 const char		*g_notices[NNOTICES] = {
@@ -115,18 +114,15 @@ void			error(int id, ...)
 	char	*msg;
 	va_list	ap;
 
-	if (id != USAGE)
+	va_start(ap, id);
+	if (ft_vasprintf(&msg, g_errmsg[id], ap))
 	{
-		va_start(ap, id);
-		if (ft_vasprintf(&msg, g_errmsg[id], ap))
-		{
-			ft_dprintf(STDERR_FILENO, "%&s %s\n", "31m", "Error:", msg);
-			free(msg);
-		}
-		va_end(ap);
+		ft_dprintf(STDERR_FILENO, "%&s %s\n", "31m", "Error:", msg);
+		free(msg);
 	}
-	if (id == NO_PLAYERS || id == USAGE)
-		ft_dprintf(STDERR_FILENO, "%s\n", g_errmsg[USAGE]);
+	va_end(ap);
+	if (id == NO_PLAYERS)
+		usage();
 	exit(EXIT_FAILURE);
 }
 

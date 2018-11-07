@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 21:08:13 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 06:13:06 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void				write_core(t_core *core, t_byte *dst, t_proc *p, int a);
 */
 
 t_champ				*find_champ(t_core *core, int32_t id);
+t_uint				find_uid(t_core *core);
 void				load_champ(t_core *core, const char *path, int pnum);
 
 /*
@@ -46,6 +47,7 @@ void				load_champ(t_core *core, const char *path, int pnum);
 */
 
 void				execute_war(t_core *core);
+void				usage(void);
 
 /*
 ** msg.c

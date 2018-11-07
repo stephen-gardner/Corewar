@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   load.c                                             :+:      :+:    :+:   */
+/*   champ.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 22:18:07 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 06:07:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,31 @@ t_champ		*find_champ(t_core *core, int32_t id)
 	while (i < core->nplayers && core->champions[i].id != id)
 		++i;
 	return ((i < core->nplayers) ? &core->champions[i] : NULL);
+}
+
+/*
+** Find first available, unique champion ID, starting with the ID of the
+**  previous champion.
+*/
+
+t_uint		find_uid(t_core *core)
+{
+	int32_t	id;
+	int		i;
+
+	if (!core->nplayers)
+		return (1);
+	i = -1;
+	id = core->champions[core->nplayers - 1].id + 1;
+	while (++i < core->nplayers - 1)
+	{
+		if (id == core->champions[i].id)
+		{
+			i = -1;
+			++id;
+		}
+	}
+	return (id);
 }
 
 /*
