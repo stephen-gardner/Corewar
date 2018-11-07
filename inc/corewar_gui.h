@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 03:08:18 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/06 20:15:04 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/06 23:56:06 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define ABS2(n)				((n) > 0 ? (n) : -(n))
 # define GUI_NUM_ROWS		64	//32, 16
 # define GUI_NUM_COLS		64	//128, 256
-# define GUI_CHAR_WIDTH		10
-# define GUI_CHAR_HEIGHT	20
+# define GUI_CHAR_WIDTH		9
+# define GUI_CHAR_HEIGHT	15
 # define GUI_ROW_SPACING	0
 # define GUI_COL_SPACING	4
 # define GUI_ROW_HEIGHT		(GUI_CHAR_HEIGHT + GUI_ROW_SPACING)
