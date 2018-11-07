@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 21:11:52 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 04:12:55 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static t_uint	find_id(t_core *core)
 	id = core->champions[core->nplayers - 1].id + 1;
 	while (++i < core->nplayers - 1)
 	{
-		if (id == core->champions[core->nplayers].id)
+		if (id == core->champions[i].id)
 		{
 			i = -1;
 			++id;
@@ -111,7 +111,7 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 	static char	*paths[MAX_PLAYERS];
 	char		f;
 
-	while ((f = ft_getopt(ac, av, "-d:gn:")) != -1)
+	while ((f = ft_getopt(ac, av, "-d:gn:q")) != -1)
 	{
 		if (f == 'd')
 			core->dcycle = ft_atoi(g_optarg);
@@ -119,6 +119,8 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 			core->gui = TRUE;
 		else if (f == 'n')
 			core->champions[core->nplayers].id = ft_atoi(g_optarg);
+		else if (f == 'q')
+			core->quiet = TRUE;
 		else if (f == '\1')
 		{
 			if (core->nplayers == MAX_PLAYERS)
@@ -127,8 +129,8 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 				core->champions[core->nplayers].id = find_id(core);
 			paths[core->nplayers++] = g_optarg;
 		}
-		else
-			exit(EXIT_FAILURE);
+		else if (f == '?')
+			error(USAGE);
 	}
 	return (paths);
 }

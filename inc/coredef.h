@@ -6,12 +6,18 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 21:23:12 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 03:53:51 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COREDEF_H
 # define COREDEF_H
+
+/*
+** GUI
+*/
+
+# define GFX_AGE_SPEED		10
 
 /*
 ** Core
@@ -24,10 +30,8 @@
 # define DUMP_LEN			32
 
 /*
-** GUI
+** Lives / Process Culling
 */
-
-# define GFX_AGE_SPEED		10
 
 # define CYCLE_TO_DIE		1536
 # define CYCLE_DELTA		50
@@ -36,8 +40,8 @@
 
 /*
 ** Registers
-** Size options are ignored at this time, requiring a system with 2-byte shorts
-**  and 4-bytes ints.
+** Size options are ignored at this time, requiring a system with 16-bit shorts
+**  and 32-bit ints. Also, little endianness, as the core is big endian.
 */
 
 # define IND_SIZE			2
@@ -60,6 +64,7 @@
 # define PROG_NAME_LENGTH	128
 # define COMMENT_LENGTH		2048
 # define COREWAR_EXEC_MAGIC	0x00EA83F3
+# define ID(id)				(~(id) + 1)
 
 /*
 ** Utility Macros
@@ -69,13 +74,10 @@
 # define ERR				error
 # define MSG				notice
 # define SYS_ERR			ERR(DEFAULT_ERR, strerror(errno))
-
 # define CORE_POS(x)		(((x) + MEM_SIZE) % MEM_SIZE)
 # define REL_POS(x)			((x) % IDX_MOD)
 # define IDX_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + REL_POS(x)))
 # define ABS_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + (x)))
-
-# define ID(id)				(~(id) + 1)
 
 /*
 ** Error Messages
@@ -91,8 +93,13 @@ enum	e_errmsg
 	NO_PLAYERS,
 	SIZE_MISMATCH,
 	TOO_MANY_CHAMPS,
+	USAGE,
 	NERRMSGS
 };
+
+/*
+** Standard Messages
+*/
 
 enum	e_notices
 {

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 03:08:23 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 04:17:42 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,21 @@ typedef struct		s_header
 ** | {struct s_champ}                                                <t_champ> |
 ** | Champion data                                                             |
 ** |---------------------------------------------------------------------------|
-** | id      | ID of champion (configurable with -n in command line)           |
-** | plives  | Number of lives for champion for current period                 |
-** | name    | Name of champion                                                |
-** | comment | Champion's description                                          |
+** | id         | ID of champion (configurable with -n in command line)        |
+** | name       | Name of champion                                             |
+** | comment    | Champion's description                                       |
+** | plives     | Number of lives for champion for current period              |
+** | last_lives | Last cycle when a process call lived for champion            |
 ** -----------------------------------------------------------------------------
 */
 
 typedef struct		s_champ
 {
 	int32_t			id;
-	t_uint			plives;
 	char			name[PROG_NAME_LENGTH + 1];
 	char			comment[COMMENT_LENGTH + 1];
+	t_uint			plives;
+	t_uint			last_live;
 }					t_champ;
 
 /*
@@ -178,6 +180,7 @@ typedef struct		s_cull
 ** | dcycle    | The cycle that the core will be dumped                        |
 ** | nplayers  | Number of champions loaded                                    |
 ** | gui       | TRUE if the GUI is being used                                 |
+** | quiet     | TRUE to suppress live and aff messages                        |
 ** -----------------------------------------------------------------------------
 */
 
@@ -194,5 +197,6 @@ typedef struct		s_core
 	t_uint			dcycle;
 	t_byte			nplayers;
 	t_bool			gui : 1;
+	t_bool			quiet : 1;
 }					t_core;
 #endif
