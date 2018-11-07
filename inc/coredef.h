@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 06:12:12 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 15:09:55 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@
 # define REL_POS(x)			((x) % IDX_MOD)
 # define IDX_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + REL_POS(x)))
 # define ABS_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + (x)))
-# define ID(id)				(~(id) + 1)
 
 /*
 ** #############################################################################

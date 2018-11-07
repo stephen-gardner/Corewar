@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 06:29:47 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 15:10:00 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	aftermath(t_core *core, t_champ *victor)
 	i = -1;
 	while (++i < n)
 	{
-		MSG(ANNOUNCE_WINNER, ID(victor->id), victors[i]->name);
+		MSG(ANNOUNCE_WINNER, -victor->id, victors[i]->name);
 		MSG(CHAMP_COMMENT, victors[i]->comment);
 	}
 }
@@ -133,7 +133,7 @@ int			main(int ac, char *av[])
 	i = -1;
 	while (++i < core.nplayers)
 	{
-		core.champions[i].id = ID(core.champions[i].id);
+		core.champions[i].id = -core.champions[i].id;
 		load_champ(&core, paths[i], i);
 	}
 	if (core.gui)
