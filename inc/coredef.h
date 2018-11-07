@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 03:53:51 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 05:58:44 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define COREDEF_H
 
 /*
-** GUI
+** #############################################################################
+** # CONFIGURATION                                                             #
+** #############################################################################
 */
-
-# define GFX_AGE_SPEED		10
 
 /*
 ** Core
@@ -28,6 +28,12 @@
 # define CHAMP_MAX_SIZE		(MEM_SIZE / 6)
 # define MAX_PLAYERS		4
 # define DUMP_LEN			32
+
+/*
+** GUI
+*/
+
+# define GFX_AGE_SPEED		10
 
 /*
 ** Lives / Process Culling
@@ -64,10 +70,11 @@
 # define PROG_NAME_LENGTH	128
 # define COMMENT_LENGTH		2048
 # define COREWAR_EXEC_MAGIC	0x00EA83F3
-# define ID(id)				(~(id) + 1)
 
 /*
-** Utility Macros
+** #############################################################################
+** # UTILITY                                                                   #
+** #############################################################################
 */
 
 # define REV				ft_revbytes
@@ -78,6 +85,13 @@
 # define REL_POS(x)			((x) % IDX_MOD)
 # define IDX_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + REL_POS(x)))
 # define ABS_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + (x)))
+# define ID(id)				(~(id) + 1)
+
+/*
+** #############################################################################
+** # LANG IDS                                                                  #
+** #############################################################################
+*/
 
 /*
 ** Error Messages
