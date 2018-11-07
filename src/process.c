@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 21:11:59 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 03:09:54 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void		cull_processes(t_core *core, t_cull *cull, t_proc **p)
 		cull->ctd = (cull->ctd > CYCLE_DELTA) ? cull->ctd - CYCLE_DELTA : 0;
 		i = -1;
 		while (++i < core->nplayers)
-			cull->plives[i] = 0;
-		cull->plives_total = 0;
+			core->champions[i].plives = 0;
+		cull->plives = 0;
 	}
 	cull->nbr_lives = 0;
 	cull->ccycle = core->cycle + cull->ctd;

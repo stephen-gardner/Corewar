@@ -6,11 +6,15 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 22:19:37 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/04 16:27:25 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 23:54:41 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** Argument is a 2 byte relative address % IDX_MOD.
+*/
 
 t_bool	op_fork(t_core *core, t_proc *p, t_instr *instr)
 {

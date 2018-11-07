@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 23:56:13 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 23:40:46 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ static size_t	dumplen(int *addrlen)
 }
 
 /*
-** Prints the arena to stdout in hexadecimal, with DUMP_LEN bytes per line.
+** Prints the arena to stdout in hexadecimal, with DUMP_LEN bytes per line, and
+**  exits the program.
 */
 
 void			dump(t_core *core)
@@ -122,6 +123,11 @@ void			error(int id, ...)
 	va_end(ap);
 	exit(EXIT_FAILURE);
 }
+
+/*
+** Prints message from g_notices with given id to stdout, followed by a
+**  newline.
+*/
 
 void			notice(int id, ...)
 {

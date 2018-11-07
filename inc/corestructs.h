@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 21:22:49 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 03:08:23 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct		s_header
 ** | Champion data                                                             |
 ** |---------------------------------------------------------------------------|
 ** | id      | ID of champion (configurable with -n in command line)           |
+** | plives  | Number of lives for champion for current period                 |
 ** | name    | Name of champion                                                |
 ** | comment | Champion's description                                          |
 ** -----------------------------------------------------------------------------
@@ -54,6 +55,7 @@ typedef struct		s_header
 typedef struct		s_champ
 {
 	int32_t			id;
+	t_uint			plives;
 	char			name[PROG_NAME_LENGTH + 1];
 	char			comment[COMMENT_LENGTH + 1];
 }					t_champ;
@@ -143,22 +145,20 @@ typedef struct		s_proc
 ** | Keeps track of lives and process culling schedule                         |
 ** |---------------------------------------------------------------------------|
 ** | ccycle       | Cycle when next culling takes place                        |
-** | plives       | Number of lives for champions of same index for period     |
-** | plives_total | Total number of valid lives for period                     |
 ** | ctd          | The current CYCLE_TO_DIE                                   |
 ** | checks       | Number of cullings done towards MAX_CHECKS for period      |
 ** | nbr_lives    | Number of lives called by processes since last culling     |
+** | plives       | Total number of valid lives for period                     |
 ** -----------------------------------------------------------------------------
 */
 
 typedef struct		s_cull
 {
 	t_uint			ccycle;
-	t_uint			plives[MAX_PLAYERS];
-	t_uint			plives_total;
 	t_uint			ctd;
 	t_uint			checks;
 	t_uint			nbr_lives;
+	t_uint			plives;
 }					t_cull;
 
 /*
