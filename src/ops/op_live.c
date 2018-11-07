@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 07:26:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/04 16:03:20 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 21:20:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ t_bool	op_live(t_core *core, t_proc *p, t_instr *instr)
 	{
 		p->champ = champ;
 		core->victor = champ;
+		++core->cull.plives[champ - core->champions];
+		++core->cull.plives_total;
 		notice(ANNOUNCE_LIVE, ID(champ->id), champ->name);
 	}
 	instr->epc = ABS_POS(core->arena, instr->epc, DIR_SIZE);
 	p->lcycle = core->cycle;
-	++core->lives;
+	++core->cull.nbr_lives;
 	return (p->carry);
 }

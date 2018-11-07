@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 00:36:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 21:11:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include "ft_getopt.h"
 #include <limits.h>
 #include <stdlib.h>
+
+/*
+** Reports the winning player(s).
+*/
 
 static void		aftermath(t_core *core, t_champ *victor)
 {
@@ -44,17 +48,24 @@ static void		aftermath(t_core *core, t_champ *victor)
 	}
 }
 
+/*
+** Main game loop.
+** Core cycle starts at 1. Core dump of previous cycle happens before
+**  execution if scheduled.
+** Processes are executed in order of newest to oldest.
+** Processes are then culled every CYCLE_TO_DIE cycles.
+** If GUI is in use, we age the arena every GFX_AGE_SPEED cycles and break.
+*/
+
 void			execute_war(t_core *core)
 {
-	static t_uint	countdown = CYCLE_TO_DIE;
-
 	while (TRUE)
 	{
 		if (++core->cycle > core->dcycle)
 			dump(core);
 		execute_processes(core, core->processes);
-		if (!--countdown)
-			countdown = cull_processes(core, &core->processes);
+		if (core->cycle >= core->cull.ccycle)
+			cull_processes(core, &core->cull, &core->processes);
 		if (!core->processes)
 			return (aftermath(core, core->victor));
 		if (core->gui && !(core->cycle % GFX_AGE_SPEED))
@@ -64,7 +75,12 @@ void			execute_war(t_core *core)
 	}
 }
 
-static t_uint	find_id(const t_core *core)
+/*
+** Find first available, unique champion ID, starting with the ID of the
+**  previous champion.
+*/
+
+static t_uint	find_id(t_core *core)
 {
 	int32_t	id;
 	int		i;
@@ -83,6 +99,12 @@ static t_uint	find_id(const t_core *core)
 	}
 	return (id);
 }
+
+/*
+** Parse command line arguments and return array with paths to champion
+**  binaries.
+** Players are allowed to be passed the same ID for team play.
+*/
 
 static char		**parse_args(t_core *core, int ac, char *const av[])
 {
@@ -111,6 +133,11 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 	return (paths);
 }
 
+/*
+** Champion IDs are made negative for the core.
+** We allow the GUI to execute the war cycle by cycle.
+*/
+
 int				main(int ac, char *av[])
 {
 	t_core	core;
@@ -118,7 +145,8 @@ int				main(int ac, char *av[])
 	int		i;
 
 	ft_memset(&core, 0, sizeof(t_core));
-	core.ccycle = CYCLE_TO_DIE;
+	core.cull.ctd = CYCLE_TO_DIE;
+	core.cull.ccycle = CYCLE_TO_DIE;
 	core.dcycle = -1;
 	paths = parse_args(&core, ac, av);
 	if (!core.nplayers)

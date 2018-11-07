@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 07:18:26 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 21:08:13 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_bool				decode(t_byte *arena, t_proc *p, t_instr *instr);
 ** process.c
 */
 
-t_uint				cull_processes(t_core *core, t_proc **procs);
+void				cull_processes(t_core *core, t_cull *culler, t_proc **p);
 void				execute_processes(t_core *core, t_proc *p);
 t_proc				*fork_process(t_core *core, t_proc *p, t_byte *fpc);
 

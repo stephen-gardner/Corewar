@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 00:39:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/06 21:23:12 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # define IDX_MOD			(MEM_SIZE / 8)
 # define CHAMP_MAX_SIZE		(MEM_SIZE / 6)
 # define MAX_PLAYERS		4
-
 # define DUMP_LEN			32
 
 /*
@@ -29,12 +28,6 @@
 */
 
 # define GFX_AGE_SPEED		10
-
-/*
-** Every CYCLE_TO_DIE cycles, the VM kills processes that have not yet called
-**  the live instruction. If live has been called at least NBR_LIVE times, or
-**  MAX_CHECKS checks have happened, CYCLE_TO_DIE is reduced by CYCLE_DELTA.
-*/
 
 # define CYCLE_TO_DIE		1536
 # define CYCLE_DELTA		50
