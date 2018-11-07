@@ -6,11 +6,16 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 22:03:27 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 07:27:42 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 05:05:25 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** Pulls 2-byte address from relative address provided in argument for indirect
+**  values.
+*/
 
 t_bool	op_sti(t_core *core, t_proc *p, t_instr *instr)
 {

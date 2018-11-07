@@ -6,11 +6,15 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 20:24:30 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 06:39:11 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 05:25:43 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** Process PC is set to 2-byte relative address if carry flag is TRUE.
+*/
 
 t_bool	op_zjmp(t_core *core, t_proc *p, t_instr *instr)
 {

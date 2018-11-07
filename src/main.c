@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 04:12:55 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 05:32:30 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void			execute_war(t_core *core)
 **  previous champion.
 */
 
-static t_uint	find_id(t_core *core)
+static t_uint	find_uid(t_core *core)
 {
 	int32_t	id;
 	int		i;
@@ -126,7 +126,7 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 			if (core->nplayers == MAX_PLAYERS)
 				ERR(TOO_MANY_CHAMPS);
 			if (!core->champions[core->nplayers].id)
-				core->champions[core->nplayers].id = find_id(core);
+				core->champions[core->nplayers].id = find_uid(core);
 			paths[core->nplayers++] = g_optarg;
 		}
 		else if (f == '?')
