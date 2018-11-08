@@ -6,11 +6,12 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 01:09:10 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 22:48:29 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 18:45:43 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#include "corewar_gui.h"
 
 /*
 ** GUI - Increments all unmaxed age data by 1.
@@ -23,7 +24,7 @@ void	age_arena(t_byte *epoch)
 	i = -1;
 	while (++i < MEM_SIZE)
 	{
-		if (epoch[i] < 254)
+		if (epoch[i] < LUM_MAX_STEPS - 1)
 			++epoch[i];
 	}
 }

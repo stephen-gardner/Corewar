@@ -6,11 +6,12 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 18:32:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 18:45:11 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#include "corewar_gui.h"
 #include "ft_printf.h"
 #include <fcntl.h>
 #include <unistd.h>
@@ -109,14 +110,14 @@ void		load_champ(t_core *core, const char *path, int pnum)
 	pc = &core->arena[(MEM_SIZE / core->nplayers) * pnum];
 	if (read(fd, pc, header.prog_size) != header.prog_size)
 		IO_ERR(path);
+	close(fd);
 	p = fork_process(core, NULL, pc);
 	p->champ = find_champ(core, champ->id);
 	p->registers[0] = p->champ->id;
-	if (core->gui)
-	{
-		ft_memset(core->owner + (pc - core->arena),
-			(p->champ - core->champions) + 1, header.prog_size);
-		ft_memset(core->epoch + (pc - core->arena), 127, header.prog_size);
-	}
-	close(fd);
+	if (!core->gui)
+		return ;
+	ft_memset(core->owner + (pc - core->arena),
+		(p->champ - core->champions) + 1, header.prog_size);
+	ft_memset(core->epoch + (pc - core->arena),
+		LUM_MAX_STEPS, header.prog_size);
 }

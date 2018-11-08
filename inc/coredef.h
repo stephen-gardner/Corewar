@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 15:09:55 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 18:47:57 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,6 @@
 # define CHAMP_MAX_SIZE		(MEM_SIZE / 6)
 # define MAX_PLAYERS		4
 # define DUMP_LEN			32
-
-/*
-** GUI
-*/
-
-# define GFX_AGE_SPEED		10
 
 /*
 ** Lives / Process Culling
