@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 06:07:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/07 18:32:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void		load_champ(t_core *core, const char *path, int pnum)
 	{
 		ft_memset(core->owner + (pc - core->arena),
 			(p->champ - core->champions) + 1, header.prog_size);
+		ft_memset(core->epoch + (pc - core->arena), 127, header.prog_size);
 	}
 	close(fd);
 }
