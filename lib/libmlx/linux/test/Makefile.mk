@@ -6,7 +6,7 @@ INCLIB=$(INC)/../lib
 
 CC=gcc
 
-CFLAGS= -I$(INC) -O3 -I..
+CFLAGS= -I$(INC) -O3 -I.. -Wno-implicit-function-declaration
 
 NAME= mlx-test
 SRC = main.c

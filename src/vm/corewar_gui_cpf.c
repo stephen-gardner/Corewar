@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "corewar_gui.h"
+#include <time.h>
 
 int	corewar_gui_calc_fps(t_corewar_gui *g)
 {

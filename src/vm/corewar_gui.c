@@ -74,6 +74,7 @@ int	corewar_gui_loop_hook(t_corewar_gui *g)
 	(void)corewar_gui_live_bar(g);
 	(void)corewar_gui_dist_bar(g);
 	(void)corewar_gui_calc_fps(g);
+	(void)corewar_gui_info_panel(g);
 	(void)mlx_put_image_to_window(g->mlx, g->win, g->img, 0, 0);
 	(void)corewar_gui_info_panel(g);
 	return (0);

@@ -29,7 +29,8 @@ int	corewar_gui_text_winner(t_corewar_gui *g, int x, int y, char *s)
 			MLX_PUTS(g->mlx,
 					g->win, g->img, y, x, g->player_colors[i + 1][0], s);
 			x += GUI_CHAR_HEIGHT;
-			sprintf(s, GUI_COMMENT_QUOTES, MSL - 3, g->core->victor->comment);
+			ft_sprintf(s, GUI_COMMENT_QUOTES, MSL - 3,
+				g->core->victor->comment);
 			MLX_PUTS(g->mlx,
 					g->win, g->img, y, x, g->player_colors[i + 1][0], s);
 			break ;
