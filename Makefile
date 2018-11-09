@@ -7,8 +7,8 @@
 NAME = corewar
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
-#CFLAGS += -Ofast -funroll-loops -Wno-unused-result
-CFLAGS += -g #-fsanitize=address
+CFLAGS += -Ofast -funroll-loops -Wno-unused-result
+#CFLAGS += -g #-fsanitize=address
 #CFLAGS += -Wunused-macros -Wunused-local-typedefs
 INC = -I inc -I lib/libft/inc
 LIBFTDIR = lib/libft/
@@ -145,7 +145,7 @@ testasm: $(ASM)
 asmtest: testasm
 
 testgui: $(VM)
-	bash -c './vm -q -g tests/champions/Gagnant.cor tests/champions/Douceur_power.cor tests/champions/overwatch.cor tests/champions/Asombra.cor'
+	bash -c './corewar -q -g tests/champions/Gagnant.cor tests/champions/Douceur_power.cor tests/champions/overwatch.cor tests/champions/Asombra.cor'
 guitest: testgui
 
 rmcor:
