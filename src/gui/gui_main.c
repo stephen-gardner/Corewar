@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 22:32:23 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/09 02:35:58 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 04:42:52 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,33 +57,6 @@ int	gui_create_images(t_gui *g)
 	return (0);
 }
 
-int	gui_loop_hook(t_gui *g)
-{
-	int	i;
-
-	i = 0;
-	while ((g->state == 1) && (i < g->cpf))
-	{
-		if (g->core->processes)
-			execute_war(g->core);
-		i++;
-	}
-	(void)gui_create_images(g);
-	(void)gui_pc_boxes(g);
-	(void)gui_block_visuals(g);
-	(void)gui_live_bar(g);
-	(void)gui_dist_bar(g);
-	(void)gui_calc_fps(g);
-#if __linux__
-	(void)gui_info_panel(g);
-#endif
-	(void)mlx_put_image_to_window(g->mlx, g->win, g->img, 0, 0);
-#if __APPLE__
-	(void)gui_info_panel(g);
-#endif
-	return (0);
-}
-
 int	gui_init(t_core *core)
 {
 	t_gui	*g;
@@ -103,7 +76,7 @@ int	gui_init(t_core *core)
 	(void)mlx_key_hook(g->win, gui_key_hook, g);
 	(void)mlx_mouse_hook(g->win, gui_mouse_hook, g);
 	(void)mlx_expose_hook(g->win, gui_expose_hook, g);
-	(void)mlx_loop_hook(g->mlx, gui_loop_hook, g);
+	(void)mlx_loop_hook(g->mlx, GUI_LOOP_HOOK, g);
 	(void)mlx_loop(g->mlx);
 	(void)gui_clean_up(g);
 	return (0);

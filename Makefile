@@ -9,6 +9,7 @@ CC = gcc
 CFLAGS += -Wall -Werror -Wextra
 #CFLAGS += -Ofast -funroll-loops -Wno-unused-result
 CFLAGS += -g #-fsanitize=address
+#CFLAGS += -Wunused-macros -Wunused-local-typedefs
 INC = -I inc -I lib/libft/inc
 LIBFTDIR = lib/libft/
 LIBFT = $(LIBFTDIR)libft.a
@@ -24,7 +25,7 @@ VMSRCDIR = $(addprefix $(SRC_DIR), $(VMDIR))
 VMOBJDIR = $(addprefix $(OBJ_DIR), $(VMDIR))
 VM_OBJECTS=$(addprefix $(VMOBJDIR), $(addsuffix .o, $(VM_FILES)))
 
-GUI_FILES = gui_main gui_bars gui_blocks gui_colors gui_cpf gui_hooks gui_pc_boxes gui_text
+GUI_FILES = gui_main gui_bars gui_blocks gui_colors gui_cpf gui_hooks gui_pc_boxes gui_text gui_loop
 UNAME	:= $(shell uname -s)
 ifeq ($(UNAME),Darwin)
 	GUI_FILES += gui_mlx_macos

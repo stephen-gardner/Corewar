@@ -6,14 +6,15 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 18:14:46 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/09 02:13:08 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 05:24:51 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GUI_FUNCTIONS_H
 # define GUI_FUNCTIONS_H
 
-#include "gui.h"
+# include "gui.h"
+# include "corestructs.h"
 
 typedef struct s_corewar_gui	t_gui;
 
@@ -40,7 +41,9 @@ int	gui_key_repeat(int keycode, t_gui *g);
 int	gui_live_bar(t_gui *g);
 int	gui_live_bar_color(t_gui *g, int j);
 int	gui_live_bar_prepare_values(t_gui *g, float *percent);
-int	gui_loop_hook(t_gui *g);
+int	gui_loop_hook_generic(t_gui *g);
+int	gui_loop_hook_linux(t_gui *g);
+int	gui_loop_hook_macos(t_gui *g);
 int	gui_mark_pc(t_gui *g, int i, int j);
 int	gui_mouse_hook(int button, int x, int y, t_gui *g);
 int	gui_pc_boxes(t_gui *g);
@@ -49,5 +52,7 @@ int	gui_set_cpf_to_numeric_key(int keycode, t_gui *g);
 int	gui_text_players(t_gui *g, int x, int y, char *s);
 int	gui_text_stats(t_gui *g, int x, int y, char *s);
 int	gui_text_winner(t_gui *g, int x, int y, char *s);
+int	mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr,
+		int x, int y, int color, char *string);
 
 #endif
