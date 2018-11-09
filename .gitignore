@@ -4,5 +4,6 @@
 *.dSYM
 a.out
 vm_champs
-asm
 corewar
+*.cor
+._*

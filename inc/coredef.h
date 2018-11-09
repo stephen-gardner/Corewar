@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 18:47:57 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/09 07:11:57 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@
 # define PROG_NAME_LENGTH	128
 # define COMMENT_LENGTH		2048
 # define COREWAR_EXEC_MAGIC	0x00EA83F3
+# define ID(id)				(~(id) + 1)
 
 /*
 ** #############################################################################
@@ -100,6 +101,7 @@ enum	e_errmsg
 	NO_PLAYERS,
 	SIZE_MISMATCH,
 	TOO_MANY_CHAMPS,
+	USAGE,
 	NERRMSGS
 };
 
