@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 03:58:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/09 07:16:34 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ const char		*g_errmsg[NERRMSGS] = {
 	"%s: exceeds max champion size (%u > %u)",
 	"%s: too small to be a champion",
 	"%s: invalid header",
-	"No champions",
+	"No champions specified",
 	"%s: code size does not match size specified in header",
 	"too many champions specified",
 	"Usage: corewar [-g] [-d cycle] [-q] <[-n id] champion ...>"
@@ -125,8 +125,9 @@ void			error(int id, ...)
 		}
 		va_end(ap);
 	}
-	if (id == NO_PLAYERS || id == USAGE)
-		ft_dprintf(STDERR_FILENO, "%s\n", g_errmsg[USAGE]);
+	va_end(ap);
+	if (id == NO_PLAYERS)
+		usage();
 	exit(EXIT_FAILURE);
 }
 

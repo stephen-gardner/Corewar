@@ -6,20 +6,23 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 02:14:08 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 07:15:37 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#include "corewar_gui.h"
 #include "ft_getopt.h"
+#include "ft_printf.h"
 #include <limits.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 /*
 ** Reports the winning player(s).
 */
 
-static void		aftermath(t_core *core, t_champ *victor)
+static void	aftermath(t_core *core, t_champ *victor)
 {
 	t_champ	*victors[MAX_PLAYERS];
 	int		n;
@@ -43,7 +46,7 @@ static void		aftermath(t_core *core, t_champ *victor)
 	i = -1;
 	while (++i < n)
 	{
-		MSG(ANNOUNCE_WINNER, ID(victor->id), victors[i]->name);
+		MSG(ANNOUNCE_WINNER, -victor->id, victors[i]->name);
 		MSG(CHAMP_COMMENT, victors[i]->comment);
 	}
 }
@@ -57,7 +60,7 @@ static void		aftermath(t_core *core, t_champ *victor)
 ** If GUI is in use, we age the arena every GFX_AGE_SPEED cycles and break.
 */
 
-void			execute_war(t_core *core)
+void		execute_war(t_core *core)
 {
 	while (TRUE)
 	{
@@ -76,37 +79,12 @@ void			execute_war(t_core *core)
 }
 
 /*
-** Find first available, unique champion ID, starting with the ID of the
-**  previous champion.
-*/
-
-static t_uint	find_id(t_core *core)
-{
-	int32_t	id;
-	int		i;
-
-	if (!core->nplayers)
-		return (1);
-	i = -1;
-	id = core->champions[core->nplayers - 1].id + 1;
-	while (++i < core->nplayers - 1)
-	{
-		if (id == core->champions[i].id)
-		{
-			i = -1;
-			++id;
-		}
-	}
-	return (id);
-}
-
-/*
 ** Parse command line arguments and return array with paths to champion
 **  binaries.
 ** Players are allowed to be passed the same ID for team play.
 */
 
-static char		**parse_args(t_core *core, int ac, char *const av[])
+static char	**parse_args(t_core *core, int ac, char *const av[])
 {
 	static char	*paths[MAX_PLAYERS];
 	char		f;
@@ -126,11 +104,11 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 			if (core->nplayers == MAX_PLAYERS)
 				ERR(TOO_MANY_CHAMPS);
 			if (!core->champions[core->nplayers].id)
-				core->champions[core->nplayers].id = find_id(core);
+				core->champions[core->nplayers].id = find_uid(core);
 			paths[core->nplayers++] = g_optarg;
 		}
 		else if (f == '?')
-			error(USAGE);
+			usage();
 	}
 	return (paths);
 }
@@ -140,7 +118,7 @@ static char		**parse_args(t_core *core, int ac, char *const av[])
 ** We allow the GUI to execute the war cycle by cycle.
 */
 
-int				main(int ac, char *av[])
+int			main(int ac, char *av[])
 {
 	t_core	core;
 	char	**paths;
@@ -156,7 +134,7 @@ int				main(int ac, char *av[])
 	i = -1;
 	while (++i < core.nplayers)
 	{
-		core.champions[i].id = ID(core.champions[i].id);
+		core.champions[i].id = -core.champions[i].id;
 		load_champ(&core, paths[i], i);
 	}
 	if (core.gui)
@@ -167,4 +145,16 @@ int				main(int ac, char *av[])
 	else
 		execute_war(&core);
 	return (EXIT_SUCCESS);
+}
+
+#define USAGE(m)	ft_dprintf(STDERR_FILENO, m)
+
+void		usage(void)
+{
+	USAGE("Usage: corewar [-g] [-d cycle] [-q] <[-n id] champion ...>\n");
+	USAGE("   -g       : Display GUI\n");
+	USAGE("   -d cycle : Dumps state of core at specified cycle and exits\n");
+	USAGE("   -q       : Silences aff and live instruction messages\n");
+	USAGE("   -n id    : Specifies champion ID (can be used for team play)\n");
+	exit(EXIT_FAILURE);
 }

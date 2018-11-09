@@ -6,11 +6,16 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 07:45:38 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/05 07:26:42 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/09 07:17:41 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** Writes value from a register to another register, or a 2-byte relative
+**  address.
+*/
 
 t_bool	op_st(t_core *core, t_proc *p, t_instr *instr)
 {

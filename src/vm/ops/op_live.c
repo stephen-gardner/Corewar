@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 07:26:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 04:19:11 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/09 07:17:16 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_bool	op_live(t_core *core, t_proc *p, t_instr *instr)
 		++champ->plives;
 		++core->cull.plives;
 		if (!core->quiet)
-			notice(ANNOUNCE_LIVE, ID(champ->id), champ->name);
+			notice(ANNOUNCE_LIVE, -champ->id, champ->name);
 	}
 	instr->epc = ABS_POS(core->arena, instr->epc, DIR_SIZE);
 	p->lcycle = core->cycle;
