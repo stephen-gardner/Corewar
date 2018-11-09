@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 05:12:57 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/09 06:29:24 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 07:28:58 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define CONSOLE_TEXT_RED		"\033[0;31m"
 # define CONSOLE_TEXT_EOC		"\033[0;00m"
 
+# define GFX_AGE_SPEED			10
 # define CPF_MAX				20
 # define GUI_ARENA_SIZE			4096
 

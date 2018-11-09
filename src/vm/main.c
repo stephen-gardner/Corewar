@@ -6,12 +6,12 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 07:15:37 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 07:30:57 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-#include "corewar_gui.h"
+#include "gui.h"
 #include "ft_getopt.h"
 #include "ft_printf.h"
 #include <limits.h>

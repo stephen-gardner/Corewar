@@ -19,7 +19,7 @@ OBJ_DIR = obj/
 
 VM = vm
 VMDIR = vm/
-VM_FILES = coreio load main msg ops process
+VM_FILES = champ coreio main msg ops process
 VM_FILES += ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
 VMSRCDIR = $(addprefix $(SRC_DIR), $(VMDIR))
 VMOBJDIR = $(addprefix $(OBJ_DIR), $(VMDIR))

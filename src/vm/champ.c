@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   load.c                                             :+:      :+:    :+:   */
+/*   champ.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 02:28:56 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 22:18:07 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/09 07:34:31 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#include "gui.h"
 #include "ft_printf.h"
 #include <fcntl.h>
 #include <unistd.h>
@@ -29,6 +30,31 @@ t_champ		*find_champ(t_core *core, int32_t id)
 	while (i < core->nplayers && core->champions[i].id != id)
 		++i;
 	return ((i < core->nplayers) ? &core->champions[i] : NULL);
+}
+
+/*
+** Find first available, unique champion ID, starting with the ID of the
+**  previous champion.
+*/
+
+t_uint		find_uid(t_core *core)
+{
+	int32_t	id;
+	int		i;
+
+	if (!core->nplayers)
+		return (1);
+	i = -1;
+	id = core->champions[core->nplayers - 1].id + 1;
+	while (++i < core->nplayers - 1)
+	{
+		if (id == core->champions[i].id)
+		{
+			i = -1;
+			++id;
+		}
+	}
+	return (id);
 }
 
 /*
@@ -84,13 +110,14 @@ void		load_champ(t_core *core, const char *path, int pnum)
 	pc = &core->arena[(MEM_SIZE / core->nplayers) * pnum];
 	if (read(fd, pc, header.prog_size) != header.prog_size)
 		IO_ERR(path);
+	close(fd);
 	p = fork_process(core, NULL, pc);
 	p->champ = find_champ(core, champ->id);
 	p->registers[0] = p->champ->id;
-	if (core->gui)
-	{
-		ft_memset(core->owner + (pc - core->arena),
-			(p->champ - core->champions) + 1, header.prog_size);
-	}
-	close(fd);
+	if (!core->gui)
+		return ;
+	ft_memset(core->owner + (pc - core->arena),
+		(p->champ - core->champions) + 1, header.prog_size);
+	ft_memset(core->epoch + (pc - core->arena),
+		LUM_MAX_STEPS, header.prog_size);
 }
