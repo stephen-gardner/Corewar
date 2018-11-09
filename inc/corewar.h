@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 04:53:44 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/08 22:58:28 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <errno.h>
 # include <stdint.h>
 # include <string.h>
+# include "corewar_gui.h"
 
 /*
 ** #############################################################################
@@ -28,7 +29,6 @@
 /*
 ** coreio.c
 */
-void				corewar_gui_init(t_core *core);
 void				age_arena(t_byte *epoch);
 int32_t				read_arg(t_core *core, t_proc *p, int a);
 int32_t				read_core(t_core *core, t_byte *src, int n, t_bool trunc);

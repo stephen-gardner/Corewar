@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 04:54:03 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/08 22:58:00 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ int				main(int ac, char *av[])
 	if (core.gui)
 	{
 		MSG(LAUNCH_GUI);
-		corewar_gui_init(&core);
+		return (corewar_gui_init(&core));
 	}
 	else
 		execute_war(&core);

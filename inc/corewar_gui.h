@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 03:08:18 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/08 22:26:06 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 00:14:21 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,16 +163,7 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 #define GUI_PLAYER_HUES2 {120, 240, 0, 180}
 #define GUI_HSL2RGB_MATRIX1 {{0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}}
 #define GUI_HSL2RGB_MATRIX2	{{0,1,2}, {1,0,2}, {2,0,1}, {2,1,0}, {1,2,0}, {0,2,1}, {2,2,2}}
-
-
-typedef	struct	s_line
-{
-	int			x0;
-	int			y0;
-	int			x1;
-	int			y1;
-	int			color;
-}				t_line;
+#define MLX_PUTS	mlx_string_put_to_image
 
 typedef struct s_corewar_gui
 {
