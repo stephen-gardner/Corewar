@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   corewar_gui_blocks.c                               :+:      :+:    :+:   */
+/*   gui_blocks.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 20:48:57 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/07 20:54:21 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 02:07:59 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar_gui.h"
+#include "gui.h"
 
-int	corewar_gui_get_block_color(t_corewar_gui *g, int i, int j)
+int	gui_get_block_color(t_gui *g, int i, int j)
 {
 	int	owner;
 	int	age;
@@ -24,7 +24,7 @@ int	corewar_gui_get_block_color(t_corewar_gui *g, int i, int j)
 	return (g->player_colors[owner][age]);
 }
 
-int	corewar_gui_put_block(t_corewar_gui *g, int i, int j)
+int	gui_put_block(t_gui *g, int i, int j)
 {
 	int	i_dst;
 	int j_dst;
@@ -32,7 +32,7 @@ int	corewar_gui_put_block(t_corewar_gui *g, int i, int j)
 	int *ptr;
 	int idx;
 
-	rgb = corewar_gui_get_block_color(g, i, j);
+	rgb = gui_get_block_color(g, i, j);
 	i = GUI_BLOCK_ARENA_X_POS + (i * GUI_BLOCK_ROW_HEIGHT);
 	j = GUI_BLOCK_ARENA_Y_POS + (j * GUI_BLOCK_COL_WIDTH);
 	i_dst = i + GUI_BLOCK_HEIGHT;
@@ -52,7 +52,7 @@ int	corewar_gui_put_block(t_corewar_gui *g, int i, int j)
 	return (0);
 }
 
-int	corewar_gui_block_visuals(t_corewar_gui *g)
+int	gui_block_visuals(t_gui *g)
 {
 	int		i;
 	int		j;
@@ -65,7 +65,7 @@ int	corewar_gui_block_visuals(t_corewar_gui *g)
 		j = 0;
 		while (j < GUI_BLOCK_NUM_COLS)
 		{
-			(void)corewar_gui_put_block(g, i, j);
+			(void)gui_put_block(g, i, j);
 			k = g->core->owner[i * GUI_BLOCK_NUM_COLS + j];
 			g->distrib[k]++;
 			j++;

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/08 22:58:28 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 02:12:10 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <errno.h>
 # include <stdint.h>
 # include <string.h>
-# include "corewar_gui.h"
+# include "gui.h"
 
 /*
 ** #############################################################################

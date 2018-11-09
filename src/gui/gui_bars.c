@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   corewar_gui_live_bar.c                             :+:      :+:    :+:   */
+/*   gui_bars.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 01:06:49 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/08 22:24:13 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 02:07:33 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar_gui.h"
+#include "gui.h"
 
-int	corewar_gui_live_bar_prepare_values(t_corewar_gui *g, float *percent)
+int	gui_live_bar_prepare_values(t_gui *g, float *percent)
 {
 	float	one_percent;
 	float	plives;
@@ -33,7 +33,7 @@ int	corewar_gui_live_bar_prepare_values(t_corewar_gui *g, float *percent)
 	return (0);
 }
 
-int	corewar_gui_live_bar_color(t_corewar_gui *g, int j)
+int	gui_live_bar_color(t_gui *g, int j)
 {
 	float	position;
 	float	percent[MAX_PLAYERS];
@@ -42,7 +42,7 @@ int	corewar_gui_live_bar_color(t_corewar_gui *g, int j)
 
 	if (g->core->cull.plives == 0)
 		return (g->player_colors[0][MAX_LUM_STEPS / LUM_TEXT_DIV]);
-	(void)corewar_gui_live_bar_prepare_values(g, &percent[0]);
+	(void)gui_live_bar_prepare_values(g, &percent[0]);
 	i = 0;
 	sum = 0;
 	position = (float)j / ((float)LIVE_BAR_WIDTH / (float)100);
@@ -56,7 +56,7 @@ int	corewar_gui_live_bar_color(t_corewar_gui *g, int j)
 	return (LIVE_BAR_DEFAULT_COLOR);
 }
 
-int	corewar_gui_live_bar(t_corewar_gui *g)
+int	gui_live_bar(t_gui *g)
 {
 	int	i;
 	int	j;
@@ -76,7 +76,7 @@ int	corewar_gui_live_bar(t_corewar_gui *g)
 			if ((i == LBXP) || (i == x - 1) || (j == LBYP) || (j == y - 1))
 				*ptr = LIVE_BAR_BORDER_COLOR;
 			else
-				*ptr = corewar_gui_live_bar_color(g, j - LIVE_BAR_Y_POS);
+				*ptr = gui_live_bar_color(g, j - LIVE_BAR_Y_POS);
 			j++;
 		}
 		i++;
@@ -84,7 +84,7 @@ int	corewar_gui_live_bar(t_corewar_gui *g)
 	return (0);
 }
 
-int	corewar_gui_dist_bar_color(t_corewar_gui *g, int pos)
+int	gui_dist_bar_color(t_gui *g, int pos)
 {
 	int i;
 	int left;
@@ -109,7 +109,7 @@ int	corewar_gui_dist_bar_color(t_corewar_gui *g, int pos)
 	return (DISTRIB_DEFAULT_COLOR);
 }
 
-int	corewar_gui_dist_bar(t_corewar_gui *g)
+int	gui_dist_bar(t_gui *g)
 {
 	int	i;
 	int x;
@@ -129,7 +129,7 @@ int	corewar_gui_dist_bar(t_corewar_gui *g)
 			if ((i == DXP) || (i == x - 1) || (j == DYP) || (j == y - 1))
 				*ptr = DIST_BORDER_COLOR;
 			else
-				*ptr = corewar_gui_dist_bar_color(g, j - DIST_Y_POS);
+				*ptr = gui_dist_bar_color(g, j - DIST_Y_POS);
 			j++;
 		}
 		i++;

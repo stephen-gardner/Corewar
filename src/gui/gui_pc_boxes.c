@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   corewar_gui_pc_boxes.c                             :+:      :+:    :+:   */
+/*   gui_pc_boxes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 00:41:15 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/08 01:00:46 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 02:09:41 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar_gui.h"
+#include "gui.h"
 
-int	corewar_gui_mark_pc(t_corewar_gui *g, int i, int j)
+int	gui_mark_pc(t_gui *g, int i, int j)
 {
 	int i_dst;
 	int j_dst;
@@ -40,7 +40,7 @@ int	corewar_gui_mark_pc(t_corewar_gui *g, int i, int j)
 	return (0);
 }
 
-int	corewar_gui_pc_boxes(t_corewar_gui *g)
+int	gui_pc_boxes(t_gui *g)
 {
 	t_proc	*p;
 	int		idx;
@@ -55,7 +55,7 @@ int	corewar_gui_pc_boxes(t_corewar_gui *g)
 		if (g->pc_box[idx] == 0)
 		{
 			g->pc_box[idx] = 1;
-			(void)corewar_gui_mark_pc(g, idx / GBNC, idx % GBNC);
+			(void)gui_mark_pc(g, idx / GBNC, idx % GBNC);
 		}
 		p = p->next;
 	}

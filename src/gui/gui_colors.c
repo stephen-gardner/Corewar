@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   corewar_gui_colors.c                               :+:      :+:    :+:   */
+/*   gui_colors.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 21:09:55 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/07 23:54:15 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 02:08:36 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar_gui.h"
+#include "gui.h"
 #include <math.h>
 
 /*
@@ -62,7 +62,7 @@ int	gui_hsl2rgb_values(float *rgb, float *cxo, float m, int i)
 ** https://en.wikipedia.org/wiki/HSL_and_HSV
 */
 
-int	corewar_gui_hsl2rgb(float h, float s, float l)
+int	gui_hsl2rgb(float h, float s, float l)
 {
 	float	cxo[3];
 	float	rgb[3];
@@ -79,7 +79,7 @@ int	corewar_gui_hsl2rgb(float h, float s, float l)
 	return (gui_hsl2rgb_int(&rgb[0]));
 }
 
-int	corewar_gui_init_colors(t_corewar_gui *g)
+int	gui_init_colors(t_gui *g)
 {
 	int			i;
 	int			j;
@@ -98,7 +98,7 @@ int	corewar_gui_init_colors(t_corewar_gui *g)
 		{
 			lum = LUM_START;
 			lum -= (float)j * (float)LUM_RANGE / (float)MAX_LUM_STEPS;
-			rgb = corewar_gui_hsl2rgb(hues[i - 1], 100, lum);
+			rgb = gui_hsl2rgb(hues[i - 1], 100, lum);
 			g->player_colors[i][j] = rgb;
 			j++;
 		}

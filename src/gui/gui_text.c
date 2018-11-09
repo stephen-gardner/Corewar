@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   corewar_gui_text.c                                 :+:      :+:    :+:   */
+/*   gui_text.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 22:31:03 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/09 00:18:41 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 02:10:15 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar_gui.h"
+#include "gui.h"
 
-int	corewar_gui_text_winner(t_corewar_gui *g, int x, int y, char *s)
+int	gui_text_winner(t_gui *g, int x, int y, char *s)
 {
 	int	i;
 	int	c;
@@ -40,7 +40,7 @@ int	corewar_gui_text_winner(t_corewar_gui *g, int x, int y, char *s)
 	return (0);
 }
 
-int	corewar_gui_text_stats(t_corewar_gui *g, int x, int y, char *s)
+int	gui_text_stats(t_gui *g, int x, int y, char *s)
 {
 	int	c;
 
@@ -68,7 +68,7 @@ int	corewar_gui_text_stats(t_corewar_gui *g, int x, int y, char *s)
 	return (x + GUI_CHAR_HEIGHT * 3);
 }
 
-int	corewar_gui_text_players(t_corewar_gui *g, int x, int y, char *s)
+int	gui_text_players(t_gui *g, int x, int y, char *s)
 {
 	int	i;
 	int	c;
@@ -94,7 +94,7 @@ int	corewar_gui_text_players(t_corewar_gui *g, int x, int y, char *s)
 	return (x + GUI_CHAR_HEIGHT);
 }
 
-int	corewar_gui_info_panel(t_corewar_gui *g)
+int	gui_info_panel(t_gui *g)
 {
 	char	text[COMMENT_LENGTH + 1];
 	int		x;
@@ -107,10 +107,10 @@ int	corewar_gui_info_panel(t_corewar_gui *g)
 	else
 		MLX_PUTS(g->mlx, g->win, g->img, y, x, INFO_TEXT_COLOR, STATE_PAUSED);
 	x += GUI_CHAR_HEIGHT;
-	x = corewar_gui_text_stats(g, x, y, &text[0]);
-	x = corewar_gui_text_players(g, x, y, &text[0]);
+	x = gui_text_stats(g, x, y, &text[0]);
+	x = gui_text_players(g, x, y, &text[0]);
 	if (g->core->processes == 0)
-		(void)corewar_gui_text_winner(g, x, y, &text[0]);
+		(void)gui_text_winner(g, x, y, &text[0]);
 	MLX_PUTS(g->mlx, g->win, g->img, LIVE_BAR_TEXT_Y_POS,
 			LIVE_BAR_TEXT_X_POS, INFO_TEXT_COLOR, LIVE_BAR_TEXT_STR);
 	MLX_PUTS(g->mlx, g->win, g->img, DIST_TEXT_Y_POS,
