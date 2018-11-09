@@ -20,7 +20,7 @@ VM = vm
 VMDIR = vm/
 VM_FILES = coreio load main msg ops process
 VM_FILES += ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
-VM_FILES += corewar_gui corewar_gui_cpf corewar_gui_hooks corewar_gui_blocks corewar_gui_colors corewar_gui_pc_boxes corewar_gui_bars
+VM_FILES += corewar_gui corewar_gui_cpf corewar_gui_hooks corewar_gui_blocks corewar_gui_colors corewar_gui_pc_boxes corewar_gui_bars corewar_gui_text
 
 UNAME	:= $(shell uname -s)
 

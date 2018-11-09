@@ -6,14 +6,14 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 03:08:18 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/08 00:16:09 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/08 22:26:06 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COREWAR_GUI_H
 # define COREWAR_GUI_H
 
-# include "mlx.h"
+#include "mlx.h"
 # include "libft.h"
 # include "ft_printf.h"
 # include "keycode.h"
@@ -75,6 +75,7 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define PANEL_H_SPACING		GUI_BLOCK_ARENA_X_POS
 # define PANEL_V_SPACING		GUI_BLOCK_ARENA_Y_POS
 # define WIN_TOTAL_WIDTH		(WIN_BLOCK_WIDTH + INFO_PANEL_WIDTH)
+# define WTW WIN_TOTAL_WIDTH
 # define WIN_TOTAL_HEIGHT	(WIN_BLOCK_HEIGHT)
 # define BORDER_BOX_COLOR	0xffffff
 # define MAX_LUM_STEPS	255
@@ -116,6 +117,8 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define DIST_TEXT_Y_POS	(INFO_PANEL_Y_POS + GUI_BLOCK_ARENA_Y_POS)
 # define DIST_TEXT_X_POS	(DIST_X_POS - (GUI_CHAR_HEIGHT * 1) - 4)
 # define DIST_TEXT		"arena distribution"
+#define DXP	DIST_X_POS
+#define DYP	DIST_Y_POS
 //-----------------------------------------------------------------------------
 #define LIVE_BAR_TEXT_STR "live breakdown for current period"
 #define LIVE_BAR_TEXT_Y_POS	(INFO_PANEL_Y_POS + GUI_BLOCK_ARENA_Y_POS)
@@ -124,6 +127,8 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 #define LIVE_BAR_WIDTH		(INFO_PANEL_WIDTH - (GUI_BLOCK_ARENA_Y_POS * 3))
 #define LIVE_BAR_X_POS		(WIN_BLOCK_HEIGHT - (GUI_CHAR_HEIGHT * 6))
 #define LIVE_BAR_Y_POS		(INFO_PANEL_Y_POS + GUI_BLOCK_ARENA_Y_POS)
+#define LBXP	LIVE_BAR_X_POS
+#define LBYP	LIVE_BAR_Y_POS
 #define LIVE_BAR_BORDER_COLOR	0xffffff
 #define LIVE_BAR_DEFAULT_COLOR	0xffffff
 #define DISTRIB_DEFAULT_COLOR	0xffffff
