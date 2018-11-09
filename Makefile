@@ -131,8 +131,8 @@ $(OBJ_DIR):
 #------------------------------------------------------------------------------
 
 again:
-	rm -f $(VM_OBJECTS)
-	make vm
+	rm -f $(VM_OBJECTS) $(GUI_OBJECTS)
+	make $(VM)
 
 clean:
 	make $@ -C $(MLXDIR)
