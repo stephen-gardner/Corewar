@@ -20,23 +20,22 @@ VM = vm
 VMDIR = vm/
 VM_FILES = coreio load main msg ops process
 VM_FILES += ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
-VM_FILES += corewar_gui corewar_gui_cpf corewar_gui_hooks corewar_gui_blocks corewar_gui_colors corewar_gui_pc_boxes corewar_gui_bars corewar_gui_text
-
-UNAME	:= $(shell uname -s)
-
-ifeq ($(UNAME),Darwin)
-	PLATFORM = macos
-	VM_FILES += macos/mlx_string_put_to_image
-endif
-
-ifeq ($(UNAME),Linux)
-	PLATFORM = linux
-	VM_FILES += linux/mlx_string_put_to_image
-endif
-
 VMSRCDIR = $(addprefix $(SRC_DIR), $(VMDIR))
 VMOBJDIR = $(addprefix $(OBJ_DIR), $(VMDIR))
 VM_OBJECTS=$(addprefix $(VMOBJDIR), $(addsuffix .o, $(VM_FILES)))
+
+GUI_FILES = gui_main gui_bars gui_blocks gui_colors gui_cpf gui_hooks gui_pc_boxes gui_text
+UNAME	:= $(shell uname -s)
+ifeq ($(UNAME),Darwin)
+	GUI_FILES += gui_mlx_macos
+endif
+ifeq ($(UNAME),Linux)
+	GUI_FILES += gui_mlx_linux
+endif
+GUIDIR = gui/
+GUISRCDIR = $(addprefix $(SRC_DIR), $(GUIDIR))
+GUIOBJDIR = $(addprefix $(OBJ_DIR), $(GUIDIR))
+GUI_OBJECTS= $(addprefix $(GUIOBJDIR), $(addsuffix .o, $(GUI_FILES)))
 
 ASM = asm
 ASMDIR = asm/
@@ -85,7 +84,7 @@ YELLOW = \033[1;33m
 all: $(NAME)
 corewar: $(VM) $(ASM) $(DISASM)
 #------------------------------------------------------------------------------
-$(VM): $(VM_OBJECTS) $(LIBFT) $(LIBMLX)
+$(VM): $(VM_OBJECTS) $(GUI_OBJECTS) $(LIBFT) $(LIBMLX)
 	$(CC) $(CFLAGS) $^ -o $@ $(LIB) $(MLXLIB)
 
 $(VM_OBJECTS): $(VMOBJDIR)%.o : $(VMSRCDIR)%.c | $(VMOBJDIR)
@@ -94,7 +93,7 @@ $(VM_OBJECTS): $(VMOBJDIR)%.o : $(VMSRCDIR)%.c | $(VMOBJDIR)
 $(VMOBJDIR): $(OBJ_DIR)
 	mkdir -p $@
 	mkdir -p $@/ops
-	mkdir -p $@/$(PLATFORM)
+	mkdir -p $@/gui
 #------------------------------------------------------------------------------
 $(ASM): $(ASM_OBJECTS) $(LIBFT)
 	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
@@ -113,6 +112,13 @@ $(DISASM_OBJECTS): $(DISASMOBJDIR)%.o : $(DISASMSRCDIR)%.c | $(DISASMOBJDIR)
 
 $(DISASMOBJDIR): $(OBJ_DIR)
 	mkdir -p $@
+#------------------------------------------------------------------------------
+$(GUI_OBJECTS): $(GUIOBJDIR)%.o : $(GUISRCDIR)%.c | $(GUIOBJDIR)
+	$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
+
+$(GUIOBJDIR): $(OBJ_DIR)
+	mkdir -p $@
+
 #------------------------------------------------------------------------------
 $(LIBFT):
 	make -C $(LIBFTDIR)
