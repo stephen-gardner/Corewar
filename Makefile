@@ -8,7 +8,7 @@ NAME = corewar
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
 #CFLAGS += -Ofast -funroll-loops -Wno-unused-result
-#CFLAGS += -g #-fsanitize=address
+CFLAGS += -g #-fsanitize=address
 INC = -I inc -I lib/libft/inc
 LIBFTDIR = lib/libft/
 LIBFT = $(LIBFTDIR)libft.a
@@ -18,7 +18,9 @@ OBJ_DIR = obj/
 
 VM = vm
 VMDIR = vm/
-VM_FILES = coreio corewar_gui load main msg ops process ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
+VM_FILES = coreio load main msg ops process
+VM_FILES += ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
+VM_FILES += corewar_gui corewar_gui_cpf corewar_gui_hooks corewar_gui_blocks corewar_gui_colors corewar_gui_pc_boxes corewar_gui_bars
 
 UNAME	:= $(shell uname -s)
 
@@ -49,7 +51,6 @@ DISASM_FILES = file_op instruction main print stdin util zaz_op
 DISASMSRCDIR = $(addprefix $(SRC_DIR), $(DISASMDIR))
 DISASMOBJDIR = $(addprefix $(OBJ_DIR), $(DISASMDIR))
 DISASM_OBJECTS = $(addprefix $(DISASMOBJDIR), $(addsuffix .o, $(DISASM_FILES)))
-
 
 ifeq ($(UNAME),Linux)
 	MLXDIR := $(MLXDIR)linux/
@@ -133,11 +134,11 @@ clean:
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed$(NC)"
 
-testasm:
+testasm: $(ASM)
 	bash -c 'for f in tests/champions/*.s; do ./asm $$f; done'
 asmtest: testasm
 
-testgui:
+testgui: $(VM)
 	bash -c './vm -q -g tests/champions/Gagnant.cor tests/champions/Douceur_power.cor tests/champions/overwatch.cor tests/champions/Asombra.cor'
 guitest: testgui
 

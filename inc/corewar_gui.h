@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 03:08:18 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/07 07:38:31 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/08 00:16:09 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <math.h>
 # include <limits.h>
 # include "corewar.h"
+# include "gui_functions.h"
 
 int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, int x, int y, int color, char *string);
 
@@ -55,6 +56,7 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define WIN_TITLE			"corewar_gui @ 42"
 # define GUI_BLOCK_NUM_ROWS		64	//32, 16
 # define GUI_BLOCK_NUM_COLS		64	//128, 256
+# define GBNC					GUI_BLOCK_NUM_COLS
 # define GUI_BLOCK_WIDTH	10
 # define GUI_BLOCK_HEIGHT	10
 # define GUI_BLOCK_ROW_SPACING	1
@@ -148,6 +150,15 @@ int      mlx_string_put_to_image(void *mlx_ptr, void *win_ptr, void *img_ptr, in
 # define IPTML INFO_PANEL_TEXT_MAX_LEN
 # define MAX_STRING_LEN	(IPTML / (GUI_CHAR_WIDTH - 2))
 # define MSL MAX_STRING_LEN
+#define GUI_NUMERIC_KEY_ARRAY	{KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0}
+#define GUI_NUMERIC_KEY_VALUES	{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}
+#define GUI_STRING "%.*s"
+# define GFX_AGE_SPEED      10
+#define GUI_PLAYER_HUES1 {0, 60, 120, 240}
+#define GUI_PLAYER_HUES2 {120, 240, 0, 180}
+#define GUI_HSL2RGB_MATRIX1 {{0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}}
+#define GUI_HSL2RGB_MATRIX2	{{0,1,2}, {1,0,2}, {2,0,1}, {2,1,0}, {1,2,0}, {0,2,1}, {2,2,2}}
+
 
 typedef	struct	s_line
 {
@@ -164,49 +175,24 @@ typedef struct s_corewar_gui
 	void			*mlx;
 	void			*win;
 	void			*img;
-	int			img_bpp;
-	int			img_sz;
-	int			img_endian;
+	int				img_bpp;
+	int				img_size;
+	int				img_endian;
 	char			*img_data;
-	int			state;
-	int			fps;
-	int			cpf;
-	unsigned long		nproc;
+	int				state;
+	int				fps;
+	int				cpf;
+	unsigned long	nprocesses;
 	char			pc_box[MEM_SIZE];
-	int			player_colors[MAX_PLAYERS + 1][MAX_LUM_STEPS];
-	int			distrib[MAX_PLAYERS + 1];
+	int				player_colors[MAX_PLAYERS + 1][MAX_LUM_STEPS + 1];
+	int				distrib[MAX_PLAYERS + 1];
 	void			*img_dist;
-	int			img_dist_bpp;
-	int			img_dist_sz;
-	int			img_dist_endian;
+	int				img_dist_bpp;
+	int				img_dist_sz;
+	int				img_dist_endian;
 	char			*img_dist_data;
 
 } t_corewar_gui;
 
-void	corewar_gui_clean_up(t_corewar_gui *g);
-void	corewar_gui_fatal_error(t_corewar_gui *g, char *msg);
-void	corewar_gui_init(t_core *core);
-void	corewar_gui_random_age(t_corewar_gui *g);
-void	corewar_gui_random_fill_arena(t_corewar_gui *g);
-void	corewar_gui_set_owner(t_corewar_gui *g);
-void	plot_line(t_corewar_gui *g, t_line line);
-void	plot_line_high(t_corewar_gui *g, t_line line, int dx, int dy);
-void	plot_line_low(t_corewar_gui *g, t_line line, int dx, int dy);
-void	plot_mini_calc(int *i1, int *i2, int *i3, int *i4);
-void	plot_swap_coords(t_line *line);
-int	corewar_gui_block_visuals(t_corewar_gui *g);
-int	corewar_gui_border_box(t_corewar_gui *g);
-int	corewar_gui_char_visuals(t_corewar_gui *g);
-int	corewar_gui_expose_hook(t_corewar_gui *g);
-int	corewar_gui_get_color(t_corewar_gui *g, int i, int j);
-int	corewar_gui_info_panel(t_corewar_gui *g);
-int	corewar_gui_init_colors(t_corewar_gui *g);
-int	corewar_gui_key_hook(int keycode, t_corewar_gui *g);
-int	corewar_gui_key_repeat(int keycode, t_corewar_gui *fdf);
-int	corewar_gui_loop_hook(t_corewar_gui *g);
-int	corewar_gui_mouse_hook(int button, int x, int y, t_corewar_gui *g);
-int	corewar_gui_put_block(t_corewar_gui *g, int i, int j);
-int	hsl_to_rgb(float h, float s, float l);
-int	make_color_array(t_corewar_gui *g, float initial_hue);
 
 #endif
