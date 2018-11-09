@@ -17,7 +17,7 @@ MLXDIR = lib/libmlx/
 SRC_DIR = src/
 OBJ_DIR = obj/
 
-VM = vm
+VM = corewar
 VMDIR = vm/
 VM_FILES = champ coreio main msg ops process
 VM_FILES += ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
@@ -82,11 +82,10 @@ YELLOW = \033[1;33m
 # RULES                                                                        #
 ################################################################################
 
-all: $(NAME)
-corewar: $(VM) $(ASM) $(DISASM)
+all: $(VM) $(ASM) $(DISASM)
 #------------------------------------------------------------------------------
 $(VM): $(VM_OBJECTS) $(GUI_OBJECTS) $(LIBFT) $(LIBMLX)
-	$(CC) $(CFLAGS) $^ -o $@ $(LIB) $(MLXLIB)
+	$(CC) $(CFLAGS) $^ $(LIB) $(MLXLIB) -o $@
 
 $(VM_OBJECTS): $(VMOBJDIR)%.o : $(VMSRCDIR)%.c | $(VMOBJDIR)
 	$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
@@ -151,6 +150,11 @@ guitest: testgui
 
 rmcor:
 	find . -iname "*.cor" -exec rm {} \;
+
+norminette:
+	norminette lib/libft/ inc/ src/
+
+norm: norminette
 
 fclean: clean
 	@make $@ -C $(LIBFTDIR)

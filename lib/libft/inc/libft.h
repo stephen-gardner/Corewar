@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 01:23:55 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/04 14:47:21 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 08:05:55 by asarandi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ char	*ft_strupcase(char *str);
 /*
 ** asarandi, 2018/11/04
 */
-int     ft_isdigit(int c);
-int     ft_isspace(int c);
+int		ft_isdigit(int c);
+int		ft_isspace(int c);
 char	**ft_strsplit2(char const *s, char c);
 #endif
