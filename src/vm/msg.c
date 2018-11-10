@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/10 03:08:18 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/10 03:50:24 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ const char		*g_errmsg[NERRMSGS] = {
 	"%s: exceeds max champion size (%u > %u)",
 	"%s: too small to be a champion",
 	"%s: invalid header",
-	"No champions specified",
+	"no champions specified",
 	"%s: code size does not match size specified in header",
 	"too many champions specified"
 };

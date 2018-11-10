@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 01:09:10 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 08:50:04 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/10 03:42:26 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,11 @@ void	age_arena(t_byte *epoch)
 {
 	size_t	i;
 
-	i = 0;
-	while (i < MEM_SIZE)
+	i = -1;
+	while (++i < MEM_SIZE)
 	{
 		if (epoch[i] < LUM_MAX_STEPS)
-			epoch[i]++;
-		i++;
+			++epoch[i];
 	}
 }
 
@@ -72,9 +71,9 @@ int32_t	read_core(t_core *core, t_byte *src, int n, t_bool trunc)
 	uint32_t	res;
 	int			i;
 
-	i = -1;
 	res = 0;
 	dst = (t_byte *)&res;
+	i = -1;
 	while (++i < n)
 		dst[(n - 1) - i] = *ABS_POS(core->arena, src, i);
 	if (trunc)
