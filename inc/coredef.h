@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 07:11:57 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/09 23:47:04 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@
 # define PROG_NAME_LENGTH	128
 # define COMMENT_LENGTH		2048
 # define COREWAR_EXEC_MAGIC	0x00EA83F3
-# define ID(id)				(~(id) + 1)
 
 /*
 ** #############################################################################
