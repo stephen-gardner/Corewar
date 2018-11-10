@@ -7,9 +7,7 @@
 NAME = corewar
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -Ofast -funroll-loops -Wno-unused-result
-#CFLAGS += -g #-fsanitize=address
-#CFLAGS += -Wunused-macros -Wunused-local-typedefs
+CFLAGS += -Ofast -funroll-loops
 INC = -I inc -I lib/libft/inc
 LIBFTDIR = lib/libft/
 LIBFT = $(LIBFTDIR)libft.a
@@ -23,6 +21,8 @@ VM_FILES = champ coreio main msg ops process
 VM_FILES += ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
 VMSRCDIR = $(addprefix $(SRC_DIR), $(VMDIR))
 VMOBJDIR = $(addprefix $(OBJ_DIR), $(VMDIR))
+VMOPSDIR = ops/
+VMOPSOBJDIR = $(addprefix $(VMOBJDIR), $(VMOPSDIR))
 VM_OBJECTS=$(addprefix $(VMOBJDIR), $(addsuffix .o, $(VM_FILES)))
 
 GUI_FILES = gui_main gui_bars gui_blocks gui_colors gui_cpf gui_hooks gui_pc_boxes gui_text gui_loop
@@ -67,6 +67,8 @@ endif
 
 LIBMLX = $(addprefix $(MLXDIR), libmlx.a)
 BINARIES = $(VM) $(ASM) $(DISASM) $(LIBMLX) $(LIBFT)
+CORFILES = $(patsubst %.s, %.cor, $(wildcard tests/champions/*.s))
+
 
 ################################################################################
 # COLORS                                                                       #
@@ -87,13 +89,17 @@ all: $(VM) $(ASM) $(DISASM)
 $(VM): $(VM_OBJECTS) $(GUI_OBJECTS) $(LIBFT) $(LIBMLX)
 	$(CC) $(CFLAGS) $^ $(LIB) $(MLXLIB) -o $@
 
-$(VM_OBJECTS): $(VMOBJDIR)%.o : $(VMSRCDIR)%.c | $(VMOBJDIR)
+$(VM_OBJECTS): $(VMOBJDIR)%.o : $(VMSRCDIR)%.c | $(VMOPSOBJDIR)
 	$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
 
-$(VMOBJDIR): $(OBJ_DIR)
+$(VMOPSOBJDIR): | $(VMOBJDIR)
 	mkdir -p $@
-	mkdir -p $@/ops
-	mkdir -p $@/gui
+
+$(VMOBJDIR): | $(OBJ_DIR)
+	mkdir -p $@
+
+$(OBJ_DIR):
+	mkdir -p $@
 #------------------------------------------------------------------------------
 $(ASM): $(ASM_OBJECTS) $(LIBFT)
 	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
@@ -101,7 +107,7 @@ $(ASM): $(ASM_OBJECTS) $(LIBFT)
 $(ASM_OBJECTS): $(ASMOBJDIR)%.o : $(ASMSRCDIR)%.c | $(ASMOBJDIR)
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-$(ASMOBJDIR): $(OBJ_DIR)
+$(ASMOBJDIR): | $(OBJ_DIR)
 	mkdir -p $@
 #------------------------------------------------------------------------------
 $(DISASM): $(DISASM_OBJECTS) $(LIBFT)
@@ -110,13 +116,13 @@ $(DISASM): $(DISASM_OBJECTS) $(LIBFT)
 $(DISASM_OBJECTS): $(DISASMOBJDIR)%.o : $(DISASMSRCDIR)%.c | $(DISASMOBJDIR)
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-$(DISASMOBJDIR): $(OBJ_DIR)
+$(DISASMOBJDIR): | $(OBJ_DIR)
 	mkdir -p $@
 #------------------------------------------------------------------------------
 $(GUI_OBJECTS): $(GUIOBJDIR)%.o : $(GUISRCDIR)%.c | $(GUIOBJDIR)
 	$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
 
-$(GUIOBJDIR): $(OBJ_DIR)
+$(GUIOBJDIR): | $(OBJ_DIR)
 	mkdir -p $@
 
 #------------------------------------------------------------------------------
@@ -125,9 +131,6 @@ $(LIBFT):
 
 $(LIBMLX):
 	make -C $(MLXDIR)
-
-$(OBJ_DIR):
-	mkdir -p $@
 #------------------------------------------------------------------------------
 
 again:
@@ -140,12 +143,17 @@ clean:
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed$(NC)"
 
+$(CORFILES): tests/champions/%.cor : tests/champions/%.s | $(ASM)
+	@./$(ASM) $<
+
 testasm: $(ASM)
-	bash -c 'for f in tests/champions/*.s; do ./asm $$f; done'
+	@make rmcor
+	@make $(CORFILES)
+
 asmtest: testasm
 
-testgui: $(VM)
-	bash -c './corewar -q -g tests/champions/Gagnant.cor tests/champions/Douceur_power.cor tests/champions/overwatch.cor tests/champions/Asombra.cor'
+testgui: $(VM) $(CORFILES)
+	./$(VM) -q -g tests/champions/Gagnant.cor tests/champions/Douceur_power.cor tests/champions/overwatch.cor tests/champions/Asombra.cor
 guitest: testgui
 
 rmcor:
@@ -156,7 +164,7 @@ norminette:
 
 norm: norminette
 
-fclean: clean
+fclean: clean rmcor
 	@make $@ -C $(LIBFTDIR)
 	@rm -f $(BINARIES)
 	@echo "$(RED)$(BINARIES) removed$(NC)"
