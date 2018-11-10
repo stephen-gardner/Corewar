@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/23 04:32:22 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 07:16:34 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/10 03:08:18 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ const char		*g_errmsg[NERRMSGS] = {
 	"%s: invalid header",
 	"No champions specified",
 	"%s: code size does not match size specified in header",
-	"too many champions specified",
-	"Usage: corewar [-g] [-d cycle] [-q] <[-n id] champion ...>"
+	"too many champions specified"
 };
 
 const char		*g_notices[NNOTICES] = {
@@ -115,15 +114,11 @@ void			error(int id, ...)
 	char	*msg;
 	va_list	ap;
 
-	if (id != USAGE)
+	va_start(ap, id);
+	if (ft_vasprintf(&msg, g_errmsg[id], ap))
 	{
-		va_start(ap, id);
-		if (ft_vasprintf(&msg, g_errmsg[id], ap))
-		{
-			ft_dprintf(STDERR_FILENO, "%&s %s\n", "31m", "Error:", msg);
-			free(msg);
-		}
-		va_end(ap);
+		ft_dprintf(STDERR_FILENO, "%&s %s\n", "31m", "Error:", msg);
+		free(msg);
 	}
 	va_end(ap);
 	if (id == NO_PLAYERS)

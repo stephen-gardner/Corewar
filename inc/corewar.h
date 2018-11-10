@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 08:49:45 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/10 02:41:41 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 /*
 ** coreio.c
 */
+
 void				age_arena(t_byte *epoch);
 int32_t				read_arg(t_core *core, t_proc *p, int a);
 int32_t				read_core(t_core *core, t_byte *src, int n, t_bool trunc);
