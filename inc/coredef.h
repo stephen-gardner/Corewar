@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 23:47:04 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/11/10 01:41:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*
 ** #############################################################################
-** # CONFIGURATION                                                             #
+** # CONFIGURATION - Not easily tuned--it is recommended to leave it alone!    #
 ** #############################################################################
 */
 
@@ -75,7 +75,7 @@
 # define ERR				error
 # define MSG				notice
 # define SYS_ERR			ERR(DEFAULT_ERR, strerror(errno))
-# define CORE_POS(x)		(((x) + MEM_SIZE) % MEM_SIZE)
+# define CORE_POS(x)		(((x) + (MEM_SIZE << 3)) % MEM_SIZE)
 # define REL_POS(x)			((x) % IDX_MOD)
 # define IDX_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + REL_POS(x)))
 # define ABS_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + (x)))
