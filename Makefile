@@ -32,6 +32,7 @@ ifeq ($(UNAME),Darwin)
 endif
 ifeq ($(UNAME),Linux)
 	GUI_FILES += gui_mlx_linux
+	CFLAGS += -Wno-unused-result
 endif
 GUIDIR = gui/
 GUISRCDIR = $(addprefix $(SRC_DIR), $(GUIDIR))
