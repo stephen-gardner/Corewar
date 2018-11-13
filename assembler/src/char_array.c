@@ -6,26 +6,11 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 20:59:31 by asarandi          #+#    #+#             */
-/*   Updated: 2018/02/11 21:52:44 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:07:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-void	destroy_char_array(char **array, int size)
-{
-	int i;
-
-	i = 0;
-	while (i < size)
-	{
-		if (array[i] != NULL)
-			free(array[i]);
-		i++;
-	}
-	free(array);
-	return ;
-}
 
 void	insert_into_char_array(t_asm *a, char *str)
 {

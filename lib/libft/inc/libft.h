@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 01:23:55 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 08:05:55 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:17:54 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,11 +130,4 @@ char	**ft_strsplit(const char *s, char delim);
 char	*ft_strsub(const char *s, unsigned int start, size_t len);
 char	*ft_strtrim(const char *s);
 char	*ft_strupcase(char *str);
-
-/*
-** asarandi, 2018/11/04
-*/
-int		ft_isdigit(int c);
-int		ft_isspace(int c);
-char	**ft_strsplit2(char const *s, char c);
 #endif

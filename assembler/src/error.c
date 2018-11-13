@@ -6,16 +6,17 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 21:06:12 by asarandi          #+#    #+#             */
-/*   Updated: 2018/03/02 02:32:56 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:12:19 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+#include <stdlib.h>
 
 void	header_error(char *msg, t_asm *a)
 {
 	ft_printf(C_RED "ERROR:" C_END " %s\n", msg);
-	destroy_char_array(a->split, a->lines);
+	free(a->split);
 	if (a->tmp != NULL)
 		free(a->tmp);
 	close(a->fd);
@@ -27,20 +28,6 @@ void	header_error(char *msg, t_asm *a)
 void	print_error(void)
 {
 	ft_printf(C_RED "ERROR:" C_END " %s\n", strerror(errno));
-	return ;
-}
-
-void	free_split(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i] != NULL)
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
 	return ;
 }
 
@@ -59,12 +46,12 @@ void	clean_up(t_asm *a)
 		{
 			free(ptr->i_name);
 			free(ptr->i_oper);
-			free_split(ptr->operands);
+			free(ptr->operands);
 		}
 		free(ptr);
 		ptr = next;
 	}
-	destroy_char_array(a->split, a->lines);
+	free(a->split);
 	if (a->tmp != NULL)
 		free(a->tmp);
 	close(a->fd);

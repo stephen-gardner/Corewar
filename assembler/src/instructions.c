@@ -6,17 +6,18 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 21:01:24 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/04 14:43:18 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:11:36 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+#include <stdlib.h>
 
 void		i_fatal(t_asm *a, char **split, char *msg)
 {
 	ft_printf(C_YELLOW"LINE %d:"C_END" %s\n", a->lines, a->split[a->lines - 1]);
 	ft_printf(C_RED"ERROR:"C_END" %s\n", msg);
-	free_split(split);
+	free(split);
 	clean_up(a);
 	exit(0);
 }
@@ -26,7 +27,7 @@ void		process_instruction(t_asm *a)
 	char	**split;
 	int		count;
 
-	split = ft_strsplit2(a->tmp, ' ');
+	split = ft_strsplit(a->tmp, ' ');
 	count = count_char_array(split);
 	if ((count == 1) || (count == 3))
 	{
@@ -44,7 +45,7 @@ void		process_instruction(t_asm *a)
 		else
 			add_instruction_to_queue(a, split[count - 2], split[count - 1]);
 	}
-	free_split(split);
+	free(split);
 	return ;
 }
 

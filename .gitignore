@@ -3,6 +3,7 @@
 *.o
 *.cor
 *.dSYM
+*.gen
 a.out
 asm
 corewar

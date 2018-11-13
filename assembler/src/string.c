@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 20:50:27 by asarandi          #+#    #+#             */
-/*   Updated: 2018/03/01 23:37:33 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:17:25 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	string_is_integer(char *str)
 		i++;
 	while (str[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (!IS_DIGIT(str[i]))
 		{
 			result = false;
 			break ;

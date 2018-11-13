@@ -6,14 +6,14 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/19 13:06:04 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/04 14:19:25 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:14:40 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # include "libft.h"
-# define BUFF_SIZE 1
+# define BUFF_SIZE 4096
 
 typedef struct	s_file
 {

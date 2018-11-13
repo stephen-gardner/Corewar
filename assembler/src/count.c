@@ -6,11 +6,12 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 21:07:02 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/04 14:43:51 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:06:30 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+#include <stdlib.h>
 
 int			count_matching_chars(char *str, char c)
 {
@@ -35,8 +36,8 @@ int			count_operands(char *str)
 
 	if (str == NULL)
 		return (0);
-	split = ft_strsplit2(str, SEPARATOR_CHAR);
+	split = ft_strsplit(str, SEPARATOR_CHAR);
 	count = count_char_array(split);
-	destroy_char_array(split, count);
+	free(split);
 	return (count);
 }

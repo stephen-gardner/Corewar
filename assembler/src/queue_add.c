@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 20:53:20 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/04 14:44:07 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:09:49 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_in	*queue_prepare(t_asm *a, char *name, char *oper)
 	ptr->address = a->prog_size;
 	ptr->i_name = ft_strdup(name);
 	ptr->i_oper = ft_strdup(oper);
-	ptr->operands = ft_strsplit2(oper, SEPARATOR_CHAR);
+	ptr->operands = ft_strsplit(oper, SEPARATOR_CHAR);
 	if (count_char_array(ptr->operands) != instr.arg_count)
 		error_bad_operand_count(ptr->original, a);
 	ptr->arg_count = instr.arg_count;

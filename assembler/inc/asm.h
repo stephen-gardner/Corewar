@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/01 04:40:47 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/04 14:18:38 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:19:17 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <stdlib.h>
 # include <stdbool.h>
 
-# define BUFF_SIZE 1
 # define TAB_SIZE 8
 # define COMMENT_TABS 4
 # define COMMENT_TAB_CHAR ';'
@@ -128,9 +127,7 @@ void			add_label_to_queue(t_asm *a, char *label);
 void			add_to_queue(t_asm *a, t_in *ptr);
 void			append_nl_string(char **parent, char *child);
 void			clean_up(t_asm *a);
-void			destroy_char_array(char **array, int size);
 void			fix_operand_values(t_asm *a, int i, t_instruction *ptr);
-void			free_split(char **array);
 void			generate_hexdump(t_asm *a);
 void			generate_output(t_asm *a);
 void			get_mandatory_info(t_asm *a);

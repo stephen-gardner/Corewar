@@ -6,11 +6,12 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 20:47:01 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/04 14:43:38 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:11:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+#include <stdlib.h>
 
 bool	is_direct(char *str)
 {
@@ -61,7 +62,7 @@ bool	is_valid_operand(char *str)
 	char	*s;
 	int		i;
 
-	split = ft_strsplit2(str, SEPARATOR_CHAR);
+	split = ft_strsplit(str, SEPARATOR_CHAR);
 	i = 0;
 	while (split[i] != NULL)
 	{
@@ -70,10 +71,10 @@ bool	is_valid_operand(char *str)
 			i++;
 		else
 		{
-			free_split(split);
+			free(split);
 			return (false);
 		}
 	}
-	free_split(split);
+	free(split);
 	return (true);
 }

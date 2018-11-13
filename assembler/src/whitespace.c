@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 23:21:55 by asarandi          #+#    #+#             */
-/*   Updated: 2018/03/01 23:41:14 by asarandi         ###   ########.fr       */
+/*   Updated: 2018/11/12 21:18:38 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	whitespace_transform(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (ft_isspace(str[i]))
+		if (IS_SPACE(str[i]))
 			str[i] = ' ';
 		i++;
 	}
@@ -46,7 +46,7 @@ void	whitespace_consolidate(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if ((ft_isspace(str[i])) && (ft_isspace(str[i + 1])))
+		if ((IS_SPACE(str[i])) && (IS_SPACE(str[i + 1])))
 		{
 			string_shift_left(&str[i]);
 			i = 0;
@@ -64,13 +64,13 @@ void	whitespace_trim(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if ((ft_isspace(str[i])) && (str[i + 1] == SEPARATOR_CHAR))
+		if ((IS_SPACE(str[i])) && (str[i + 1] == SEPARATOR_CHAR))
 		{
 			string_shift_left(&str[i]);
 			i = 0;
 			continue ;
 		}
-		if ((ft_isspace(str[i + 1])) && (str[i] == SEPARATOR_CHAR))
+		if ((IS_SPACE(str[i + 1])) && (str[i] == SEPARATOR_CHAR))
 		{
 			i++;
 			string_shift_left(&str[i]);
