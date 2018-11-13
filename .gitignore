@@ -1,9 +1,10 @@
 .*
-*.o
 *.a
+*.o
+*.cor
 *.dSYM
 a.out
-vm_champs
+asm
 corewar
-*.cor
-._*
+disasm
+vm_champs

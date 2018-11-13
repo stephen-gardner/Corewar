@@ -1,47 +1,76 @@
-##
-## Makefile for MiniLibX in /home/boulon/work/c/raytraceur/minilibx
-## 
-## Made by Olivier Crouzet
-## Login   <ol@epitech.net>
-## 
-## Started on  Tue Oct  5 15:56:43 2004 Olivier Crouzet
-## Last update Tue May 15 15:41:20 2007 Olivier Crouzet
-##
-
 ## Please use configure script
 
+################################################################################
+# SETTINGS                                                                     #
+################################################################################
 
-INC	=%%%%
-HT	=%%%%
-DOCP	=%%%%
+NAME = libmlx.a
+AR = ar
+ARFLAGS = -rcs
+CC = gcc
+CFLAGS += -Wno-implicit-function-declaration -Wno-unused-result -Wno-return-type -Wno-parentheses
+CFLAGS += -Ofast -funroll-loops
+CFLAGS += #-g -fsanitize=address
+INC = %%%%
+SRC_DIR = src
+SRC	= \
+	mlx_clear_window\
+	mlx_destroy_image\
+	mlx_destroy_window\
+	mlx_expose_hook\
+	mlx_flush_event\
+	mlx_get_color_value\
+	mlx_get_data_addr\
+	mlx_hook\
+	mlx_init\
+	mlx_int_anti_resize_win\
+	mlx_int_do_nothing\
+	mlx_int_get_visual\
+	mlx_int_param_event\
+	mlx_int_set_win_event_mask\
+	mlx_int_str_to_wordtab\
+	mlx_int_wait_first_expose\
+	mlx_key_hook\
+	mlx_loop\
+	mlx_loop_hook\
+	mlx_mouse_hook\
+	mlx_new_image\
+	mlx_new_window\
+	mlx_pixel_put\
+	mlx_put_image_to_window\
+	mlx_rgb\
+	mlx_string_put\
+	mlx_xpm
+OBJ_DIR = obj
+OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 
-CC	= gcc
+################################################################################
+# COLORS                                                                       #
+################################################################################
 
-NAME	= libmlx.a
+NC = \033[0m
+GREEN = \033[1;32m
+RED = \033[1;31m
 
-SRC	= mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
-	mlx_mouse_hook.c mlx_key_hook.c mlx_expose_hook.c mlx_loop_hook.c \
-	mlx_int_anti_resize_win.c mlx_int_do_nothing.c \
-	mlx_int_wait_first_expose.c mlx_int_get_visual.c \
-	mlx_flush_event.c mlx_string_put.c \
-	mlx_new_image.c mlx_get_data_addr.c \
-	mlx_put_image_to_window.c mlx_get_color_value.c mlx_clear_window.c \
-	mlx_xpm.c mlx_int_str_to_wordtab.c mlx_destroy_window.c \
-	mlx_int_param_event.c mlx_int_set_win_event_mask.c mlx_hook.c \
-	mlx_rgb.c mlx_destroy_image.c
+################################################################################
+# RULES                                                                        #
+################################################################################
 
-OBJ	=$(SRC:.c=.o)
-CFLAGS	= -O3 -I$(INC) -Wno-implicit-function-declaration -Wno-unused-result
+all: $(NAME)
 
-all	: $(NAME) $(DOCP)
+$(NAME): $(OBJ)
+	@$(AR) $(ARFLAGS) $@ $(OBJ)
+	@echo "$(GREEN)DONE$(NC)"
 
-$(NAME)	: $(OBJ)
-	ar -r $(NAME) $(OBJ)
-	ranlib $(NAME)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -I $(INC) -I inc -c $< -o $@
 
-do_cp	:
-	cp $(NAME) libmlx_$(HT).a
+clean:
+	@rm -rf $(OBJ_DIR)
 
+fclean: clean
+	@rm -f $(NAME)
+	@echo "$(RED)$(NAME) removed$(NC)"
 
-clean	:
-	rm -f $(OBJ) $(NAME) *~ core *.core
+re: fclean all

@@ -1,75 +1,150 @@
 #!/usr/bin/make -f
 
+UNAME = $(shell uname -s)
+
 ################################################################################
 # SETTINGS                                                                     #
 ################################################################################
 
-NAME = corewar
+
+# [ COMPILATION ]
+
 CC = gcc
 CFLAGS += -Wall -Werror -Wextra
 CFLAGS += -Ofast -funroll-loops
-INC = -I inc -I lib/libft/inc
-LIBFTDIR = lib/libft/
-LIBFT = $(LIBFTDIR)libft.a
-MLXDIR = lib/libmlx/
-SRC_DIR = src/
-OBJ_DIR = obj/
-
-VM = corewar
-VMDIR = vm/
-VM_FILES = champ coreio main msg ops process
-VM_FILES += ops/op_add ops/op_aff ops/op_and ops/op_fork ops/op_ld ops/op_ldi ops/op_lfork ops/op_live ops/op_lld ops/op_lldi ops/op_nop ops/op_or ops/op_st ops/op_sti ops/op_sub ops/op_xor ops/op_zjmp
-VMSRCDIR = $(addprefix $(SRC_DIR), $(VMDIR))
-VMOBJDIR = $(addprefix $(OBJ_DIR), $(VMDIR))
-VMOPSDIR = ops/
-VMOPSOBJDIR = $(addprefix $(VMOBJDIR), $(VMOPSDIR))
-VM_OBJECTS=$(addprefix $(VMOBJDIR), $(addsuffix .o, $(VM_FILES)))
-
-GUI_FILES = gui_main gui_bars gui_blocks gui_colors gui_cpf gui_hooks gui_pc_boxes gui_text gui_loop
-UNAME	:= $(shell uname -s)
-ifeq ($(UNAME),Darwin)
-	GUI_FILES += gui_mlx_macos
-endif
+CFLAGS += #-g -fsanitize=address
 ifeq ($(UNAME),Linux)
-	GUI_FILES += gui_mlx_linux
 	CFLAGS += -Wno-unused-result
 endif
-GUIDIR = gui/
-GUISRCDIR = $(addprefix $(SRC_DIR), $(GUIDIR))
-GUIOBJDIR = $(addprefix $(OBJ_DIR), $(GUIDIR))
-GUI_OBJECTS= $(addprefix $(GUIOBJDIR), $(addsuffix .o, $(GUI_FILES)))
+OBJ_DIR = obj
 
-ASM = asm
-ASMDIR = asm/
-ASM_FILES = char_array count error file_op header_utils hexdump instruction_utils instructions is_operand label_utils main operand_error output queue_add resolve_labels string trim util validate_header whitespace zaz_op
-ASMSRCDIR = $(addprefix $(SRC_DIR), $(ASMDIR))
-ASMOBJDIR = $(addprefix $(OBJ_DIR), $(ASMDIR))
-ASM_OBJECTS = $(addprefix $(ASMOBJDIR), $(addsuffix .o, $(ASM_FILES)))
+# [ LIBRARIES ]
 
-DISASM = disasm
-DISASMDIR = disasm/
-DISASM_FILES = file_op instruction main print stdin util zaz_op
-DISASMSRCDIR = $(addprefix $(SRC_DIR), $(DISASMDIR))
-DISASMOBJDIR = $(addprefix $(OBJ_DIR), $(DISASMDIR))
-DISASM_OBJECTS = $(addprefix $(DISASMOBJDIR), $(addsuffix .o, $(DISASM_FILES)))
+LIB = lib
+LIBFT_DIR = $(LIB)/libft
+LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_INC = -I $(LIBFT_DIR)/inc
 
 ifeq ($(UNAME),Linux)
-	MLXDIR := $(MLXDIR)linux/
-	MLXINC = -I $(MLXDIR) -I inc/linux/
-	MLXLIB = -L $(MLXDIR) -lX11 -lXext -lmlx -lbsd -lm
+	GFX_FRAMEWORK = -lX11 -lXext -lbsd -lm
+	MLX_DIR = $(LIB)/libmlx/linux
+	MLX_INC = -I $(MLX_DIR)/inc
 endif
-
 ifeq ($(UNAME),Darwin)
-	MLXDIR := $(MLXDIR)macos/
-	MLXINC = -I $(MLXDIR) -I inc/macos/
-	MLXLIB = -L $(MLXDIR) -lmlx -framework OpenGL -framework AppKit
+	GFX_FRAMEWORK = -framework OpenGL -framework AppKit
+	MLX_DIR = $(LIB)/libmlx/macos
+	MLX_INC = -I $(MLX_DIR)/inc
 endif
+LIBMLX = $(MLX_DIR)/libmlx.a
 
+RVM_DIR = $(LIB)/refvm
+RVM_INC = -I $(RVM_DIR)/inc
+RVM_SRC_DIR = $(RVM_DIR)/src
+RVM_SRC = \
+	zaz_op
+RVM_OBJ_DIR = $(OBJ_DIR)/$(RVM_DIR)
+RVM_OBJ = $(patsubst %, $(RVM_OBJ_DIR)/%.o, $(RVM_SRC))
 
-LIBMLX = $(addprefix $(MLXDIR), libmlx.a)
-BINARIES = $(VM) $(ASM) $(DISASM) $(LIBMLX) $(LIBFT)
-CORFILES = $(patsubst %.s, %.cor, $(wildcard tests/champions/*.s))
+# [ ASSEMBLER ]
 
+ASM = asm
+ASM_DIR = assembler
+ASM_INC = -I $(ASM_DIR)/inc $(RVM_INC) $(LIBFT_INC)
+ASM_SRC_DIR = $(ASM_DIR)/src
+ASM_SRC = \
+	char_array\
+	count\
+	error\
+	file_op\
+	header_utils\
+	hexdump\
+	instruction_utils\
+	instructions\
+	is_operand\
+	label_utils\
+	main\
+	operand_error\
+	output\
+	queue_add\
+	resolve_labels\
+	string\
+	trim\
+	util\
+	validate_header\
+	whitespace
+ASM_OBJ_DIR = $(OBJ_DIR)/$(ASM_DIR)
+ASM_OBJ = $(patsubst %, $(ASM_OBJ_DIR)/%.o, $(ASM_SRC))
+
+# [ DISASSEMBLER ]
+
+DISASM = disasm
+DISASM_DIR = disassembler
+DISASM_INC = -I $(DISASM_DIR)/inc $(RVM_INC) $(LIBFT_INC)
+DISASM_SRC_DIR = $(DISASM_DIR)/src
+DISASM_SRC = \
+	file_op\
+	instruction\
+	main\
+	print\
+	stdin\
+	util
+DISASM_OBJ_DIR = $(OBJ_DIR)/$(DISASM_DIR)
+DISASM_OBJ = $(patsubst %, $(DISASM_OBJ_DIR)/%.o, $(DISASM_SRC))
+
+# [ VIRTUAL MACHINE ]
+
+VM = corewar
+VM_DIR = vm
+VM_INC = -I $(VM_DIR)/inc $(MLX_INC) $(LIBFT_INC)
+ifeq ($(UNAME),Linux)
+	VM_INC += -I $(VM_DIR)/inc/linux
+endif
+ifeq ($(UNAME),Darwin)
+	VM_INC += -I $(VM_DIR)/inc/macos
+endif
+VM_SRC_DIR = $(VM_DIR)/src
+VM_SRC = \
+	champ\
+	coreio\
+	gui/gui_bars\
+	gui/gui_blocks\
+	gui/gui_colors\
+	gui/gui_cpf\
+	gui/gui_hooks\
+	gui/gui_loop\
+	gui/gui_main
+ifeq ($(UNAME),Linux)
+	VM_SRC += gui/gui_mlx_linux
+endif
+ifeq ($(UNAME),Darwin)
+	VM_SRC += gui/gui_mlx_macos
+endif
+VM_SRC += \
+	gui/gui_pc_boxes\
+	gui/gui_text\
+	main\
+	msg\
+	ops\
+	ops/op_add\
+	ops/op_aff\
+	ops/op_and\
+	ops/op_fork\
+	ops/op_ld\
+	ops/op_ldi\
+	ops/op_lfork\
+	ops/op_live\
+	ops/op_lld\
+	ops/op_lldi\
+	ops/op_nop\
+	ops/op_or\
+	ops/op_st\
+	ops/op_sti\
+	ops/op_sub\
+	ops/op_xor\
+	ops/op_zjmp\
+	process
+VM_OBJ_DIR = $(OBJ_DIR)/$(VM_DIR)
+VM_OBJ = $(patsubst %, $(VM_OBJ_DIR)/%.o, $(VM_SRC))
 
 ################################################################################
 # COLORS                                                                       #
@@ -85,89 +160,84 @@ YELLOW = \033[1;33m
 # RULES                                                                        #
 ################################################################################
 
-all: $(VM) $(ASM) $(DISASM)
-#------------------------------------------------------------------------------
-$(VM): $(VM_OBJECTS) $(GUI_OBJECTS) $(LIBFT) $(LIBMLX)
-	$(CC) $(CFLAGS) $^ $(LIB) $(MLXLIB) -o $@
+all: $(ASM) $(DISASM) $(VM)
 
-$(VM_OBJECTS): $(VMOBJDIR)%.o : $(VMSRCDIR)%.c | $(VMOPSOBJDIR)
-	$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
+# [ LINKING ]
 
-$(VMOPSOBJDIR): | $(VMOBJDIR)
-	mkdir -p $@
+$(ASM): $(LIBFT) $(ASM_OBJ) $(RVM_OBJ)
+	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... "
+	@$(CC) $(CFLAGS) $(LIBFT) $(ASM_OBJ) $(RVM_OBJ) -o $@
+	@echo "$(GREEN)DONE$(NC)"
 
-$(VMOBJDIR): | $(OBJ_DIR)
-	mkdir -p $@
+$(DISASM): $(LIBFT) $(DISASM_OBJ) $(RVM_OBJ)
+	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... "
+	@$(CC) $(CFLAGS) $(LIBFT) $(DISASM_OBJ) $(RVM_OBJ) -o $@
+	@echo "$(GREEN)DONE$(NC)"
 
-$(OBJ_DIR):
-	mkdir -p $@
-#------------------------------------------------------------------------------
-$(ASM): $(ASM_OBJECTS) $(LIBFT)
-	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
+$(VM): $(LIBFT) $(LIBMLX) $(VM_OBJ)
+	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... "
+	@$(CC) $(CFLAGS) $(GFX_FRAMEWORK) $(LIBFT) $(LIBMLX) $(VM_OBJ) -o $@
+	@echo "$(GREEN)DONE$(NC)"
 
-$(ASM_OBJECTS): $(ASMOBJDIR)%.o : $(ASMSRCDIR)%.c | $(ASMOBJDIR)
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+# [ COMPILING ]
 
-$(ASMOBJDIR): | $(OBJ_DIR)
-	mkdir -p $@
-#------------------------------------------------------------------------------
-$(DISASM): $(DISASM_OBJECTS) $(LIBFT)
-	$(CC) $(CFLAGS) $(INC) $(LIB) $^ -o $@
+$(ASM_OBJ_DIR)/%.o: $(ASM_SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	@echo " > Compiling $<..."
+	@$(CC) $(CFLAGS) $(ASM_INC) -c $< -o $@
 
-$(DISASM_OBJECTS): $(DISASMOBJDIR)%.o : $(DISASMSRCDIR)%.c | $(DISASMOBJDIR)
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+$(DISASM_OBJ_DIR)/%.o: $(DISASM_SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	@echo " > Compiling $<..."
+	@$(CC) $(CFLAGS) $(DISASM_INC) -c $< -o $@
 
-$(DISASMOBJDIR): | $(OBJ_DIR)
-	mkdir -p $@
-#------------------------------------------------------------------------------
-$(GUI_OBJECTS): $(GUIOBJDIR)%.o : $(GUISRCDIR)%.c | $(GUIOBJDIR)
-	$(CC) $(CFLAGS) $(INC) $(MLXINC) -c $< -o $@
+$(VM_OBJ_DIR)/%.o: $(VM_SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	@echo " > Compiling $<..."
+	@$(CC) $(CFLAGS) $(VM_INC) -c $< -o $@
 
-$(GUIOBJDIR): | $(OBJ_DIR)
-	mkdir -p $@
+# [ LIBRARIES ]
 
-#------------------------------------------------------------------------------
 $(LIBFT):
-	make -C $(LIBFTDIR)
+	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... "
+	@make -C $(LIBFT_DIR)
 
 $(LIBMLX):
-	make -C $(MLXDIR)
-#------------------------------------------------------------------------------
+	@printf "$(YELLOW)%-$(COLSIZE)s$(NC)" "Building $@... " 
+	@make -C $(MLX_DIR)
+
+$(RVM_OBJ_DIR)/%.o: $(RVM_SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	@echo " > Compiling $<..."
+	@$(CC) $(CFLAGS) $(ASM_INC) $(RVM_INC) -c $< -o $@
+
+# [ CLEANING ]
 
 again:
-	rm -f $(VM_OBJECTS) $(GUI_OBJECTS)
-	make $(VM)
+	@rm -rf $(OBJ_DIR)
+	@echo "$(RED)Object files removed"
+	@rm -f $(ASM)
+	@echo "$(ASM) removed"
+	@rm -f $(DISASM)
+	@echo "$(DISASM) removed"
+	@rm -f $(VM)
+	@echo "$(VM) removed$(NC)"
+	@make
 
 clean:
-	make $@ -C $(MLXDIR)
-	@make $@ -C $(LIBFTDIR)
+	@make -C $(LIBFT_DIR) $@
+	@make -C $(MLX_DIR) $@
 	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)Object files removed$(NC)"
 
-$(CORFILES): tests/champions/%.cor : tests/champions/%.s | $(ASM)
-	@./$(ASM) $<
-
-testasm: $(ASM)
-	@make rmcor
-	@make $(CORFILES)
-
-asmtest: testasm
-
-testgui: $(VM) $(CORFILES)
-	./$(VM) -q -g tests/champions/Gagnant.cor tests/champions/Douceur_power.cor tests/champions/overwatch.cor tests/champions/Asombra.cor
-guitest: testgui
-
-rmcor:
-	find . -iname "*.cor" -exec rm {} \;
-
-norminette:
-	norminette lib/libft/ inc/ src/
-
-norm: norminette
-
-fclean: clean rmcor
-	@make $@ -C $(LIBFTDIR)
-	@rm -f $(BINARIES)
-	@echo "$(RED)$(BINARIES) removed$(NC)"
+fclean: clean
+	@make -C $(LIBFT_DIR) $@
+	@make -C $(MLX_DIR) $@
+	@rm -f $(ASM)
+	@echo "$(RED)$(ASM) removed"
+	@rm -f $(DISASM)
+	@echo "$(DISASM) removed"
+	@rm -f $(VM)
+	@echo "$(VM) removed$(NC)"
 
 re: fclean all
