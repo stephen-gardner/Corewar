@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/10 02:41:41 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/25 00:21:05 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ int32_t				read_core(t_core *core, t_byte *src, int n, t_bool trunc);
 void				write_core(t_core *core, t_byte *dst, t_proc *p, int a);
 
 /*
+** execution.c
+*/
+
+void				execute_war(t_core *core);
+
+/*
 ** load.c
 */
 
@@ -46,7 +52,6 @@ void				load_champ(t_core *core, const char *path, int pnum);
 ** main.c
 */
 
-void				execute_war(t_core *core);
 void				usage(void);
 
 /*
@@ -67,8 +72,7 @@ t_bool				decode(t_byte *arena, t_proc *p, t_instr *instr);
 ** process.c
 */
 
-void				cull_processes(t_core *core, t_cull *culler, t_proc **p);
-void				execute_processes(t_core *core, t_proc *p);
+void				cull_processes(t_core *core, t_cull *culler);
 t_proc				*fork_process(t_core *core, t_proc *p, t_byte *fpc);
 
 /*

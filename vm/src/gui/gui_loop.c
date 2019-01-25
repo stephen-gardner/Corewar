@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 04:36:04 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/09 04:46:30 by asarandi         ###   ########.fr       */
+/*   Updated: 2019/01/22 02:37:59 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	gui_loop_hook_linux(t_gui *g)
 	i = 0;
 	while ((g->state == 1) && (i < g->cpf))
 	{
-		if (g->core->processes)
+		if (g->core->procpool.size)
 			execute_war(g->core);
 		i++;
 	}
@@ -47,7 +47,7 @@ int	gui_loop_hook_macos(t_gui *g)
 	i = 0;
 	while ((g->state == 1) && (i < g->cpf))
 	{
-		if (g->core->processes)
+		if (g->core->procpool.size)
 			execute_war(g->core);
 		i++;
 	}
@@ -69,7 +69,7 @@ int	gui_loop_hook_generic(t_gui *g)
 	i = 0;
 	while ((g->state == 1) && (i < g->cpf))
 	{
-		if (g->core->processes)
+		if (g->core->procpool.size)
 			execute_war(g->core);
 		i++;
 	}

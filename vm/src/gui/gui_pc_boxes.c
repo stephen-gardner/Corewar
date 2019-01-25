@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 00:41:15 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/09 02:09:41 by asarandi         ###   ########.fr       */
+/*   Updated: 2019/01/24 19:30:25 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,16 @@ int	gui_mark_pc(t_gui *g, int i, int j)
 
 int	gui_pc_boxes(t_gui *g)
 {
-	t_proc	*p;
-	int		idx;
+	t_proc		*p;
+	int			idx;
+	t_uint		i;
 
-	p = g->core->processes;
 	g->nprocesses = 0;
 	(void)ft_memset(g->pc_box, 0, MEM_SIZE);
-	while (p)
+	i = g->core->procpool.size;
+	while (i--)
 	{
+		p = &g->core->procpool.procs[i];
 		g->nprocesses++;
 		idx = (p->pc - g->core->arena) % MEM_SIZE;
 		if (g->pc_box[idx] == 0)
@@ -57,7 +59,6 @@ int	gui_pc_boxes(t_gui *g)
 			g->pc_box[idx] = 1;
 			(void)gui_mark_pc(g, idx / GBNC, idx % GBNC);
 		}
-		p = p->next;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/07 04:17:42 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/25 01:09:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ typedef struct		s_instr
 ** | pid       | Process PID                                                   |
 ** | lcycle    | Last cycle when process called live                           |
 ** | carry     | The "carry" flag; TRUE when last operation returned 0         |
-** | next      | Next process in list                                          |
 ** -----------------------------------------------------------------------------
 */
 
@@ -138,19 +137,36 @@ typedef struct		s_proc
 	t_uint			pid;
 	t_uint			lcycle;
 	t_bool			carry : 1;
-	struct s_proc	*next;
 }					t_proc;
+
+/*
+** -----------------------------------------------------------------------------
+** | {struct s_procpool}                                          <t_procpool> |
+** | Keeps track of process pool                                               |
+** |---------------------------------------------------------------------------|
+** | procs   | Process pool memory section                                     |
+** | size    | Number of processes in pool                                     |
+** | maxsize | Maximum number of processes pool can hold                       |
+** -----------------------------------------------------------------------------
+*/
+
+typedef struct		s_procpool
+{
+	t_proc			*procs;
+	t_uint			size;
+	t_uint			maxsize;
+}					t_procpool;
 
 /*
 ** -----------------------------------------------------------------------------
 ** | {struct s_cull}                                                  <t_cull> |
 ** | Keeps track of lives and process culling schedule                         |
 ** |---------------------------------------------------------------------------|
-** | ccycle       | Cycle when next culling takes place                        |
-** | ctd          | The current CYCLE_TO_DIE                                   |
-** | checks       | Number of cullings done towards MAX_CHECKS for period      |
-** | nbr_lives    | Number of lives called by processes since last culling     |
-** | plives       | Total number of valid lives for period                     |
+** | ccycle    | Cycle when next culling takes place                           |
+** | ctd       | The current CYCLE_TO_DIE                                      |
+** | checks    | Number of cullings done towards MAX_CHECKS for period         |
+** | nbr_lives | Number of lives called by processes since last culling        |
+** | plives    | Total number of valid lives for period                        |
 ** -----------------------------------------------------------------------------
 */
 
@@ -175,7 +191,7 @@ typedef struct		s_cull
 ** | champions | The loaded players                                            |
 ** | cull      | Keeps track of lives and culling schedule                     |
 ** | victor    | Pointer to last champion to have a process call live for it   |
-** | processes | Linked list of processes still alive                          |
+** | procpool  | Keeps track of process pool                                   |
 ** | cycle     | Current cycle                                                 |
 ** | dcycle    | The cycle that the core will be dumped                        |
 ** | nplayers  | Number of champions loaded                                    |
@@ -190,9 +206,9 @@ typedef struct		s_core
 	t_byte			owner[MEM_SIZE];
 	t_byte			epoch[MEM_SIZE];
 	t_champ			champions[MAX_PLAYERS];
+	t_procpool		procpool;
 	t_cull			cull;
 	t_champ			*victor;
-	t_proc			*processes;
 	t_uint			cycle;
 	t_uint			dcycle;
 	t_byte			nplayers;

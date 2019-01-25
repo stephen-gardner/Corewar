@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/10 02:41:18 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/25 01:01:31 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define IDX_MOD			(MEM_SIZE / 8)
 # define CHAMP_MAX_SIZE		(MEM_SIZE / 6)
 # define MAX_PLAYERS		4
-# define DUMP_LEN			32
+# define DUMP_LEN			64
 
 /*
 ** Lives / Process Culling
@@ -56,6 +56,7 @@
 # define T_R				1
 # define T_I				2
 # define T_D				4
+# define NOP				&g_ops[g_ops_size - 1]
 
 /*
 ** Champions

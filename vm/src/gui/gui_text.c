@@ -6,7 +6,7 @@
 /*   By: asarandi <asarandi@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 22:31:03 by asarandi          #+#    #+#             */
-/*   Updated: 2018/11/09 02:10:15 by asarandi         ###   ########.fr       */
+/*   Updated: 2019/01/22 02:41:02 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	gui_info_panel(t_gui *g)
 	x += GUI_CHAR_HEIGHT;
 	x = gui_text_stats(g, x, y, &text[0]);
 	x = gui_text_players(g, x, y, &text[0]);
-	if (g->core->processes == 0)
+	if (g->core->procpool.size == 0)
 		(void)gui_text_winner(g, x, y, &text[0]);
 	MLX_PUTS(g->mlx, g->win, g->img, LIVE_BAR_TEXT_Y_POS,
 			LIVE_BAR_TEXT_X_POS, INFO_TEXT_COLOR, LIVE_BAR_TEXT_STR);

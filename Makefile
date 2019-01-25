@@ -106,6 +106,7 @@ VM_SRC_DIR = $(VM_DIR)/src
 VM_SRC = \
 	champ\
 	coreio\
+	execution\
 	gui/gui_bars\
 	gui/gui_blocks\
 	gui/gui_colors\

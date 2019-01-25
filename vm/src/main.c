@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 20:53:34 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/09 07:30:57 by asarandi         ###   ########.fr       */
+/*   Updated: 2019/01/25 00:22:43 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,66 +17,6 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-/*
-** Reports the winning player(s).
-*/
-
-static void	aftermath(t_core *core, t_champ *victor)
-{
-	t_champ	*victors[MAX_PLAYERS];
-	int		n;
-	int		i;
-
-	MSG(WAR_OVER, core->cycle);
-	if (!victor)
-	{
-		MSG(ANNOUNCE_LOSERS);
-		return ;
-	}
-	n = 0;
-	i = -1;
-	while (++i < core->nplayers)
-	{
-		if (core->champions[i].id == victor->id)
-			victors[n++] = &core->champions[i];
-	}
-	if (n > 1)
-		MSG(ANNOUNCE_WINNER_TEAM, victor->name);
-	i = -1;
-	while (++i < n)
-	{
-		MSG(ANNOUNCE_WINNER, -victor->id, victors[i]->name);
-		MSG(CHAMP_COMMENT, victors[i]->comment);
-	}
-}
-
-/*
-** Main game loop.
-** Core cycle starts at 1. Core dump of previous cycle happens before
-**  execution if scheduled.
-** Processes are executed in order of newest to oldest.
-** Processes are then culled every CYCLE_TO_DIE cycles.
-** If GUI is in use, we age the arena every GFX_AGE_SPEED cycles and break.
-*/
-
-void		execute_war(t_core *core)
-{
-	while (TRUE)
-	{
-		if (++core->cycle > core->dcycle)
-			dump(core);
-		execute_processes(core, core->processes);
-		if (core->cycle >= core->cull.ccycle)
-			cull_processes(core, &core->cull, &core->processes);
-		if (!core->processes)
-			return (aftermath(core, core->victor));
-		if (core->gui && !(core->cycle % GFX_AGE_SPEED))
-			age_arena(core->epoch);
-		if (core->gui)
-			break ;
-	}
-}
 
 /*
 ** Parse command line arguments and return array with paths to champion
