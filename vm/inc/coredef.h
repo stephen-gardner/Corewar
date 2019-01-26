@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/25 01:01:31 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/26 02:45:56 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 /*
 ** Core
+** For performance (and implementation) reasons, MEM_SIZE must be a power of 2
 */
 
 # define MEM_SIZE			4096
@@ -39,9 +40,21 @@
 # define MAX_CHECKS			10
 
 /*
+** Champions
+*/
+
+# define PROG_NAME_LENGTH	128
+# define COMMENT_LENGTH		2048
+# define COREWAR_EXEC_MAGIC	0x00EA83F3
+
+/*
+** #############################################################################
+** # UTILITY                                                                   #
+** #############################################################################
+*/
+
+/*
 ** Registers
-** Size options are ignored at this time, requiring a system with 16-bit shorts
-**  and 32-bit ints. Also, little endianness, as the core is big endian.
 */
 
 # define IND_SIZE			2
@@ -59,27 +72,22 @@
 # define NOP				&g_ops[g_ops_size - 1]
 
 /*
-** Champions
+** Core access
 */
 
-# define PROG_NAME_LENGTH	128
-# define COMMENT_LENGTH		2048
-# define COREWAR_EXEC_MAGIC	0x00EA83F3
+# define CORE_POS(x)		((x) & (MEM_SIZE - 1))
+# define REL_POS(x)			((x) % IDX_MOD)
+# define IDX_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + REL_POS(x)))
+# define ABS_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + (x)))
 
 /*
-** #############################################################################
-** # UTILITY                                                                   #
-** #############################################################################
+** Other
 */
 
 # define REV				ft_revbytes
 # define ERR				error
 # define MSG				notice
 # define SYS_ERR			ERR(DEFAULT_ERR, strerror(errno))
-# define CORE_POS(x)		(((x) + (MEM_SIZE << 3)) % MEM_SIZE)
-# define REL_POS(x)			((x) % IDX_MOD)
-# define IDX_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + REL_POS(x)))
-# define ABS_POS(ar, pc, x)	((ar) + CORE_POS(((pc) - (ar)) + (x)))
 
 /*
 ** #############################################################################
