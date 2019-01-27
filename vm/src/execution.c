@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/25 00:13:38 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/25 00:39:35 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/27 01:03:43 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,17 @@ static void	aftermath(t_core *core, t_champ *victor)
 ** The current cycle counts towards the instruction execution time.
 */
 
-static void	exec_op(t_core *core, t_proc *p, t_instr *instr)
+static void	exec_op(t_core *core, t_proc *p, t_instr *instr, t_uint *sched)
 {
 	instr->epc = ABS_POS(core->arena, p->pc, 1);
 	if ((t_uint)(*p->pc - 1) < g_ops_size)
-	{
 		instr->op = &g_ops[*p->pc - 1];
-		instr->ecycle = core->cycle + instr->op->latency - 1;
-	}
 	else
 	{
 		instr->op = NOP;
 		p->pc = instr->epc;
 	}
+	*sched = core->cycle + (instr->op->latency - 1);
 }
 
 /*
@@ -80,21 +78,22 @@ static void	exec_op(t_core *core, t_proc *p, t_instr *instr)
 **  to point to an invalid address.
 */
 
-static void	execute_processes(t_core *core)
+static void	execute_processes(t_core *core, t_procpool *pool, t_uint nprocs)
 {
 	t_proc	*p;
 	t_instr	*instr;
-	t_uint	i;
 
-	i = core->procpool.size;
-	while (i--)
+	while (nprocs--)
 	{
-		p = &core->procpool.procs[i];
+		if (pool->sched[nprocs] != core->cycle)
+			continue ;
+		p = &pool->procs[nprocs];
 		instr = &p->instr;
 		if (!instr->op->opcode)
-			exec_op(core, p, instr);
-		else if (core->cycle == instr->ecycle)
+			exec_op(core, p, instr, &pool->sched[nprocs]);
+		else
 		{
+			pool->sched[nprocs] = core->cycle + 1;
 			if (instr->op->opcode == 0x0C || instr->op->opcode == 0x0F)
 				instr->op->run(core, p, instr);
 			else
@@ -119,14 +118,17 @@ static void	execute_processes(t_core *core)
 
 void		execute_war(t_core *core)
 {
+	t_procpool	*pool;
+
+	pool = &core->procpool;
 	while (TRUE)
 	{
 		if (++core->cycle > core->dcycle)
 			dump(core);
-		execute_processes(core);
+		execute_processes(core, pool, pool->size);
 		if (core->cycle >= core->cull.ccycle)
 			cull_processes(core, &core->cull);
-		if (!core->procpool.size)
+		if (!pool->size)
 			return (aftermath(core, core->victor));
 		if (core->gui && !(core->cycle % GFX_AGE_SPEED))
 			age_arena(core->epoch);

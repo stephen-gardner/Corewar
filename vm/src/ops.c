@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 21:02:58 by sgardner          #+#    #+#             */
-/*   Updated: 2018/11/06 23:37:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/26 23:50:44 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ const t_op		g_ops[17] = {
 	{"lldi", op_lldi, 50, 0x0E, 3, {T_R | T_I | T_D, T_R | T_D, T_R}, 1, 1},
 	{"lfork", op_lfork, 1000, 0x0F, 1, {T_D}, 0, 1},
 	{"aff", op_aff, 2, 0x10, 1, {T_R}, 1, 0},
-	{"nop", op_nop, 1, 0x00, 0, {0}, 0, 0}
+	{"nop", op_nop, 2, 0x00, 0, {0}, 0, 0}
 };
 
 const t_uint	g_ops_size = sizeof(g_ops) / sizeof(t_op);

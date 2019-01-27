@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/25 01:09:50 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/27 01:18:47 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ typedef struct		s_instr
 	t_byte			*epc;
 	t_byte			*args[3];
 	t_byte			atypes[3];
-	t_uint			ecycle;
 }					t_instr;
 
 /*
@@ -145,6 +144,7 @@ typedef struct		s_proc
 ** | Keeps track of process pool                                               |
 ** |---------------------------------------------------------------------------|
 ** | procs   | Process pool memory section                                     |
+** | sched   | Scheduled execution cycle for processes                         |
 ** | size    | Number of processes in pool                                     |
 ** | maxsize | Maximum number of processes pool can hold                       |
 ** -----------------------------------------------------------------------------
@@ -153,6 +153,7 @@ typedef struct		s_proc
 typedef struct		s_procpool
 {
 	t_proc			*procs;
+	t_uint			*sched;
 	t_uint			size;
 	t_uint			maxsize;
 }					t_procpool;
