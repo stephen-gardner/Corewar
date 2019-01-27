@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/27 01:29:21 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/27 06:18:57 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static void	drain_pool(t_procpool *pool)
 {
 	pool->maxsize /= 2;
 	pool->procs = realloc(pool->procs, sizeof(t_proc) * pool->maxsize);
-	pool->sched = realloc(pool->sched, sizeof(t_uint) * pool->maxsize);
-	if (!pool->procs || !pool->sched)
+	pool->meta = realloc(pool->meta, sizeof(t_meta) * pool->maxsize);
+	if (!pool->procs || !pool->meta)
 		SYS_ERR;
 }
 
@@ -71,7 +71,7 @@ static void	defrag_pool(t_procpool *pool, t_uint start, t_uint killed)
 		{
 			procs[start] = procs[end];
 			procs[end].pc = NULL;
-			pool->sched[start++] = pool->sched[end++];
+			pool->meta[start++] = pool->meta[end++];
 		}
 	}
 	pool->size -= killed;
@@ -131,8 +131,8 @@ t_proc		*fork_process(t_core *core, t_proc *p, t_byte *fpc)
 		clone = pool->procs;
 		pool->maxsize = (pool->maxsize) ? pool->maxsize << 1 : 32;
 		pool->procs = realloc(pool->procs, sizeof(t_proc) * pool->maxsize);
-		pool->sched = realloc(pool->sched, sizeof(t_uint) * pool->maxsize);
-		if (!pool->procs || !pool->sched)
+		pool->meta = realloc(pool->meta, sizeof(t_meta) * pool->maxsize);
+		if (!pool->procs || !pool->meta)
 			SYS_ERR;
 		ft_memset(pool->procs + pool->size, 0,
 			sizeof(t_proc) * (pool->maxsize - pool->size));
@@ -141,9 +141,9 @@ t_proc		*fork_process(t_core *core, t_proc *p, t_byte *fpc)
 	clone = &pool->procs[pool->size];
 	if (p)
 		ft_memcpy(clone, p, sizeof(t_proc));
-	clone->pc = fpc;
 	clone->pid = ++lpid;
 	clone->instr.op = NOP;
-	pool->sched[pool->size++] = core->cycle + 1;
+	set_pc(core, clone, fpc, pool->size);
+	pool->meta[pool->size++].ecycle = core->cycle + 1;
 	return (clone);
 }

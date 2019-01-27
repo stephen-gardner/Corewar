@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 18:36:50 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/25 00:21:05 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/27 05:07:48 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void				write_core(t_core *core, t_byte *dst, t_proc *p, int a);
 */
 
 void				execute_war(t_core *core);
+void				set_pc(t_core *core, t_proc *p, t_byte *pc, t_uint nproc);
 
 /*
 ** load.c

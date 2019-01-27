@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:24:13 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/27 01:18:47 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/28 00:28:03 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ typedef struct		s_op
 ** |        |  the operation is complete                                       |
 ** | args   | Pointer to arguments for instruction                             |
 ** | atypes | Specifies type for args with same index                          |
-** | ecycle | Cycle when operation will complete                               |
 ** -----------------------------------------------------------------------------
 */
 
@@ -140,11 +139,27 @@ typedef struct		s_proc
 
 /*
 ** -----------------------------------------------------------------------------
+** | {struct s_meta}                                                  <t_meta> |
+** | Process meta for loop optimization                                        |
+** |---------------------------------------------------------------------------|
+** | ecycle | Scheduled cycle for process to execute instruction               |
+** | pos    | Location of process PC for GUI to render box                     |
+** -----------------------------------------------------------------------------
+*/
+
+typedef struct		s_meta
+{
+	t_uint			ecycle;
+	t_uint			pos;
+}					t_meta;
+
+/*
+** -----------------------------------------------------------------------------
 ** | {struct s_procpool}                                          <t_procpool> |
 ** | Keeps track of process pool                                               |
 ** |---------------------------------------------------------------------------|
 ** | procs   | Process pool memory section                                     |
-** | sched   | Scheduled execution cycle for processes                         |
+** | meta    | Process meta for loop optimization                              |
 ** | size    | Number of processes in pool                                     |
 ** | maxsize | Maximum number of processes pool can hold                       |
 ** -----------------------------------------------------------------------------
@@ -153,7 +168,7 @@ typedef struct		s_proc
 typedef struct		s_procpool
 {
 	t_proc			*procs;
-	t_uint			*sched;
+	t_meta			*meta;
 	t_uint			size;
 	t_uint			maxsize;
 }					t_procpool;
@@ -190,9 +205,9 @@ typedef struct		s_cull
 ** |           |  stores the index (+1) to the champion in core->champions     |
 ** | epoch     | GUI - Age of the data in the core                             |
 ** | champions | The loaded players                                            |
+** | procpool  | Keeps track of process pool                                   |
 ** | cull      | Keeps track of lives and culling schedule                     |
 ** | victor    | Pointer to last champion to have a process call live for it   |
-** | procpool  | Keeps track of process pool                                   |
 ** | cycle     | Current cycle                                                 |
 ** | dcycle    | The cycle that the core will be dumped                        |
 ** | nplayers  | Number of champions loaded                                    |

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/25 00:13:38 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/27 01:03:43 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/27 06:14:42 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,20 @@ static void	aftermath(t_core *core, t_champ *victor)
 ** The current cycle counts towards the instruction execution time.
 */
 
-static void	exec_op(t_core *core, t_proc *p, t_instr *instr, t_uint *sched)
+static void	exec_op(t_core *core, t_proc *p, t_instr *instr, t_uint nproc)
 {
+	t_procpool	*pool;
+
+	pool = &core->procpool;
 	instr->epc = ABS_POS(core->arena, p->pc, 1);
 	if ((t_uint)(*p->pc - 1) < g_ops_size)
 		instr->op = &g_ops[*p->pc - 1];
 	else
 	{
 		instr->op = NOP;
-		p->pc = instr->epc;
+		set_pc(core, p, instr->epc, nproc);
 	}
-	*sched = core->cycle + (instr->op->latency - 1);
+	pool->meta[nproc].ecycle = core->cycle + (instr->op->latency - 1);
 }
 
 /*
@@ -85,23 +88,23 @@ static void	execute_processes(t_core *core, t_procpool *pool, t_uint nprocs)
 
 	while (nprocs--)
 	{
-		if (pool->sched[nprocs] != core->cycle)
+		if (pool->meta[nprocs].ecycle != core->cycle)
 			continue ;
 		p = &pool->procs[nprocs];
 		instr = &p->instr;
 		if (!instr->op->opcode)
-			exec_op(core, p, instr, &pool->sched[nprocs]);
+			exec_op(core, p, instr, nprocs);
 		else
 		{
-			pool->sched[nprocs] = core->cycle + 1;
+			pool->meta[nprocs].ecycle = core->cycle + 1;
 			if (instr->op->opcode == 0x0C || instr->op->opcode == 0x0F)
 				instr->op->run(core, p, instr);
 			else
 			{
 				if (!instr->op->cbyte || decode(core->arena, p, instr))
 					p->carry = instr->op->run(core, p, instr);
-				p->pc = instr->epc;
 				instr->op = NOP;
+				set_pc(core, p, instr->epc, nprocs);
 			}
 		}
 	}
@@ -135,4 +138,10 @@ void		execute_war(t_core *core)
 		if (core->gui)
 			break ;
 	}
+}
+
+void		set_pc(t_core *core, t_proc *p, t_byte *pc, t_uint nproc)
+{
+	p->pc = pc;
+	core->procpool.meta[nproc].pos = pc - core->arena;
 }
