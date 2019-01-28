@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 00:30:56 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/27 06:18:57 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/27 22:18:20 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,30 +48,32 @@ static void	drain_pool(t_procpool *pool)
 		SYS_ERR;
 }
 
+#define CULLED(meta, i)	(meta[i].pos == CULL_PROC)
+
 /*
 ** Shifts all living processes to a contiguous memory section.
 */
 
 static void	defrag_pool(t_procpool *pool, t_uint start, t_uint killed)
 {
-	t_proc	*procs;
+	t_meta	*meta;
 	t_uint	end;
 
 	end = start + 1;
-	procs = pool->procs;
+	meta = pool->meta;
 	while (end < pool->size)
 	{
-		while (start < pool->size && procs[start].pc)
+		while (start < pool->size && !CULLED(meta, start))
 			++start;
 		if (end < start)
 			end = start + 1;
-		while (end < pool->size && !procs[end].pc)
+		while (end < pool->size && CULLED(meta, end))
 			++end;
-		while (end < pool->size && procs[end].pc && !procs[start].pc)
+		while (end < pool->size && CULLED(meta, start) && !CULLED(meta, end))
 		{
-			procs[start] = procs[end];
-			procs[end].pc = NULL;
-			pool->meta[start++] = pool->meta[end++];
+			meta[start] = meta[end];
+			meta[end].pos = CULL_PROC;
+			pool->procs[start++] = pool->procs[end++];
 		}
 	}
 	pool->size -= killed;
@@ -86,26 +88,28 @@ static void	defrag_pool(t_procpool *pool, t_uint start, t_uint killed)
 
 void		cull_processes(t_core *core, t_cull *cull)
 {
-	t_proc	*p;
-	t_uint	start;
-	t_uint	killed;
-	t_uint	i;
+	t_procpool	*pool;
+	t_proc		*p;
+	t_uint		start;
+	t_uint		killed;
+	t_uint		i;
 
 	start = 0;
 	killed = 0;
-	i = core->procpool.size;
+	pool = &core->procpool;
+	i = pool->size;
 	while (i--)
 	{
-		p = &core->procpool.procs[i];
+		p = &pool->procs[i];
 		if (core->cycle - p->lcycle >= cull->ctd)
 		{
 			start = i;
-			p->pc = NULL;
+			pool->meta[i].pos = CULL_PROC;
 			++killed;
 		}
 	}
 	if (killed)
-		defrag_pool(&core->procpool, start, killed);
+		defrag_pool(pool, start, killed);
 	schedule_culling(core, cull);
 }
 

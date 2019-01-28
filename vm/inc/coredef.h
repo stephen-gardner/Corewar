@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/21 01:22:46 by sgardner          #+#    #+#             */
-/*   Updated: 2019/01/26 02:45:56 by sgardner         ###   ########.fr       */
+/*   Updated: 2019/01/27 22:18:18 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define CYCLE_DELTA		50
 # define NBR_LIVE			21
 # define MAX_CHECKS			10
+# define CULL_PROC			(t_uint)-1
 
 /*
 ** Champions
